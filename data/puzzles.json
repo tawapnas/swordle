@@ -1,0 +1,395 @@
+[
+  {
+    "id": "2026-01-01-spotbug-01",
+    "type": "spot-bug",
+    "prompt": "Which line breaks this view?",
+    "difficulty": 1,
+    "payload": {
+      "codeLines": [
+        "struct ContentView: View {",
+        "    var body: some View {",
+        "        VStack {",
+        "            Text(Hello, world!)",
+        "        }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": { "buggyLineIndex": 3 },
+    "explanation": "String literals in Swift need quotes. It should be Text(\"Hello, world!\")."
+  },
+  {
+    "id": "2026-01-02-predict-01",
+    "type": "predict-render",
+    "prompt": "What does this view render?",
+    "difficulty": 1,
+    "payload": {
+      "code": "VStack {\n    Text(\"Hi\")\n    Text(\"There\")\n}",
+      "options": [
+        { "id": "a", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='52' text-anchor='middle' font-size='14'>Hi</text><text x='60' y='72' text-anchor='middle' font-size='14'>There</text></svg>" },
+        { "id": "b", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='40' y='62' text-anchor='middle' font-size='14'>Hi</text><text x='84' y='62' text-anchor='middle' font-size='14'>There</text></svg>" },
+        { "id": "c", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='62' text-anchor='middle' font-size='14'>HiThere</text></svg>" },
+        { "id": "d", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='62' text-anchor='middle' font-size='14'>There</text></svg>" }
+      ]
+    },
+    "answer": { "correctOptionId": "a" },
+    "explanation": "A VStack stacks its children vertically, top to bottom: \"Hi\" above \"There\"."
+  },
+  {
+    "id": "2026-01-03-fillmod-01",
+    "type": "fill-modifier",
+    "prompt": "Fill in the modifier that makes the text blue.",
+    "difficulty": 1,
+    "payload": {
+      "codeBefore": "Text(\"Hello\")\n    .",
+      "codeAfter": "(.blue)",
+      "options": ["foregroundStyle", "background", "tint", "font"]
+    },
+    "answer": { "correctIndex": 0 },
+    "explanation": ".foregroundStyle(.blue) sets the text color. (.foregroundColor still works but Apple is phasing it out.)"
+  },
+  {
+    "id": "2026-01-04-syntaxsort-01",
+    "type": "syntax-sort",
+    "prompt": "Put these lines in the right order to make a valid view.",
+    "difficulty": 1,
+    "payload": {
+      "shuffledLines": [
+        "    }",
+        "struct ContentView: View {",
+        "        Text(\"Hello\")",
+        "    var body: some View {"
+      ]
+    },
+    "answer": { "correctOrder": [1, 3, 2, 0] },
+    "explanation": "A View declares `struct ... : View`, then a `body` property, then the content, then closes the braces."
+  },
+  {
+    "id": "2026-01-05-spotbug-02",
+    "type": "spot-bug",
+    "prompt": "Which line stops this from compiling?",
+    "difficulty": 1,
+    "payload": {
+      "codeLines": [
+        "struct GreetingView: View {",
+        "    var body: some View {",
+        "        VStack {",
+        "            Text(\"Welcome\")",
+        "            Image(systemName: \"star.fill\")",
+        "        ",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": { "buggyLineIndex": 5 },
+    "explanation": "The VStack opens a `{` on line 3 but it is never closed. Line 5 should be a `}` to close the VStack before the body's closing brace."
+  },
+  {
+    "id": "2026-01-06-fillmod-02",
+    "type": "fill-modifier",
+    "prompt": "Fill in the modifier that adds space around the text on all sides.",
+    "difficulty": 1,
+    "payload": {
+      "codeBefore": "Text(\"Tap me\")\n    .",
+      "codeAfter": "()\n    .background(.yellow)",
+      "options": ["padding", "frame", "offset", "spacing"]
+    },
+    "answer": { "correctIndex": 0 },
+    "explanation": ".padding() adds breathing room inside a view's frame. Without it, the yellow background hugs the text tightly."
+  },
+  {
+    "id": "2026-01-07-predict-02",
+    "type": "predict-render",
+    "prompt": "What does this view render?",
+    "difficulty": 1,
+    "payload": {
+      "code": "HStack {\n    Text(\"Left\")\n    Text(\"Right\")\n}",
+      "options": [
+        { "id": "a", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='38' y='62' text-anchor='middle' font-size='13'>Left</text><text x='82' y='62' text-anchor='middle' font-size='13'>Right</text></svg>" },
+        { "id": "b", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='52' text-anchor='middle' font-size='13'>Left</text><text x='60' y='72' text-anchor='middle' font-size='13'>Right</text></svg>" },
+        { "id": "c", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='62' text-anchor='middle' font-size='13'>LeftRight</text></svg>" },
+        { "id": "d", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='30' y='30' text-anchor='middle' font-size='13'>Left</text><text x='90' y='95' text-anchor='middle' font-size='13'>Right</text></svg>" }
+      ]
+    },
+    "answer": { "correctOptionId": "a" },
+    "explanation": "An HStack lays its children out side by side, left to right: \"Left\" then \"Right\"."
+  },
+  {
+    "id": "2026-01-08-syntaxsort-02",
+    "type": "syntax-sort",
+    "prompt": "Order these lines to make a working button.",
+    "difficulty": 1,
+    "payload": {
+      "shuffledLines": [
+        "    print(\"Tapped!\")",
+        "Button(\"Press\") {",
+        "}"
+      ]
+    },
+    "answer": { "correctOrder": [1, 0, 2] },
+    "explanation": "`Button(\"Press\") {` opens the action closure, the action runs inside it, and `}` closes the closure."
+  },
+  {
+    "id": "2026-01-09-spotbug-03",
+    "type": "spot-bug",
+    "prompt": "Which line is wrong?",
+    "difficulty": 1,
+    "payload": {
+      "codeLines": [
+        "struct ProfileView: View {",
+        "    var body: some View {",
+        "        Image(systemName: heart.fill)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": { "buggyLineIndex": 2 },
+    "explanation": "`systemName:` takes a String, so the SF Symbol name needs quotes: Image(systemName: \"heart.fill\")."
+  },
+  {
+    "id": "2026-01-10-fillmod-03",
+    "type": "fill-modifier",
+    "prompt": "Fill in the modifier that makes the text bigger and bold, like a screen title.",
+    "difficulty": 1,
+    "payload": {
+      "codeBefore": "Text(\"Settings\")\n    .",
+      "codeAfter": "(.largeTitle)\n    .bold()",
+      "options": ["font", "fontWeight", "textScale", "size"]
+    },
+    "answer": { "correctIndex": 0 },
+    "explanation": ".font(.largeTitle) picks one of SwiftUI's built-in text styles. Combined with .bold() you get a big, heavy title."
+  },
+  {
+    "id": "2026-01-11-predict-03",
+    "type": "predict-render",
+    "prompt": "What does this view render?",
+    "difficulty": 1,
+    "payload": {
+      "code": "Text(\"Hi\")\n    .foregroundStyle(.white)\n    .padding()\n    .background(.blue)",
+      "options": [
+        { "id": "a", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='34' y='46' width='52' height='28' rx='4' fill='#1E73E8'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#FFFFFF'>Hi</text></svg>" },
+        { "id": "b", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='65' text-anchor='middle' font-size='14' fill='#1E73E8'>Hi</text></svg>" },
+        { "id": "c", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='120' fill='#1E73E8'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#FFFFFF'>Hi</text></svg>" },
+        { "id": "d", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='42' y='52' width='36' height='18' fill='#1E73E8'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#FFFFFF'>Hi</text></svg>" }
+      ]
+    },
+    "answer": { "correctOptionId": "a" },
+    "explanation": "Order matters: white text, then padding grows the frame, then a blue background fills that padded frame — a small blue pill behind \"Hi\"."
+  },
+  {
+    "id": "2026-01-12-syntaxsort-03",
+    "type": "syntax-sort",
+    "prompt": "Order these lines to make a view with a title above a subtitle.",
+    "difficulty": 1,
+    "payload": {
+      "shuffledLines": [
+        "    Text(\"Welcome\")",
+        "VStack {",
+        "}",
+        "    Text(\"to Swordle\")"
+      ]
+    },
+    "answer": { "correctOrder": [1, 0, 3, 2] },
+    "explanation": "Open the VStack, add \"Welcome\" first (it shows on top), then \"to Swordle\" below it, then close the VStack."
+  },
+  {
+    "id": "2026-01-13-spotbug-04",
+    "type": "spot-bug",
+    "prompt": "Which line breaks this view?",
+    "difficulty": 1,
+    "payload": {
+      "codeLines": [
+        "struct CardView: View {",
+        "    var body: some View {",
+        "        VStack",
+        "            Text(\"Title\")",
+        "            Text(\"Body\")",
+        "        }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": { "buggyLineIndex": 2 },
+    "explanation": "A stack needs an opening brace: `VStack {`. Without it, the two Text views aren't inside the stack and the closing `}` has nothing to match."
+  },
+  {
+    "id": "2026-01-14-fillmod-04",
+    "type": "fill-modifier",
+    "prompt": "Fill in the modifier that scales this SF Symbol up to a chosen point size.",
+    "difficulty": 1,
+    "payload": {
+      "codeBefore": "Image(systemName: \"star.fill\")\n    .",
+      "codeAfter": "(.system(size: 40))\n    .foregroundStyle(.yellow)",
+      "options": ["font", "imageScale", "resizable", "frame"]
+    },
+    "answer": { "correctIndex": 0 },
+    "explanation": "SF Symbols are font glyphs, so .font(.system(size: 40)) sizes them. (.imageScale only offers small/medium/large; .resizable is for bitmap images.)"
+  },
+  {
+    "id": "2026-01-15-predict-04",
+    "type": "predict-render",
+    "prompt": "What does this view render?",
+    "difficulty": 1,
+    "payload": {
+      "code": "ZStack {\n    Color.blue\n    Text(\"On top\")\n        .foregroundStyle(.white)\n}",
+      "options": [
+        { "id": "a", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='120' fill='#1E73E8'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#FFFFFF'>On top</text></svg>" },
+        { "id": "b", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='60' fill='#1E73E8'/><text x='60' y='95' text-anchor='middle' font-size='14' fill='#000000'>On top</text></svg>" },
+        { "id": "c", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='120' fill='#FFFFFF'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#1E73E8'>On top</text></svg>" },
+        { "id": "d", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='120' fill='#1E73E8'/></svg>" }
+      ]
+    },
+    "answer": { "correctOptionId": "a" },
+    "explanation": "A ZStack layers children back to front: blue fills the space, and the white \"On top\" text sits on top of it, centered."
+  },
+  {
+    "id": "2026-01-16-syntaxsort-04",
+    "type": "syntax-sort",
+    "prompt": "Order these lines to make a view with state and a button that changes it.",
+    "difficulty": 2,
+    "payload": {
+      "shuffledLines": [
+        "    var body: some View {",
+        "struct CounterView: View {",
+        "        Button(\"Add\") { count += 1 }",
+        "    @State private var count = 0",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": { "correctOrder": [1, 3, 0, 2, 4, 5] },
+    "explanation": "Declare the struct, then the @State property, then `body`, then the Button that mutates it, then close `body`, then close the struct."
+  },
+  {
+    "id": "2026-01-17-spotbug-05",
+    "type": "spot-bug",
+    "prompt": "Which line is the bug?",
+    "difficulty": 2,
+    "payload": {
+      "codeLines": [
+        "struct CounterView: View {",
+        "    @State private var count = 0",
+        "    var body: some View {",
+        "        Button(\"Count: \\(count)\") {",
+        "            count + 1",
+        "        }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": { "buggyLineIndex": 4 },
+    "explanation": "`count + 1` computes a value and throws it away. To actually update the state you need `count += 1`."
+  },
+  {
+    "id": "2026-01-18-fillmod-05",
+    "type": "fill-modifier",
+    "prompt": "Fill in the property wrapper so the Toggle can change `isOn`.",
+    "difficulty": 2,
+    "payload": {
+      "codeBefore": "struct ToggleView: View {\n    @",
+      "codeAfter": " private var isOn = false\n    var body: some View {\n        Toggle(\"Sound\", isOn: $isOn)\n    }\n}",
+      "options": ["State", "Binding", "Environment", "Published"]
+    },
+    "answer": { "correctIndex": 0 },
+    "explanation": "@State gives a view its own mutable value. The `$isOn` syntax passes a binding to that state into the Toggle so it can flip it."
+  },
+  {
+    "id": "2026-01-19-predict-05",
+    "type": "predict-render",
+    "prompt": "What does this view render?",
+    "difficulty": 2,
+    "payload": {
+      "code": "VStack(alignment: .leading) {\n    Text(\"One\")\n    Text(\"Three Words Here\")\n}",
+      "options": [
+        { "id": "a", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='14' y='52' text-anchor='start' font-size='13'>One</text><text x='14' y='72' text-anchor='start' font-size='13'>Three Words Here</text></svg>" },
+        { "id": "b", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='52' text-anchor='middle' font-size='13'>One</text><text x='60' y='72' text-anchor='middle' font-size='13'>Three Words Here</text></svg>" },
+        { "id": "c", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='106' y='52' text-anchor='end' font-size='13'>One</text><text x='106' y='72' text-anchor='end' font-size='13'>Three Words Here</text></svg>" },
+        { "id": "d", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='32' y='62' text-anchor='middle' font-size='13'>One</text><text x='88' y='62' text-anchor='middle' font-size='13'>Three Words Here</text></svg>" }
+      ]
+    },
+    "answer": { "correctOptionId": "a" },
+    "explanation": "VStack(alignment: .leading) lines the children up by their left edges, so both texts start at the same x position on the left."
+  },
+  {
+    "id": "2026-01-20-spotbug-06",
+    "type": "spot-bug",
+    "prompt": "Which line keeps this list from working?",
+    "difficulty": 2,
+    "payload": {
+      "codeLines": [
+        "struct NamesView: View {",
+        "    let names = [\"Ada\", \"Grace\", \"Alan\"]",
+        "    var body: some View {",
+        "        List(names, id: \\.self) {",
+        "            Text(name)",
+        "        }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": { "buggyLineIndex": 4 },
+    "explanation": "The closure receives each element, but it was never named. Write `List(names, id: \\.self) { name in Text(name) }` so `name` exists."
+  },
+  {
+    "id": "2026-01-21-fillmod-06",
+    "type": "fill-modifier",
+    "prompt": "Fill in the modifier that rounds the corners of the blue box.",
+    "difficulty": 2,
+    "payload": {
+      "codeBefore": "Color.blue\n    .frame(width: 80, height: 80)\n    .",
+      "codeAfter": "(12)",
+      "options": ["cornerRadius", "border", "shadow", "blur"]
+    },
+    "answer": { "correctIndex": 0 },
+    "explanation": ".cornerRadius(12) rounds all four corners. (.clipShape(RoundedRectangle(cornerRadius: 12)) does the same thing and is the newer style.)"
+  },
+  {
+    "id": "2026-01-22-predict-06",
+    "type": "predict-render",
+    "prompt": "What does this view render?",
+    "difficulty": 2,
+    "payload": {
+      "code": "HStack {\n    Text(\"Left\")\n    Spacer()\n    Text(\"Right\")\n}",
+      "options": [
+        { "id": "a", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='8' y='62' text-anchor='start' font-size='13'>Left</text><text x='112' y='62' text-anchor='end' font-size='13'>Right</text></svg>" },
+        { "id": "b", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='42' y='62' text-anchor='middle' font-size='13'>Left</text><text x='82' y='62' text-anchor='middle' font-size='13'>Right</text></svg>" },
+        { "id": "c", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='52' text-anchor='middle' font-size='13'>Left</text><text x='60' y='72' text-anchor='middle' font-size='13'>Right</text></svg>" },
+        { "id": "d", "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='8' y='62' text-anchor='start' font-size='13'>Left</text><text x='40' y='62' text-anchor='start' font-size='13'>Right</text></svg>" }
+      ]
+    },
+    "answer": { "correctOptionId": "a" },
+    "explanation": "A Spacer expands to fill all available space, pushing \"Left\" to the leading edge and \"Right\" to the trailing edge."
+  },
+  {
+    "id": "2026-01-23-syntaxsort-05",
+    "type": "syntax-sort",
+    "prompt": "Order these lines so the screen has a navigation title.",
+    "difficulty": 2,
+    "payload": {
+      "shuffledLines": [
+        "    Text(\"Your tasks go here\")",
+        "NavigationStack {",
+        "        .navigationTitle(\"Tasks\")",
+        "}"
+      ]
+    },
+    "answer": { "correctOrder": [1, 0, 2, 3] },
+    "explanation": "Open the NavigationStack, put the content inside, attach `.navigationTitle` to that content, then close the stack."
+  },
+  {
+    "id": "2026-01-24-syntaxsort-06",
+    "type": "syntax-sort",
+    "prompt": "Order these lines to make a row with an icon next to a label.",
+    "difficulty": 1,
+    "payload": {
+      "shuffledLines": [
+        "    Text(\"Favorites\")",
+        "HStack {",
+        "    Image(systemName: \"star.fill\")",
+        "}"
+      ]
+    },
+    "answer": { "correctOrder": [1, 2, 0, 3] },
+    "explanation": "Open the HStack, the star image comes first (so it's on the left), then the \"Favorites\" label, then close the HStack."
+  }
+]

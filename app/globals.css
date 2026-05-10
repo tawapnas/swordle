@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fefcf7;
+  --foreground: #2b2b3a;
+
+  /* Swordle palette — playful, Duolingo-ish, high contrast */
+  --color-brand: #6c5ce7; /* primary purple */
+  --color-brand-dark: #5a4bd1;
+  --color-accent: #00b894; /* success green */
+  --color-accent-dark: #00997c;
+  --color-danger: #e84393; /* "miss" pink */
+  --color-danger-dark: #cf3a83;
+  --color-flame: #ff7a18; /* streak flame */
+  --color-sky: #74b9ff;
+  --color-card: #ffffff;
+  --color-ink: #2b2b3a;
+  --color-ink-soft: #6b6b7d;
+  --color-line: #ece8df;
+  --color-code-bg: #1e1e2e;
+  --color-code-fg: #e4e4ef;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-brand: var(--color-brand);
+  --color-brand-dark: var(--color-brand-dark);
+  --color-accent: var(--color-accent);
+  --color-accent-dark: var(--color-accent-dark);
+  --color-danger: var(--color-danger);
+  --color-danger-dark: var(--color-danger-dark);
+  --color-flame: var(--color-flame);
+  --color-sky: var(--color-sky);
+  --color-card: var(--color-card);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-line: var(--color-line);
+  --color-code-bg: var(--color-code-bg);
+  --color-code-fg: var(--color-code-fg);
+
+  --font-sans: var(--font-line-seed-sans-th), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes swordle-pop {
+  0% { transform: scale(0.85); opacity: 0; }
+  60% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pop { animation: swordle-pop 0.3s ease-out both; }
+
+@keyframes swordle-rise {
+  0% { transform: translateY(8px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.animate-rise { animation: swordle-rise 0.25s ease-out both; }

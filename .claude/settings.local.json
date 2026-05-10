@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sL \"https://data.jsdelivr.com/v1/packages/gh/lazywasabi/thai-web-fonts@7?structure=tree\")",
+      "Bash(python3 -c 'import sys,json; d=json.load\\(sys.stdin\\); *)",
+      "Bash(curl -sL \"https://data.jsdelivr.com/v1/packages/gh/lazywasabi/thai-web-fonts@7?structure=flat\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f['name']\\) for f in d['files'] if 'line-seed-sans-th' in f['name'].lower\\(\\)]\")",
+      "Bash(curl -sL \"https://data.jsdelivr.com/v1/packages/gh/lazywasabi/thai-web-fonts\")",
+      "Bash(npm run *)",
+      "Bash(node -p \"process.arch\")",
+      "Bash(node -e \"require\\('lightningcss'\\)\")",
+      "Bash(curl -sv http://localhost:3000/api/puzzle/today)",
+      "Bash(node *)",
+      "Bash(curl -s -o /dev/null -w \"3001: %{http_code}\\\\n\" http://localhost:3001/api/puzzle/today)",
+      "Bash(npx tsc *)",
+      "Bash(git -C /Users/sanpawat/Personal/swordle status --short)",
+      "Bash(curl -s http://localhost:3001/api/puzzle/today)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('dayNumber:', d['dayNumber'], 'id:', d['puzzle']['id']\\)\")",
+      "Bash(curl -s -X POST http://localhost:3001/api/puzzle/validate -H 'Content-Type: application/json' -d '{\"id\":\"2026-01-01-spotbug-01\",\"answer\":{\"buggyLineIndex\":3}}')",
+      "Bash(curl -s -X POST http://localhost:3001/api/puzzle/validate -H 'Content-Type: application/json' -d '{\"id\":\"2026-01-01-spotbug-01\",\"answer\":{\"buggyLineIndex\":0}}')",
+      "Bash(curl -s -X POST http://localhost:3001/api/puzzle/validate -H 'Content-Type: application/json' -d '{\"id\":\"2026-01-02-predict-01\",\"answer\":{\"correctOptionId\":\"a\"}}')",
+      "Bash(curl -s -X POST http://localhost:3001/api/puzzle/validate -H 'Content-Type: application/json' -d '{\"id\":\"2026-01-03-fillmod-01\",\"answer\":{\"correctIndex\":0}}')",
+      "Bash(curl -s -X POST http://localhost:3001/api/puzzle/validate -H 'Content-Type: application/json' -d '{\"id\":\"2026-01-04-syntaxsort-01\",\"answer\":{\"correctOrder\":[1,3,2,0]}}')",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(rm -f /tmp/swordle-dev.log)",
+      "Bash(echo \"tsc exit: $?\")",
+      "Bash(echo \"exit=$?\")"
+    ]
+  }
+}

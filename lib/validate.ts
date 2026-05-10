@@ -1,0 +1,52 @@
+// Answer validation — one validator per puzzle type.
+//
+// `userAnswer` arrives from an untrusted request body, so every validator
+// defensively narrows its shape. A malformed or wrong-shape answer returns
+// `false`; this function never throws.
+
+import type { Puzzle } from "@/lib/types";
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function isNumberArray(value: unknown): value is number[] {
+  return Array.isArray(value) && value.every(isNumber);
+}
+
+function arraysEqual(a: number[], b: number[]): boolean {
+  return a.length === b.length && a.every((v, i) => v === b[i]);
+}
+
+export function validate(puzzle: Puzzle, userAnswer: unknown): boolean {
+  switch (puzzle.type) {
+    case "spot-bug": {
+      if (!isRecord(userAnswer)) return false;
+      return userAnswer.buggyLineIndex === puzzle.answer.buggyLineIndex;
+    }
+    case "predict-render": {
+      if (!isRecord(userAnswer)) return false;
+      return userAnswer.correctOptionId === puzzle.answer.correctOptionId;
+    }
+    case "fill-modifier": {
+      if (!isRecord(userAnswer)) return false;
+      return userAnswer.correctIndex === puzzle.answer.correctIndex;
+    }
+    case "syntax-sort": {
+      if (!isRecord(userAnswer)) return false;
+      const order = userAnswer.correctOrder;
+      if (!isNumberArray(order)) return false;
+      return arraysEqual(order, puzzle.answer.correctOrder);
+    }
+    default: {
+      // Exhaustiveness guard — if a new puzzle type is added to the union and
+      // not handled above, this line stops compiling.
+      const _exhaustive: never = puzzle;
+      return _exhaustive;
+    }
+  }
+}
