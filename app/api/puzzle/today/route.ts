@@ -3,13 +3,15 @@
 //   → 500 on error
 //
 // In non-production environments only, a `?date=YYYY-MM-DD` query param overrides
-// "today" so the daily rotation can be tested locally.
+// "today" so the daily rotation can be tested locally. A `?locale=` query param
+// also overrides the cookie-derived locale for the response (useful for dev).
 
 import type { NextRequest } from "next/server";
 import type { TodayResponse } from "@/lib/types";
 import { jsonPuzzleStore } from "@/lib/puzzleStore";
 import { getTodayPuzzle } from "@/lib/daily";
 import { toPublicPuzzle } from "@/lib/public";
+import { resolveLocale } from "@/lib/server-locale";
 
 // This route depends on the current date, so it must not be statically cached.
 export const dynamic = "force-dynamic";
@@ -29,9 +31,13 @@ function resolveDate(req: NextRequest): Date {
 
 export async function GET(req: NextRequest): Promise<Response> {
   try {
+    const locale = await resolveLocale(req.nextUrl.searchParams.get("locale"));
     const puzzles = await jsonPuzzleStore.getAll();
     const { puzzle, dayNumber } = getTodayPuzzle(puzzles, resolveDate(req));
-    const body: TodayResponse = { puzzle: toPublicPuzzle(puzzle), dayNumber };
+    const body: TodayResponse = {
+      puzzle: toPublicPuzzle(puzzle, locale),
+      dayNumber,
+    };
     return Response.json(body);
   } catch (err) {
     console.error("[api/puzzle/today] failed:", err);

@@ -5,9 +5,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function OnboardingForm({ email }: { email: string }) {
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations("Onboarding");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [teamName, setTeamName] = useState("");
@@ -32,15 +35,14 @@ export default function OnboardingForm({ email }: { email: string }) {
         }),
       });
       if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as { error?: string } | null;
-        setError(data?.error ?? "Couldn't save that — please try again.");
+        setError(t("saveFailed"));
         setSubmitting(false);
         return;
       }
-      router.replace("/");
+      router.replace(`/${locale}`);
       router.refresh();
     } catch {
-      setError("Couldn't reach the server — please try again.");
+      setError(t("serverUnreachable"));
       setSubmitting(false);
     }
   }
@@ -61,7 +63,7 @@ export default function OnboardingForm({ email }: { email: string }) {
 
       <div className="flex flex-col gap-2">
         <label htmlFor="firstName" className="text-sm font-bold text-ink">
-          First name
+          {t("firstName")}
         </label>
         <input
           id="firstName"
@@ -77,7 +79,7 @@ export default function OnboardingForm({ email }: { email: string }) {
 
       <div className="flex flex-col gap-2">
         <label htmlFor="lastName" className="text-sm font-bold text-ink">
-          Last name
+          {t("lastName")}
         </label>
         <input
           id="lastName"
@@ -92,8 +94,8 @@ export default function OnboardingForm({ email }: { email: string }) {
 
       <div className="flex flex-col gap-2">
         <label htmlFor="teamName" className="text-sm font-bold text-ink">
-          Team name{" "}
-          <span className="font-medium text-ink-soft">(optional)</span>
+          {t("teamName")}{" "}
+          <span className="font-medium text-ink-soft">{t("optional")}</span>
         </label>
         <input
           id="teamName"
@@ -101,14 +103,14 @@ export default function OnboardingForm({ email }: { email: string }) {
           autoComplete="off"
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
-          placeholder="Leave blank if you're flying solo"
+          placeholder={t("teamPlaceholder")}
           className={inputClass}
         />
       </div>
 
       <div className="flex flex-col gap-2">
         <label htmlFor="school" className="text-sm font-bold text-ink">
-          School
+          {t("school")}
         </label>
         <input
           id="school"
@@ -126,11 +128,14 @@ export default function OnboardingForm({ email }: { email: string }) {
         disabled={submitting}
         className="mt-2 rounded-2xl bg-brand px-6 py-3.5 text-base font-bold text-white shadow-sm transition active:translate-y-px active:bg-brand-dark disabled:opacity-60"
       >
-        {submitting ? "Saving…" : "Start playing"}
+        {submitting ? t("saving") : t("startPlaying")}
       </button>
 
       <p className="text-xs text-ink-soft">
-        Signed in as <span className="font-medium break-all">{email}</span>.
+        {t.rich("signedInAs", {
+          email,
+          b: (chunks) => <span className="font-medium break-all">{chunks}</span>,
+        })}
       </p>
     </form>
   );

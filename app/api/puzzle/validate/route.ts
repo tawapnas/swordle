@@ -19,6 +19,8 @@ import { validate } from "@/lib/validate";
 import { getTodayPuzzle } from "@/lib/daily";
 import { getSessionUser } from "@/lib/supabase/server";
 import { recordValidateAttempt } from "@/lib/account-data";
+import { pickLocale } from "@/lib/public";
+import { resolveLocale } from "@/lib/server-locale";
 
 export const dynamic = "force-dynamic";
 
@@ -49,10 +51,11 @@ export async function POST(req: NextRequest): Promise<Response> {
       return Response.json({ error: "Puzzle not found" }, { status: 404 });
     }
 
+    const locale = await resolveLocale(req.nextUrl.searchParams.get("locale"));
     const correct = validate(puzzle, body.answer);
     const result: ValidateResultWithAccount = {
       correct,
-      explanation: puzzle.explanation,
+      explanation: pickLocale(puzzle.explanation, locale),
     };
 
     const user = await getSessionUser();

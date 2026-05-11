@@ -9,7 +9,9 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:3000>. With no configuration the game runs anonymously — daily puzzle, 60-second timer, sharing, and a localStorage streak, no sign-in. Once you [configure Supabase](#sign-in--accounts-supabase), the app is **gated behind a sign-in welcome screen** (email magic link or Google) and streaks/records are stored server-side, with an `/admin` dashboard.
+Open <http://localhost:3000>. Bilingual out of the box (English & Thai — toggle in the corner; URLs are `/en/...` and `/th/...`). With no configuration the game runs anonymously — daily puzzle, 60-second timer, sharing, and a localStorage streak, no sign-in. Once you [configure Supabase](#sign-in--accounts-supabase), the app is **gated behind a sign-in welcome screen** (email magic link or Google) and streaks/records are stored server-side, with an `/admin` dashboard.
+
+> `next-intl@4` lists Next 16 as a stable peer dep; run `npm install --legacy-peer-deps` to satisfy it against the `16.x-canary` pin in `package.json`.
 
 ### Commands
 
@@ -160,6 +162,18 @@ Next.js 16 (App Router, Turbopack — **canary**, pinned in `package.json`) · R
 
 - **`npm run build` fails on Apple Silicon Macs running an x86-64 Node under Rosetta** — Tailwind v4 needs the `lightningcss` native binary matching your Node arch, and only `lightningcss-darwin-arm64` gets installed. `npm run dev` is unaffected. Fix: install an arm64 build of Node (nvm/Homebrew) and reinstall deps. (`build` works fine on Linux CI / Vercel.)
 - A network error while submitting an answer currently counts the attempt as a miss (and resets the streak). Soften to a retry if that matters for your players.
+
+## Languages
+
+The UI and per-puzzle text are localized to **English** and **Thai**, switchable via the corner toggle (or by editing the URL prefix `/en/...` ↔ `/th/...`). UI strings live in [`messages/en.json`](messages/en.json) and [`messages/th.json`](messages/th.json) under namespaces (`Brand`, `Welcome`, `Login`, `Onboarding`, `Game`, `Result`, `Admin`, …). Per-puzzle `prompt` and `explanation` are stored as `{ en, th }` objects in `data/puzzles.json` and resolved server-side by [`lib/public.ts`](lib/public.ts) before reaching the client. SwiftUI code and SF Symbol names inside puzzles stay English — they're a programming language, not prose.
+
+**Adding a new language:** add the locale to `i18n/routing.ts`'s `locales`, drop in `messages/<code>.json` (copy from `en.json` and translate), and add the field to every puzzle's `prompt`/`explanation` in `data/puzzles.json` (the `LocalizedString` type in `lib/types.ts` will enforce it).
+
+**Editing translations:** `messages/*.json` is hot-reloaded by `npm run dev`. For the puzzle bank, edit the Thai strings in [`scripts/localize-puzzles.mjs`](scripts/localize-puzzles.mjs)'s `TRANSLATIONS` map and re-run it, or hand-edit `data/puzzles.json` directly.
+
+The font (LINE Seed Sans TH) already ships both Latin and Thai glyphs, so no extra font work was needed.
+
+Supabase magic-link **email templates** are templated in the Supabase dashboard, not in this repo — to localize the email body, configure a Thai variant there. The app already passes the locale through the redirect URL (`/<locale>/auth/callback`), so post-sign-in lands the user back in their language.
 
 ## Not in MVP (v2 ideas)
 

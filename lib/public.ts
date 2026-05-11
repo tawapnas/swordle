@@ -1,49 +1,59 @@
-// Converts a full `Puzzle` (which carries the answer) into the answer-stripped
-// `PublicPuzzle` that API responses are allowed to expose. This is the single
-// chokepoint between "has the answer" and "safe to serialize" — route handlers
-// must pass puzzles through here before responding.
+// Converts a full `Puzzle` (server-side storage, localized strings, carries the
+// answer) into the `PublicPuzzle` the client sees: answer stripped, `prompt`
+// and `explanation` resolved to a single string for the request locale. This
+// is the single chokepoint between "has the answer / both languages" and "safe
+// to serialize".
 
-import type { Puzzle, PublicPuzzle } from "@/lib/types";
+import type { Locale } from "@/i18n/routing";
+import type { LocalizedString, Puzzle, PublicPuzzle } from "@/lib/types";
+import { routing } from "@/i18n/routing";
 
-export function toPublicPuzzle(puzzle: Puzzle): PublicPuzzle {
-  // Rebuild the object field-by-field rather than spreading, so there is no way
-  // for `answer` (or any future secret field) to leak through. Switching on the
-  // discriminant keeps the union narrowing intact for the return type.
+/** Pick the localized variant; falls back to the default locale if missing. */
+export function pickLocale(s: LocalizedString, locale: Locale): string {
+  return s[locale] || s[routing.defaultLocale] || "";
+}
+
+export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
+  // Rebuild the object field-by-field rather than spreading, so there is no
+  // way for `answer` (or any future secret field) to leak through. Switching
+  // on the discriminant keeps the union narrowing intact for the return type.
+  const prompt = pickLocale(puzzle.prompt, locale);
+  const explanation = pickLocale(puzzle.explanation, locale);
   switch (puzzle.type) {
     case "spot-bug":
       return {
         id: puzzle.id,
         type: puzzle.type,
-        prompt: puzzle.prompt,
+        prompt,
         difficulty: puzzle.difficulty,
-        explanation: puzzle.explanation,
+        explanation,
         payload: puzzle.payload,
       };
     case "predict-render":
       return {
         id: puzzle.id,
         type: puzzle.type,
-        prompt: puzzle.prompt,
+        prompt,
         difficulty: puzzle.difficulty,
-        explanation: puzzle.explanation,
+        explanation,
         payload: puzzle.payload,
       };
     case "fill-modifier":
       return {
         id: puzzle.id,
         type: puzzle.type,
-        prompt: puzzle.prompt,
+        prompt,
         difficulty: puzzle.difficulty,
-        explanation: puzzle.explanation,
+        explanation,
         payload: puzzle.payload,
       };
     case "syntax-sort":
       return {
         id: puzzle.id,
         type: puzzle.type,
-        prompt: puzzle.prompt,
+        prompt,
         difficulty: puzzle.difficulty,
-        explanation: puzzle.explanation,
+        explanation,
         payload: puzzle.payload,
       };
     default: {

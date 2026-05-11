@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import type { User } from "@supabase/supabase-js";
 import {
   createSupabaseBrowserClient,
@@ -15,6 +16,8 @@ import {
 
 export default function AccountBar() {
   const router = useRouter();
+  const t = useTranslations("AccountBar");
+  const locale = useLocale();
   const [configured] = useState(isSupabaseConfigured);
   const [user, setUser] = useState<User | null>(null);
   const [signingOut, setSigningOut] = useState(false);
@@ -55,10 +58,10 @@ export default function AccountBar() {
   if (!user) {
     return (
       <Link
-        href="/login"
+        href={`/${locale}/login`}
         className="shrink-0 text-xs font-bold text-ink-soft underline-offset-2 hover:text-brand hover:underline"
       >
-        Sign in
+        {t("signIn")}
       </Link>
     );
   }
@@ -77,7 +80,7 @@ export default function AccountBar() {
         disabled={signingOut}
         className="shrink-0 rounded-lg px-2 py-1 text-xs font-bold text-ink-soft transition hover:bg-card hover:text-brand active:translate-y-px disabled:opacity-50"
       >
-        Sign out
+        {t("signOut")}
       </button>
     </div>
   );

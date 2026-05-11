@@ -1,0 +1,123 @@
+{
+  "Brand": {
+    "name": "Swordle",
+    "orgName": "Swift Coding Club Thailand",
+    "dayLabel": "#{day}"
+  },
+  "Welcome": {
+    "tagline": "The daily SwiftUI puzzle.",
+    "pitch": "A new puzzle every day. Sixty seconds on the clock. Keep your streak alive.",
+    "types": {
+      "spotBug": "🐛 Spot the bug in a snippet",
+      "predictRender": "🖼️ Predict what a view renders",
+      "fillModifier": "🧩 Fill in the missing modifier",
+      "syntaxSort": "🔀 Sort the lines into a working view"
+    },
+    "signInToPlay": "Sign in to play"
+  },
+  "Login": {
+    "subhead": "Sign in to play the daily puzzle and keep your streak across devices.",
+    "unconfiguredTitle": "Sign-in isn't set up on this deployment yet.",
+    "unconfiguredBody": "Add the Supabase environment variables to enable accounts. Until then the game runs without sign-in.",
+    "checkEmailTitle": "Check your email 📬",
+    "checkEmailBody": "We sent a magic link to {email}. Open it on this device to sign in.",
+    "useDifferentEmail": "Use a different email",
+    "linkFailed": "That link didn't work — try again.",
+    "continueWithGoogle": "Continue with Google",
+    "redirecting": "Redirecting…",
+    "or": "or",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@school.edu",
+    "sending": "Sending…",
+    "emailMeLink": "Email me a magic link",
+    "noPassword": "No password needed — we'll email you a link that signs you in.",
+    "back": "← Back"
+  },
+  "Onboarding": {
+    "wave": "👋",
+    "title": "Welcome to Swordle!",
+    "subhead": "A couple of quick things before your first puzzle.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "teamName": "Team name",
+    "optional": "(optional)",
+    "teamPlaceholder": "Leave blank if you're flying solo",
+    "school": "School",
+    "saving": "Saving…",
+    "startPlaying": "Start playing",
+    "signedInAs": "Signed in as <b>{email}</b>.",
+    "saveFailed": "Couldn't save that — please try again.",
+    "serverUnreachable": "Couldn't reach the server — please try again."
+  },
+  "Game": {
+    "loading": "Loading today's puzzle…",
+    "errorTitle": "Couldn't load the puzzle",
+    "devPreview": "Dev preview · {date} · drop the ?date= param to play today",
+    "submit": "Submit",
+    "syntaxSort": {
+      "hint": "Tap a line then tap another to swap them, or use the arrows.",
+      "moveUp": "Move line {n} up",
+      "moveDown": "Move line {n} down",
+      "lineSelected": "Line {n}: {text}. Selected. Tap another line to swap.",
+      "lineIdle": "Line {n}: {text}. Tap to select.",
+      "blank": "blank"
+    },
+    "scorerUnreachable": "We couldn't reach the scorer — counted as a miss."
+  },
+  "Result": {
+    "solvedBanner": "Solved it!",
+    "failedBanner": "Not this time",
+    "time": "Time",
+    "currentStreak": "Current streak",
+    "longestStreak": "Longest",
+    "comeBackTomorrow": "Come back tomorrow for a fresh puzzle.",
+    "share": "Share",
+    "signInCta": "🔥 Sign in to save your streak →",
+    "alreadyPlayedTitle": "You've played today's puzzle"
+  },
+  "AccountBar": {
+    "signIn": "Sign in",
+    "signOut": "Sign out"
+  },
+  "Admin": {
+    "title": "Admin dashboard",
+    "noAccess": "You don't have access to this page.",
+    "noData": "No data yet — once players sign in and play, this dashboard will fill in.",
+    "unconfigured": "Connect Supabase to see data.",
+    "stats": {
+      "totalUsers": "Total users",
+      "totalAttempts": "Total attempts",
+      "totalSolved": "Total solved",
+      "solveRate": "Solve rate"
+    },
+    "byDay": {
+      "title": "By day",
+      "day": "#Day",
+      "players": "Players",
+      "solved": "Solved",
+      "rate": "Solve %"
+    },
+    "streaks": {
+      "title": "Streak distribution",
+      "streak": "Streak",
+      "users": "Users"
+    },
+    "signups": {
+      "title": "Recent signups",
+      "empty": "No signups yet."
+    }
+  },
+  "Toast": {
+    "copied": "Copied to clipboard!"
+  },
+  "Language": {
+    "english": "EN",
+    "thai": "ไทย",
+    "switchTo": "Switch to {language}"
+  },
+  "Site": {
+    "rightsReserved": "All rights reserved.",
+    "emailUs": "Email us",
+    "facebook": "Facebook"
+  }
+}

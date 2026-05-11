@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { GameResult } from "@/lib/streak";
 import ResultCard from "./ResultCard";
 
@@ -22,6 +23,7 @@ export default function AlreadyPlayed({
   longestStreak: number;
   showSignInCta?: boolean;
 }) {
+  const tResult = useTranslations("Result");
   return (
     <ResultCard
       dayNumber={dayNumber}
@@ -29,7 +31,7 @@ export default function AlreadyPlayed({
       timeMs={timeMs}
       currentStreak={currentStreak}
       longestStreak={longestStreak}
-      heading="You already played today"
+      heading={tResult("alreadyPlayedTitle")}
       showSignInCta={showSignInCta}
     />
   );

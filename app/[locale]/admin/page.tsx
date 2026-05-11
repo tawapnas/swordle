@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { getSessionUser, isSupabaseConfigured } from "@/lib/supabase/server";
 import { isAdminEmail } from "@/lib/supabase/admin";
 import { getAdminOverview } from "@/lib/account-data";
@@ -8,30 +9,36 @@ import AdminDashboard from "@/components/admin/AdminDashboard";
 export const metadata = { title: "Admin — Swordle" };
 export const dynamic = "force-dynamic";
 
-function NoAccess() {
+async function NoAccess({ locale }: { locale: string }) {
+  const tAdmin = await getTranslations("Admin");
+  const tLogin = await getTranslations("Login");
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col items-center gap-4 px-4 py-16 text-center">
       <span className="text-4xl" aria-hidden>
         🔒
       </span>
-      <h1 className="text-xl font-black text-ink">You don&apos;t have access to this page</h1>
-      <p className="text-sm text-ink-soft">
-        The admin dashboard is for the Swordle organizer.
-      </p>
+      <h1 className="text-xl font-black text-ink">{tAdmin("noAccess")}</h1>
       <Link
-        href="/"
+        href={`/${locale}`}
         className="text-sm font-bold text-brand underline-offset-2 hover:underline"
       >
-        ← Back to today&apos;s puzzle
+        {tLogin("back")}
       </Link>
     </main>
   );
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const user = await getSessionUser();
-  if (!user) redirect("/login?next=/admin");
-  if (!isAdminEmail(user.email)) return <NoAccess />;
+  if (!user) redirect(`/${locale}/login?next=/${locale}/admin`);
+  if (!isAdminEmail(user.email)) return <NoAccess locale={locale} />;
 
   const overview = await getAdminOverview();
   return (

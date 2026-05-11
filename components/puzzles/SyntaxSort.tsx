@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { PuzzleComponentProps } from "./types";
 
 /**
@@ -16,6 +17,8 @@ export default function SyntaxSort({
   onSubmit,
   disabled,
 }: PuzzleComponentProps) {
+  const t = useTranslations("Game");
+  const tSort = useTranslations("Game.syntaxSort");
   const initial =
     puzzle.type === "syntax-sort"
       ? puzzle.payload.shuffledLines.map((_, i) => i)
@@ -64,9 +67,17 @@ export default function SyntaxSort({
                 disabled={disabled}
                 onClick={() => tapLine(pos)}
                 aria-pressed={isSelected}
-                aria-label={`Line ${pos + 1}: ${lines[origIdx].trim() || "blank"}. ${
-                  isSelected ? "Selected. Tap another line to swap." : "Tap to select."
-                }`}
+                aria-label={
+                  isSelected
+                    ? tSort("lineSelected", {
+                        n: pos + 1,
+                        text: lines[origIdx].trim() || tSort("blank"),
+                      })
+                    : tSort("lineIdle", {
+                        n: pos + 1,
+                        text: lines[origIdx].trim() || tSort("blank"),
+                      })
+                }
                 className="flex-1 overflow-x-auto px-3 py-2.5 text-left font-mono text-[13px] leading-relaxed text-code-fg active:bg-brand/30 disabled:cursor-default sm:text-sm"
               >
                 <span className="whitespace-pre">
@@ -78,7 +89,7 @@ export default function SyntaxSort({
                   type="button"
                   disabled={disabled || pos === 0}
                   onClick={() => swap(pos, pos - 1)}
-                  aria-label={`Move line ${pos + 1} up`}
+                  aria-label={tSort("moveUp", { n: pos + 1 })}
                   className="rounded-lg p-1 text-code-fg/60 transition hover:bg-white/10 hover:text-code-fg active:translate-y-px disabled:opacity-25"
                 >
                   <ChevronUp size={18} aria-hidden />
@@ -87,7 +98,7 @@ export default function SyntaxSort({
                   type="button"
                   disabled={disabled || pos === order.length - 1}
                   onClick={() => swap(pos, pos + 1)}
-                  aria-label={`Move line ${pos + 1} down`}
+                  aria-label={tSort("moveDown", { n: pos + 1 })}
                   className="rounded-lg p-1 text-code-fg/60 transition hover:bg-white/10 hover:text-code-fg active:translate-y-px disabled:opacity-25"
                 >
                   <ChevronDown size={18} aria-hidden />
@@ -97,16 +108,14 @@ export default function SyntaxSort({
           );
         })}
       </ol>
-      <p className="text-sm text-ink-soft">
-        Tap a line then tap another to swap them, or use the arrows.
-      </p>
+      <p className="text-sm text-ink-soft">{tSort("hint")}</p>
       <button
         type="button"
         disabled={disabled}
         onClick={() => onSubmit({ correctOrder: order })}
         className="rounded-2xl bg-brand px-6 py-3.5 text-base font-bold text-white shadow-sm transition active:translate-y-px active:bg-brand-dark disabled:opacity-40"
       >
-        Submit
+        {t("submit")}
       </button>
     </div>
   );

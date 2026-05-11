@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { PublicPuzzle, TodayResponse } from "@/lib/types";
 import type { MeResponse, ValidateResultWithAccount } from "@/lib/account";
 import { readState, recordResult, type GameResult } from "@/lib/streak";
@@ -17,6 +19,7 @@ import {
 } from "@/lib/supabase/client";
 import Timer from "./Timer";
 import AccountBar from "./AccountBar";
+import LanguageToggle from "./LanguageToggle";
 import PuzzleRenderer from "./puzzles/PuzzleRenderer";
 import ResultScreen from "./ResultScreen";
 import AlreadyPlayed from "./AlreadyPlayed";
@@ -35,7 +38,11 @@ type Phase =
       streaks: Streaks;
     };
 
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
 export default function GamePage() {
+  const t = useTranslations("Game");
+  const tBrand = useTranslations("Brand");
   const [phase, setPhase] = useState<Phase>({ kind: "loading" });
   /** True once we know the player is signed in (server-backed). */
   const [signedIn, setSignedIn] = useState(false);
@@ -43,13 +50,29 @@ export default function GamePage() {
   const submittedRef = useRef(false);
   const pendingAnswerRef = useRef<unknown>(null);
 
-  // Mount: fetch today's puzzle + (if a session exists) the server account,
-  // import legacy localStorage progress once, then decide the phase.
+  // Dev-only `?date=YYYY-MM-DD` override — lets devs preview any specific day's
+  // puzzle without editing data/puzzles.json. The API gates the param on
+  // NODE_ENV !== "production", so it's a no-op in deployed/production builds.
+  // Note: validate still records attempts under the *real* today's day_number;
+  // clear `attempts` if you want a clean record after exploring.
+  const searchParams = useSearchParams();
+  const rawDate = searchParams.get("date");
+  const previewDate = rawDate && DATE_RE.test(rawDate) ? rawDate : null;
+
+  // Mount (or when ?date= changes): fetch the right puzzle + (if a session
+  // exists) the server account, import legacy localStorage progress once,
+  // then decide the phase.
   useEffect(() => {
     let cancelled = false;
+    // Reset per-puzzle state so a ?date= change starts a fresh attempt.
+    submittedRef.current = false;
+    pendingAnswerRef.current = null;
+    const todayUrl = previewDate
+      ? `/api/puzzle/today?date=${previewDate}`
+      : "/api/puzzle/today";
     (async () => {
       try {
-        const res = await fetch("/api/puzzle/today", { cache: "no-store" });
+        const res = await fetch(todayUrl, { cache: "no-store" });
         if (!res.ok) throw new Error(`today returned ${res.status}`);
         const today = (await res.json()) as TodayResponse;
         const me = await loadAccount();
@@ -73,14 +96,19 @@ export default function GamePage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [previewDate]);
 
   const finish = useCallback(
     async (puzzle: PublicPuzzle, dayNumber: number, answer: unknown) => {
       if (submittedRef.current) return;
       submittedRef.current = true;
       const timeMs = Date.now() - startedAtRef.current;
-      const { data, explanation } = await submitAnswer(puzzle.id, answer, timeMs);
+      const { data, explanation } = await submitAnswer(
+        puzzle.id,
+        answer,
+        timeMs,
+        t("scorerUnreachable"),
+      );
       const result: GameResult = (data?.correct ?? false) ? "solved" : "failed";
 
       // Signed-in path: trust the server's streak / alreadyPlayed.
@@ -114,7 +142,7 @@ export default function GamePage() {
         streaks: streaksFromState(state),
       });
     },
-    [],
+    [t],
   );
 
   const handleSubmit = useCallback(
@@ -141,22 +169,33 @@ export default function GamePage() {
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
       <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
         <h1 className="text-xl font-black text-brand sm:text-2xl">
-          Swordle
-          {headerDay !== null && <span className="ml-2 text-ink-soft">#{headerDay}</span>}
+          {tBrand("name")}
+          {headerDay !== null && (
+            <span className="ml-2 text-ink-soft">
+              {tBrand("dayLabel", { day: headerDay })}
+            </span>
+          )}
         </h1>
         <div className="flex items-center gap-3">
+          <LanguageToggle />
           <AccountBar />
           {phase.kind === "playing" && <Timer running onExpire={handleExpire} />}
         </div>
       </header>
 
+      {previewDate && process.env.NODE_ENV !== "production" && (
+        <div className="rounded-xl bg-flame/10 px-3 py-2 text-xs font-bold text-flame">
+          {t("devPreview", { date: previewDate })}
+        </div>
+      )}
+
       {phase.kind === "loading" && (
-        <p className="mt-10 text-center text-ink-soft">Loading today&apos;s puzzle…</p>
+        <p className="mt-10 text-center text-ink-soft">{t("loading")}</p>
       )}
 
       {phase.kind === "error" && (
         <div className="mt-10 rounded-2xl bg-card px-5 py-4 text-center text-sm text-ink ring-1 ring-line">
-          <p className="font-bold">Couldn&apos;t load the puzzle</p>
+          <p className="font-bold">{t("errorTitle")}</p>
           <p className="mt-1 text-ink-soft">{phase.message}</p>
         </div>
       )}
@@ -219,6 +258,7 @@ async function submitAnswer(
   id: string,
   answer: unknown,
   timeMs: number,
+  fallbackExplanation: string,
 ): Promise<{ data: ValidateResultWithAccount | null; explanation: string }> {
   try {
     const res = await fetch("/api/puzzle/validate", {
@@ -233,5 +273,5 @@ async function submitAnswer(
   } catch {
     /* fall through */
   }
-  return { data: null, explanation: "We couldn't reach the scorer — counted as a miss." };
+  return { data: null, explanation: fallbackExplanation };
 }

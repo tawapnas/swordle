@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { AdminOverview } from "@/lib/account";
 import StatCards from "./StatCards";
 import ByDayTable from "./ByDayTable";
 import StreakHistogram from "./StreakHistogram";
 import RecentSignups from "./RecentSignups";
 
-export default function AdminDashboard({
+export default async function AdminDashboard({
   overview,
   configured,
   adminEmail,
@@ -14,6 +15,9 @@ export default function AdminDashboard({
   configured: boolean;
   adminEmail: string;
 }) {
+  const t = await getTranslations("Admin");
+  const tLogin = await getTranslations("Login");
+  const locale = await getLocale();
   const empty =
     overview.totalUsers === 0 &&
     overview.totalAttempts === 0 &&
@@ -24,21 +28,20 @@ export default function AdminDashboard({
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-8 sm:py-12">
       <header className="flex flex-wrap items-baseline justify-between gap-2">
         <div>
-          <h1 className="text-2xl font-black text-brand">Swordle admin</h1>
-          <p className="text-sm text-ink-soft">Signed in as {adminEmail}</p>
+          <h1 className="text-2xl font-black text-brand">{t("title")}</h1>
+          <p className="text-sm text-ink-soft">{adminEmail}</p>
         </div>
         <Link
-          href="/"
+          href={`/${locale}`}
           className="text-sm font-bold text-ink-soft underline-offset-2 hover:text-brand hover:underline"
         >
-          ← Back to the game
+          {tLogin("back")}
         </Link>
       </header>
 
       {!configured && (
         <p className="rounded-2xl bg-card px-5 py-4 text-sm text-ink ring-1 ring-line">
-          <strong>Connect Supabase to see data.</strong> Set the Supabase
-          environment variables on this deployment and the dashboard will fill in.
+          {t("unconfigured")}
         </p>
       )}
 
@@ -46,8 +49,7 @@ export default function AdminDashboard({
 
       {empty ? (
         <div className="rounded-2xl bg-card px-5 py-10 text-center text-sm text-ink-soft ring-1 ring-line">
-          No data yet — once players start signing in and solving puzzles, their
-          stats show up here.
+          {t("noData")}
         </div>
       ) : (
         <div className="flex flex-col gap-8">

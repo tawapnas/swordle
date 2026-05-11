@@ -1,9 +1,19 @@
 // Shared puzzle contract for Swordle.
 //
 // This file is the single source of truth for the puzzle data shape, consumed
-// by both the API routes (backend) and the player UI (frontend). The
-// backend-engineer owns the canonical version; the frontend imports it
-// read-only. Keep it dependency-free.
+// by both the API routes (backend) and the player UI (frontend). Keep it
+// dependency-free.
+//
+// Two layers:
+//   - `Puzzle` (server-side storage) — `prompt` and `explanation` are
+//     `LocalizedString` so the bank carries both languages.
+//   - `PublicPuzzle` (what the API returns) — `prompt` and `explanation` are
+//     plain strings, already resolved to the request locale by `toPublicPuzzle`.
+
+import type { Locale } from "@/i18n/routing";
+
+/** A piece of user-facing text translated for every supported locale. */
+export type LocalizedString = Record<Locale, string>;
 
 export type PuzzleType =
   | "spot-bug"
@@ -16,11 +26,11 @@ interface BasePuzzle {
   id: string;
   type: PuzzleType;
   /** Shown above the puzzle, e.g. "Which line breaks this view?". */
-  prompt: string;
+  prompt: LocalizedString;
   /** For future weighting; not surfaced in MVP UI. */
   difficulty: 1 | 2 | 3;
   /** Shown on the result screen — the teaching moment. */
-  explanation: string;
+  explanation: LocalizedString;
 }
 
 export interface SpotBugPuzzle extends BasePuzzle {
@@ -65,12 +75,19 @@ export type Puzzle =
   | FillModifierPuzzle
   | SyntaxSortPuzzle;
 
-/** What the API returns to the client — never includes `answer`. */
+interface BasePublicPuzzle {
+  id: string;
+  type: PuzzleType;
+  prompt: string;
+  difficulty: 1 | 2 | 3;
+  explanation: string;
+}
+
 export type PublicPuzzle =
-  | Omit<SpotBugPuzzle, "answer">
-  | Omit<PredictRenderPuzzle, "answer">
-  | Omit<FillModifierPuzzle, "answer">
-  | Omit<SyntaxSortPuzzle, "answer">;
+  | (BasePublicPuzzle & Pick<SpotBugPuzzle, "type" | "payload">)
+  | (BasePublicPuzzle & Pick<PredictRenderPuzzle, "type" | "payload">)
+  | (BasePublicPuzzle & Pick<FillModifierPuzzle, "type" | "payload">)
+  | (BasePublicPuzzle & Pick<SyntaxSortPuzzle, "type" | "payload">);
 
 /** Response shape of GET /api/puzzle/today. */
 export interface TodayResponse {

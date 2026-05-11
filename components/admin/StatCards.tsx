@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { AdminOverview } from "@/lib/account";
 
 function pct(part: number, whole: number): string {
@@ -5,12 +6,13 @@ function pct(part: number, whole: number): string {
   return `${Math.round((part / whole) * 100)}%`;
 }
 
-export default function StatCards({ overview }: { overview: AdminOverview }) {
+export default async function StatCards({ overview }: { overview: AdminOverview }) {
+  const t = await getTranslations("Admin.stats");
   const cards: { label: string; value: string }[] = [
-    { label: "Players", value: String(overview.totalUsers) },
-    { label: "Attempts", value: String(overview.totalAttempts) },
-    { label: "Solved", value: String(overview.totalSolved) },
-    { label: "Solve rate", value: pct(overview.totalSolved, overview.totalAttempts) },
+    { label: t("totalUsers"), value: String(overview.totalUsers) },
+    { label: t("totalAttempts"), value: String(overview.totalAttempts) },
+    { label: t("totalSolved"), value: String(overview.totalSolved) },
+    { label: t("solveRate"), value: pct(overview.totalSolved, overview.totalAttempts) },
   ];
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
