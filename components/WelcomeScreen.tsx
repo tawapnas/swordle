@@ -29,7 +29,6 @@ export default async function WelcomeScreen() {
 
       <ul className="flex flex-col gap-2 rounded-2xl bg-card px-5 py-4 text-sm text-ink ring-1 ring-line">
         <li>{tWelcome("types.spotBug")}</li>
-        <li>{tWelcome("types.predictRender")}</li>
         <li>{tWelcome("types.fillModifier")}</li>
         <li>{tWelcome("types.syntaxSort")}</li>
       </ul>

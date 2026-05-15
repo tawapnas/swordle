@@ -9,7 +9,6 @@
     "pitch": "ปริศนาใหม่ทุกวัน เวลา 60 วินาที รักษาสตรีคของคุณเอาไว้",
     "types": {
       "spotBug": "🐛 หาบั๊กในโค้ดให้เจอ",
-      "predictRender": "🖼️ ทายดูว่า view จะแสดงผลยังไง",
       "fillModifier": "🧩 เติม modifier ที่หายไป",
       "syntaxSort": "🔀 เรียงบรรทัดให้เป็น view ที่ใช้งานได้"
     },
@@ -105,6 +104,37 @@
     "signups": {
       "title": "สมาชิกใหม่ล่าสุด",
       "empty": "ยังไม่มีผู้สมัคร"
+    },
+    "puzzles": {
+      "title": "ปริศนา",
+      "create": "สร้างปริศนา",
+      "type": "ประเภทปริศนา",
+      "typeSpotBug": "หาบั๊ก",
+      "typeFillModifier": "เติม modifier",
+      "typeSyntaxSort": "เรียงลำดับโค้ด",
+      "idLabel": "ID (ไม่บังคับ — สร้างให้อัตโนมัติถ้าเว้นว่าง)",
+      "difficulty": "ระดับความยาก",
+      "promptEn": "โจทย์ (อังกฤษ)",
+      "promptTh": "โจทย์ (ไทย)",
+      "explanationEn": "คำอธิบาย (อังกฤษ)",
+      "explanationTh": "คำอธิบาย (ไทย)",
+      "codeLines": "บรรทัดโค้ด (บรรทัดละหนึ่งรายการ)",
+      "buggyLineIndex": "หมายเลขบรรทัดที่มีบั๊ก (เริ่มจาก 0)",
+      "codeBefore": "โค้ดก่อนช่องว่าง",
+      "codeAfter": "โค้ดหลังช่องว่าง",
+      "options": "ตัวเลือก (4 รายการ บรรทัดละหนึ่งรายการ)",
+      "correctIndex": "ตัวเลือกที่ถูก (0–3)",
+      "shuffledLines": "บรรทัดที่สลับ (บรรทัดละหนึ่งรายการ)",
+      "correctOrder": "ลำดับที่ถูก (ดัชนีคั่นด้วยจุลภาค เช่น 2,0,1,3)",
+      "submit": "สร้างปริศนา",
+      "creating": "กำลังสร้าง…",
+      "created": "สร้างปริศนาแล้ว",
+      "createFailed": "สร้างปริศนานี้ไม่สำเร็จ",
+      "delete": "ลบ",
+      "deleteConfirm": "ลบปริศนานี้?",
+      "listTitle": "ปริศนาที่มีอยู่",
+      "listEmpty": "ยังไม่มีปริศนาในฐานข้อมูล — รัน npm run seed:puzzles",
+      "unconfigured": "เชื่อมต่อ Supabase (service-role key) เพื่อจัดการปริศนา"
     }
   },
   "Toast": {

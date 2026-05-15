@@ -9,7 +9,6 @@
     "pitch": "A new puzzle every day. Sixty seconds on the clock. Keep your streak alive.",
     "types": {
       "spotBug": "🐛 Spot the bug in a snippet",
-      "predictRender": "🖼️ Predict what a view renders",
       "fillModifier": "🧩 Fill in the missing modifier",
       "syntaxSort": "🔀 Sort the lines into a working view"
     },
@@ -105,6 +104,37 @@
     "signups": {
       "title": "Recent signups",
       "empty": "No signups yet."
+    },
+    "puzzles": {
+      "title": "Puzzles",
+      "create": "Create a puzzle",
+      "type": "Puzzle type",
+      "typeSpotBug": "Spot the bug",
+      "typeFillModifier": "Fill the modifier",
+      "typeSyntaxSort": "Syntax sort",
+      "idLabel": "ID (optional — auto-generated if blank)",
+      "difficulty": "Difficulty",
+      "promptEn": "Prompt (English)",
+      "promptTh": "Prompt (Thai)",
+      "explanationEn": "Explanation (English)",
+      "explanationTh": "Explanation (Thai)",
+      "codeLines": "Code lines (one per line)",
+      "buggyLineIndex": "Buggy line number (0-based)",
+      "codeBefore": "Code before the blank",
+      "codeAfter": "Code after the blank",
+      "options": "Options (4, one per line)",
+      "correctIndex": "Correct option (0–3)",
+      "shuffledLines": "Shuffled lines (one per line)",
+      "correctOrder": "Correct order (comma-separated indices, e.g. 2,0,1,3)",
+      "submit": "Create puzzle",
+      "creating": "Creating…",
+      "created": "Puzzle created.",
+      "createFailed": "Couldn't create that puzzle.",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this puzzle?",
+      "listTitle": "Existing puzzles",
+      "listEmpty": "No puzzles in the database yet — run npm run seed:puzzles.",
+      "unconfigured": "Connect Supabase (service-role key) to manage puzzles."
     }
   },
   "Toast": {

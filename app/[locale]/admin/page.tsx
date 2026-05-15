@@ -2,8 +2,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { getSessionUser, isSupabaseConfigured } from "@/lib/supabase/server";
-import { isAdminEmail } from "@/lib/supabase/admin";
+import { isAdminConfigured, isAdminEmail } from "@/lib/supabase/admin";
 import { getAdminOverview } from "@/lib/account-data";
+import { listAllPuzzles } from "@/lib/puzzle-admin";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 
 export const metadata = { title: "Admin — Swordle" };
@@ -41,11 +42,15 @@ export default async function AdminPage({
   if (!isAdminEmail(user.email)) return <NoAccess locale={locale} />;
 
   const overview = await getAdminOverview();
+  const puzzlesConfigured = isAdminConfigured();
+  const puzzles = puzzlesConfigured ? await listAllPuzzles() : [];
   return (
     <AdminDashboard
       overview={overview}
       configured={isSupabaseConfigured()}
       adminEmail={user.email ?? ""}
+      puzzles={puzzles}
+      puzzlesConfigured={puzzlesConfigured}
     />
   );
 }

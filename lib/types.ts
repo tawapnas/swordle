@@ -15,11 +15,7 @@ import type { Locale } from "@/i18n/routing";
 /** A piece of user-facing text translated for every supported locale. */
 export type LocalizedString = Record<Locale, string>;
 
-export type PuzzleType =
-  | "spot-bug"
-  | "predict-render"
-  | "fill-modifier"
-  | "syntax-sort";
+export type PuzzleType = "spot-bug" | "fill-modifier" | "syntax-sort";
 
 interface BasePuzzle {
   /** Stable id, e.g. "2026-01-01-spotbug-01". */
@@ -37,16 +33,6 @@ export interface SpotBugPuzzle extends BasePuzzle {
   type: "spot-bug";
   payload: { codeLines: string[] };
   answer: { buggyLineIndex: number };
-}
-
-export interface PredictRenderPuzzle extends BasePuzzle {
-  type: "predict-render";
-  payload: {
-    code: string;
-    /** Exactly 4 options. `mockupSvg` is inline SVG markup. */
-    options: { id: string; mockupSvg: string }[];
-  };
-  answer: { correctOptionId: string };
 }
 
 export interface FillModifierPuzzle extends BasePuzzle {
@@ -69,11 +55,7 @@ export interface SyntaxSortPuzzle extends BasePuzzle {
   answer: { correctOrder: number[] };
 }
 
-export type Puzzle =
-  | SpotBugPuzzle
-  | PredictRenderPuzzle
-  | FillModifierPuzzle
-  | SyntaxSortPuzzle;
+export type Puzzle = SpotBugPuzzle | FillModifierPuzzle | SyntaxSortPuzzle;
 
 interface BasePublicPuzzle {
   id: string;
@@ -85,7 +67,6 @@ interface BasePublicPuzzle {
 
 export type PublicPuzzle =
   | (BasePublicPuzzle & Pick<SpotBugPuzzle, "type" | "payload">)
-  | (BasePublicPuzzle & Pick<PredictRenderPuzzle, "type" | "payload">)
   | (BasePublicPuzzle & Pick<FillModifierPuzzle, "type" | "payload">)
   | (BasePublicPuzzle & Pick<SyntaxSortPuzzle, "type" | "payload">);
 

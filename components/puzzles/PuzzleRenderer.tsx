@@ -2,7 +2,6 @@
 
 import type { PublicPuzzle } from "@/lib/types";
 import SpotTheBug from "./SpotTheBug";
-import PredictTheRender from "./PredictTheRender";
 import FillTheModifier from "./FillTheModifier";
 import SyntaxSort from "./SyntaxSort";
 
@@ -20,8 +19,6 @@ export default function PuzzleRenderer({
   switch (puzzle.type) {
     case "spot-bug":
       return <SpotTheBug {...props} />;
-    case "predict-render":
-      return <PredictTheRender {...props} />;
     case "fill-modifier":
       return <FillTheModifier {...props} />;
     case "syntax-sort":

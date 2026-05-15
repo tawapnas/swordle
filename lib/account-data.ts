@@ -22,7 +22,7 @@ import {
   isAdminConfigured,
   isAdminEmail,
 } from "@/lib/supabase/admin";
-import { jsonPuzzleStore } from "@/lib/puzzleStore";
+import { getPuzzleStore } from "@/lib/puzzleStore";
 import { getTodayPuzzle } from "@/lib/daily";
 
 // ---------------------------------------------------------------------------
@@ -193,7 +193,7 @@ export function liveStreakFromAttempts(
 }
 
 async function todayDayNumber(): Promise<number> {
-  const { dayNumber } = getTodayPuzzle(await jsonPuzzleStore.getAll());
+  const { dayNumber } = getTodayPuzzle(await getPuzzleStore().getAll());
   return dayNumber;
 }
 
@@ -424,7 +424,7 @@ export async function importLegacyAttempt(
   timeMs: number,
 ): Promise<boolean> {
   if (!isSupabaseConfigured()) return false;
-  const all = await jsonPuzzleStore.getAll();
+  const all = await getPuzzleStore().getAll();
   const len = all.length;
   const idx = (((lastDayNumber - 1) % len) + len) % len;
   const puzzleId = all[idx].id;

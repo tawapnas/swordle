@@ -29,15 +29,6 @@ export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
         explanation,
         payload: puzzle.payload,
       };
-    case "predict-render":
-      return {
-        id: puzzle.id,
-        type: puzzle.type,
-        prompt,
-        difficulty: puzzle.difficulty,
-        explanation,
-        payload: puzzle.payload,
-      };
     case "fill-modifier":
       return {
         id: puzzle.id,

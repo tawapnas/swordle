@@ -8,7 +8,7 @@
 
 import type { NextRequest } from "next/server";
 import type { TodayResponse } from "@/lib/types";
-import { jsonPuzzleStore } from "@/lib/puzzleStore";
+import { getPuzzleStore } from "@/lib/puzzleStore";
 import { getTodayPuzzle } from "@/lib/daily";
 import { toPublicPuzzle } from "@/lib/public";
 import { resolveLocale } from "@/lib/server-locale";
@@ -32,7 +32,7 @@ function resolveDate(req: NextRequest): Date {
 export async function GET(req: NextRequest): Promise<Response> {
   try {
     const locale = await resolveLocale(req.nextUrl.searchParams.get("locale"));
-    const puzzles = await jsonPuzzleStore.getAll();
+    const puzzles = await getPuzzleStore().getAll();
     const { puzzle, dayNumber } = getTodayPuzzle(puzzles, resolveDate(req));
     const body: TodayResponse = {
       puzzle: toPublicPuzzle(puzzle, locale),

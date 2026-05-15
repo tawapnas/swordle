@@ -28,10 +28,6 @@ export function validate(puzzle: Puzzle, userAnswer: unknown): boolean {
       if (!isRecord(userAnswer)) return false;
       return userAnswer.buggyLineIndex === puzzle.answer.buggyLineIndex;
     }
-    case "predict-render": {
-      if (!isRecord(userAnswer)) return false;
-      return userAnswer.correctOptionId === puzzle.answer.correctOptionId;
-    }
     case "fill-modifier": {
       if (!isRecord(userAnswer)) return false;
       return userAnswer.correctIndex === puzzle.answer.correctIndex;

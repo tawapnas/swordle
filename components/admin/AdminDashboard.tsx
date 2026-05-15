@@ -1,19 +1,25 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { AdminOverview } from "@/lib/account";
+import type { Puzzle } from "@/lib/types";
 import StatCards from "./StatCards";
 import ByDayTable from "./ByDayTable";
 import StreakHistogram from "./StreakHistogram";
 import RecentSignups from "./RecentSignups";
+import PuzzleManager from "./PuzzleManager";
 
 export default async function AdminDashboard({
   overview,
   configured,
   adminEmail,
+  puzzles,
+  puzzlesConfigured,
 }: {
   overview: AdminOverview;
   configured: boolean;
   adminEmail: string;
+  puzzles: Puzzle[];
+  puzzlesConfigured: boolean;
 }) {
   const t = await getTranslations("Admin");
   const tLogin = await getTranslations("Login");
@@ -58,6 +64,8 @@ export default async function AdminDashboard({
           <RecentSignups signups={overview.recentSignups} />
         </div>
       )}
+
+      <PuzzleManager puzzles={puzzles} configured={puzzlesConfigured} />
     </main>
   );
 }

@@ -14,7 +14,7 @@
 
 import type { NextRequest } from "next/server";
 import type { ValidateResultWithAccount } from "@/lib/account";
-import { jsonPuzzleStore } from "@/lib/puzzleStore";
+import { getPuzzleStore } from "@/lib/puzzleStore";
 import { validate } from "@/lib/validate";
 import { getTodayPuzzle } from "@/lib/daily";
 import { getSessionUser } from "@/lib/supabase/server";
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   const timeMs = typeof body.timeMs === "number" && Number.isFinite(body.timeMs) ? body.timeMs : 0;
 
   try {
-    const puzzles = await jsonPuzzleStore.getAll();
+    const puzzles = await getPuzzleStore().getAll();
     const puzzle = puzzles.find((p) => p.id === body.id) ?? null;
     if (!puzzle) {
       return Response.json({ error: "Puzzle not found" }, { status: 404 });

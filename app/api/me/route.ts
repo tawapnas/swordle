@@ -8,7 +8,7 @@
 import type { MeResponse } from "@/lib/account";
 import { getSessionUser } from "@/lib/supabase/server";
 import { getMeData } from "@/lib/account-data";
-import { jsonPuzzleStore } from "@/lib/puzzleStore";
+import { getPuzzleStore } from "@/lib/puzzleStore";
 import { getTodayPuzzle } from "@/lib/daily";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +19,7 @@ export async function GET(): Promise<Response> {
     return Response.json({ error: "Not authenticated" }, { status: 401 });
   }
   try {
-    const { dayNumber } = getTodayPuzzle(await jsonPuzzleStore.getAll());
+    const { dayNumber } = getTodayPuzzle(await getPuzzleStore().getAll());
     const me: MeResponse = await getMeData(user, dayNumber);
     return Response.json(me);
   } catch (err) {

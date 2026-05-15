@@ -27,43 +27,6 @@
     }
   },
   {
-    "id": "2026-01-02-predict-01",
-    "type": "predict-render",
-    "prompt": {
-      "en": "What does this view render?",
-      "th": "view นี้แสดงผลออกมาเป็นอย่างไร?"
-    },
-    "difficulty": 1,
-    "payload": {
-      "code": "VStack {\n    Text(\"Hi\")\n    Text(\"There\")\n}",
-      "options": [
-        {
-          "id": "a",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='52' text-anchor='middle' font-size='14'>Hi</text><text x='60' y='72' text-anchor='middle' font-size='14'>There</text></svg>"
-        },
-        {
-          "id": "b",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='40' y='62' text-anchor='middle' font-size='14'>Hi</text><text x='84' y='62' text-anchor='middle' font-size='14'>There</text></svg>"
-        },
-        {
-          "id": "c",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='62' text-anchor='middle' font-size='14'>HiThere</text></svg>"
-        },
-        {
-          "id": "d",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='62' text-anchor='middle' font-size='14'>There</text></svg>"
-        }
-      ]
-    },
-    "answer": {
-      "correctOptionId": "a"
-    },
-    "explanation": {
-      "en": "A VStack stacks its children vertically, top to bottom: \"Hi\" above \"There\".",
-      "th": "VStack วางลูก ๆ ของมันในแนวตั้งจากบนลงล่าง: \"Hi\" อยู่บน \"There\" อยู่ล่าง"
-    }
-  },
-  {
     "id": "2026-01-03-fillmod-01",
     "type": "fill-modifier",
     "prompt": {
@@ -173,43 +136,6 @@
     }
   },
   {
-    "id": "2026-01-07-predict-02",
-    "type": "predict-render",
-    "prompt": {
-      "en": "What does this view render?",
-      "th": "view นี้แสดงผลออกมาเป็นอย่างไร?"
-    },
-    "difficulty": 1,
-    "payload": {
-      "code": "HStack {\n    Text(\"Left\")\n    Text(\"Right\")\n}",
-      "options": [
-        {
-          "id": "a",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='38' y='62' text-anchor='middle' font-size='13'>Left</text><text x='82' y='62' text-anchor='middle' font-size='13'>Right</text></svg>"
-        },
-        {
-          "id": "b",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='52' text-anchor='middle' font-size='13'>Left</text><text x='60' y='72' text-anchor='middle' font-size='13'>Right</text></svg>"
-        },
-        {
-          "id": "c",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='62' text-anchor='middle' font-size='13'>LeftRight</text></svg>"
-        },
-        {
-          "id": "d",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='30' y='30' text-anchor='middle' font-size='13'>Left</text><text x='90' y='95' text-anchor='middle' font-size='13'>Right</text></svg>"
-        }
-      ]
-    },
-    "answer": {
-      "correctOptionId": "a"
-    },
-    "explanation": {
-      "en": "An HStack lays its children out side by side, left to right: \"Left\" then \"Right\".",
-      "th": "HStack วางลูก ๆ เรียงข้างกันจากซ้ายไปขวา: \"Left\" ก่อน แล้วตามด้วย \"Right\""
-    }
-  },
-  {
     "id": "2026-01-08-syntaxsort-02",
     "type": "syntax-sort",
     "prompt": {
@@ -285,43 +211,6 @@
     "explanation": {
       "en": ".font(.largeTitle) picks one of SwiftUI's built-in text styles. Combined with .bold() you get a big, heavy title.",
       "th": ".font(.largeTitle) เลือกใช้สไตล์ตัวอักษรสำเร็จรูปของ SwiftUI พอใช้คู่กับ .bold() ก็จะได้หัวข้อตัวใหญ่ตัวหนา"
-    }
-  },
-  {
-    "id": "2026-01-11-predict-03",
-    "type": "predict-render",
-    "prompt": {
-      "en": "What does this view render?",
-      "th": "view นี้แสดงผลออกมาเป็นอย่างไร?"
-    },
-    "difficulty": 1,
-    "payload": {
-      "code": "Text(\"Hi\")\n    .foregroundStyle(.white)\n    .padding()\n    .background(.blue)",
-      "options": [
-        {
-          "id": "a",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='34' y='46' width='52' height='28' rx='4' fill='#1E73E8'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#FFFFFF'>Hi</text></svg>"
-        },
-        {
-          "id": "b",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='65' text-anchor='middle' font-size='14' fill='#1E73E8'>Hi</text></svg>"
-        },
-        {
-          "id": "c",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='120' fill='#1E73E8'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#FFFFFF'>Hi</text></svg>"
-        },
-        {
-          "id": "d",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='42' y='52' width='36' height='18' fill='#1E73E8'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#FFFFFF'>Hi</text></svg>"
-        }
-      ]
-    },
-    "answer": {
-      "correctOptionId": "a"
-    },
-    "explanation": {
-      "en": "Order matters: white text, then padding grows the frame, then a blue background fills that padded frame — a small blue pill behind \"Hi\".",
-      "th": "ลำดับสำคัญมาก: ตัวอักษรสีขาว → .padding() ขยายกรอบ → .background(.blue) เติมพื้นหลังสีน้ำเงินตามกรอบที่ขยายแล้ว ผลคือแคปซูลสีน้ำเงินเล็ก ๆ ที่มีคำว่า \"Hi\" อยู่กลาง"
     }
   },
   {
@@ -405,43 +294,6 @@
     "explanation": {
       "en": "SF Symbols are font glyphs, so .font(.system(size: 40)) sizes them. (.imageScale only offers small/medium/large; .resizable is for bitmap images.)",
       "th": "SF Symbols เป็น glyph ของฟอนต์ ดังนั้นต้องใช้ .font(.system(size: 40)) เพื่อกำหนดขนาด (.imageScale มีแค่ small/medium/large; .resizable เอาไว้ใช้กับรูปแบบ bitmap)"
-    }
-  },
-  {
-    "id": "2026-01-15-predict-04",
-    "type": "predict-render",
-    "prompt": {
-      "en": "What does this view render?",
-      "th": "view นี้แสดงผลออกมาเป็นอย่างไร?"
-    },
-    "difficulty": 1,
-    "payload": {
-      "code": "ZStack {\n    Color.blue\n    Text(\"On top\")\n        .foregroundStyle(.white)\n}",
-      "options": [
-        {
-          "id": "a",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='120' fill='#1E73E8'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#FFFFFF'>On top</text></svg>"
-        },
-        {
-          "id": "b",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='60' fill='#1E73E8'/><text x='60' y='95' text-anchor='middle' font-size='14' fill='#000000'>On top</text></svg>"
-        },
-        {
-          "id": "c",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='120' fill='#FFFFFF'/><text x='60' y='65' text-anchor='middle' font-size='14' fill='#1E73E8'>On top</text></svg>"
-        },
-        {
-          "id": "d",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='120' height='120' fill='#1E73E8'/></svg>"
-        }
-      ]
-    },
-    "answer": {
-      "correctOptionId": "a"
-    },
-    "explanation": {
-      "en": "A ZStack layers children back to front: blue fills the space, and the white \"On top\" text sits on top of it, centered.",
-      "th": "ZStack ซ้อนลูก ๆ ทับกันจากหลังไปหน้า: สีน้ำเงินเติมทั้งพื้นที่ ตัวอักษรสีขาว \"On top\" อยู่ด้านบนตรงกลาง"
     }
   },
   {
@@ -532,43 +384,6 @@
     }
   },
   {
-    "id": "2026-01-19-predict-05",
-    "type": "predict-render",
-    "prompt": {
-      "en": "What does this view render?",
-      "th": "view นี้แสดงผลออกมาเป็นอย่างไร?"
-    },
-    "difficulty": 2,
-    "payload": {
-      "code": "VStack(alignment: .leading) {\n    Text(\"One\")\n    Text(\"Three Words Here\")\n}",
-      "options": [
-        {
-          "id": "a",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='14' y='52' text-anchor='start' font-size='13'>One</text><text x='14' y='72' text-anchor='start' font-size='13'>Three Words Here</text></svg>"
-        },
-        {
-          "id": "b",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='52' text-anchor='middle' font-size='13'>One</text><text x='60' y='72' text-anchor='middle' font-size='13'>Three Words Here</text></svg>"
-        },
-        {
-          "id": "c",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='106' y='52' text-anchor='end' font-size='13'>One</text><text x='106' y='72' text-anchor='end' font-size='13'>Three Words Here</text></svg>"
-        },
-        {
-          "id": "d",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='32' y='62' text-anchor='middle' font-size='13'>One</text><text x='88' y='62' text-anchor='middle' font-size='13'>Three Words Here</text></svg>"
-        }
-      ]
-    },
-    "answer": {
-      "correctOptionId": "a"
-    },
-    "explanation": {
-      "en": "VStack(alignment: .leading) lines the children up by their left edges, so both texts start at the same x position on the left.",
-      "th": "VStack(alignment: .leading) จัดลูก ๆ ให้ชิดขอบซ้าย ดังนั้น Text ทั้งสองจะเริ่มที่ตำแหน่ง x เดียวกันทางซ้าย"
-    }
-  },
-  {
     "id": "2026-01-20-spotbug-06",
     "type": "spot-bug",
     "prompt": {
@@ -620,43 +435,6 @@
     "explanation": {
       "en": ".cornerRadius(12) rounds all four corners. (.clipShape(RoundedRectangle(cornerRadius: 12)) does the same thing and is the newer style.)",
       "th": ".cornerRadius(12) ทำให้มุมทั้งสี่โค้ง (.clipShape(RoundedRectangle(cornerRadius: 12)) ทำเหมือนกันและเป็นสไตล์ใหม่กว่า)"
-    }
-  },
-  {
-    "id": "2026-01-22-predict-06",
-    "type": "predict-render",
-    "prompt": {
-      "en": "What does this view render?",
-      "th": "view นี้แสดงผลออกมาเป็นอย่างไร?"
-    },
-    "difficulty": 2,
-    "payload": {
-      "code": "HStack {\n    Text(\"Left\")\n    Spacer()\n    Text(\"Right\")\n}",
-      "options": [
-        {
-          "id": "a",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='8' y='62' text-anchor='start' font-size='13'>Left</text><text x='112' y='62' text-anchor='end' font-size='13'>Right</text></svg>"
-        },
-        {
-          "id": "b",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='42' y='62' text-anchor='middle' font-size='13'>Left</text><text x='82' y='62' text-anchor='middle' font-size='13'>Right</text></svg>"
-        },
-        {
-          "id": "c",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='60' y='52' text-anchor='middle' font-size='13'>Left</text><text x='60' y='72' text-anchor='middle' font-size='13'>Right</text></svg>"
-        },
-        {
-          "id": "d",
-          "mockupSvg": "<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><text x='8' y='62' text-anchor='start' font-size='13'>Left</text><text x='40' y='62' text-anchor='start' font-size='13'>Right</text></svg>"
-        }
-      ]
-    },
-    "answer": {
-      "correctOptionId": "a"
-    },
-    "explanation": {
-      "en": "A Spacer expands to fill all available space, pushing \"Left\" to the leading edge and \"Right\" to the trailing edge.",
-      "th": "Spacer ขยายตัวเองให้เต็มที่ว่างที่มี ดัน \"Left\" ไปชิดขอบซ้ายและ \"Right\" ไปชิดขอบขวา"
     }
   },
   {

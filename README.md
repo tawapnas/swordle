@@ -41,10 +41,13 @@ No test runner is configured. `npx tsc --noEmit` is the type-check.
 
 ## Adding a puzzle
 
-Puzzles live in [`data/puzzles.json`](data/puzzles.json) — an array typed against the discriminated `Puzzle` union in [`lib/types.ts`](lib/types.ts). To add one, append an object with:
+Two ways:
+
+- **With Supabase configured** — sign in as an `ADMIN_EMAILS` address, open `/admin`, and use the **Puzzles** section to create one (a form per type) or delete an existing one. Puzzles live in the `public.puzzles` table; `data/puzzles.json` is then just the seed source. See [Sign-in & accounts](#sign-in--accounts-supabase).
+- **Without Supabase** (or to change the seed) — edit [`data/puzzles.json`](data/puzzles.json), an array typed against the discriminated `Puzzle` union in [`lib/types.ts`](lib/types.ts). Append an object with:
 
 - `id` — stable and unique, e.g. `"2026-02-01-spotbug-07"`
-- `type` — `"spot-bug" | "predict-render" | "fill-modifier" | "syntax-sort"`
+- `type` — `"spot-bug" | "fill-modifier" | "syntax-sort"`
 - `prompt` — the line shown above the puzzle
 - `difficulty` — `1 | 2 | 3` (informational for now; keep early puzzles at `1`)
 - `explanation` — shown on the result screen, always (the teaching moment)
@@ -75,7 +78,7 @@ Example (spot-the-bug):
 }
 ```
 
-For the other types: `predict-render` → `payload.code` + `payload.options` (4 items, each `{ id, mockupSvg }` where `mockupSvg` is inline `<svg>…</svg>` markup) + `answer.correctOptionId`; `fill-modifier` → `payload.codeBefore` + `payload.codeAfter` + `payload.options` (4 strings) + `answer.correctIndex`; `syntax-sort` → `payload.shuffledLines` + `answer.correctOrder` (a permutation of the line indices, in the order they should appear). Run `npx tsc --noEmit` after editing — the JSON is checked against the type. Keep the SwiftUI realistic and current; kids will read it.
+For the other types: `fill-modifier` → `payload.codeBefore` + `payload.codeAfter` + `payload.options` (4 strings) + `answer.correctIndex`; `syntax-sort` → `payload.shuffledLines` + `answer.correctOrder` (a permutation of the line indices, in the order they should appear). Run `npx tsc --noEmit` after editing — the JSON is checked against the type. If Supabase is configured, re-run `npm run seed:puzzles` to push JSON edits into the table. Keep the SwiftUI realistic and current; kids will read it.
 
 ## Sign-in & accounts (Supabase)
 
@@ -94,8 +97,15 @@ Run the files in [`supabase/migrations/`](supabase/migrations/) in order, in the
 
 - `0001_init.sql` — `profiles` + `attempts`, the `user_streak_summary` function, RLS policies, and a trigger that makes a profile row on signup (works for both email and Google users).
 - `0002_profile_onboarding.sql` — adds `first_name` / `last_name` / `team_name` / `school` to `profiles` for the onboarding form, plus an insert-own RLS policy.
+- `0003_puzzles.sql` — the `puzzles` table (the puzzle bank, including answers). RLS is on with **no** select policy — only the service-role key reads it, so answers never leak. After applying it, seed the table from the JSON:
 
-Both are idempotent (safe to re-run).
+  ```sh
+  npm run seed:puzzles
+  ```
+
+  (idempotent — upserts on `id`; re-run after editing `data/puzzles.json`). When Supabase is configured, the app serves puzzles from this table; otherwise it falls back to `data/puzzles.json`.
+
+All are idempotent (safe to re-run).
 
 ### 3. Set env vars
 
@@ -127,6 +137,7 @@ app/
     me/profile/route.ts      POST the onboarding fields → user's profile row
     me/import/route.ts       POST one-time localStorage → server backfill
     admin/overview/route.ts  GET aggregates (admin only)
+    admin/puzzles/route.ts   GET/POST/DELETE puzzles (admin only)
 components/
   WelcomeScreen.tsx         the pre-game gate (pitch + <LoginForm/>)
   LoginForm.tsx             email magic link + "Continue with Google" (client)
@@ -139,7 +150,10 @@ components/
 lib/
   types.ts                  the Puzzle discriminated union + PublicPuzzle + response types
   daily.ts                  deterministic daily selection
-  puzzleStore.ts            PuzzleStore interface + JSON-backed impl (swap for a DB later)
+  puzzleStore.ts            PuzzleStore: getPuzzleStore() → Supabase when configured, else bundled JSON
+  puzzle-schema.ts          parsePuzzleInput — runtime validation of a whole puzzle
+  puzzle-row.ts             puzzles-table row ↔ Puzzle mapping
+  puzzle-admin.ts           server-side puzzle list/create/delete (service-role)
   validate.ts, public.ts    per-type answer checking; answer-stripping chokepoint
   streak.ts                 localStorage state + streak transitions (client)
   share.ts                  the shareable result string
@@ -147,7 +161,8 @@ lib/
   account-data.ts           server-side Supabase queries (getMeData, getAdminOverview)
   gameSession.ts            helpers extracted from GamePage
   supabase/{server,client,admin}.ts   Supabase clients (cookie / browser / service-role)
-data/puzzles.json           the puzzle bank (24 puzzles, 6 of each type)
+data/puzzles.json           the puzzle bank fallback / seed for the `puzzles` table (18 puzzles)
+scripts/seed-puzzles.mjs    `npm run seed:puzzles` — upsert data/puzzles.json into Supabase
 supabase/migrations/        SQL migrations
 proxy.ts                    refreshes the Supabase auth cookie (Next 16's `middleware` rename)
 ```
