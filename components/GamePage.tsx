@@ -9,7 +9,6 @@ import { readState, recordResult, type GameResult } from "@/lib/streak";
 import {
   decideInitialPhase,
   fetchMe,
-  maybeImport,
   streaksFromState,
   type Streaks,
 } from "@/lib/gameSession";
@@ -237,21 +236,14 @@ export default function GamePage() {
   );
 }
 
-/** Get the server account if the player has a Supabase session; import once. */
+/** Get the server account if the player has a Supabase session. */
 async function loadAccount(): Promise<MeResponse | null> {
   if (!isSupabaseConfigured()) return null;
   const {
     data: { user },
   } = await createSupabaseBrowserClient().auth.getUser();
   if (!user) return null;
-  let me = await fetchMe();
-  const local = readState();
-  if (me && local) {
-    await maybeImport(me, local);
-    const refreshed = await fetchMe();
-    if (refreshed) me = refreshed;
-  }
-  return me;
+  return fetchMe();
 }
 
 async function submitAnswer(

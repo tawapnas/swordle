@@ -2,8 +2,6 @@
 // new auth-aware endpoints and the UI). The puzzle contract lives in lib/types.ts;
 // this file is everything that hangs off a signed-in user.
 
-import type { GameResult } from "@/lib/streak";
-
 /** One recorded daily attempt. */
 export interface AttemptRecord {
   puzzleId: string;
@@ -47,24 +45,6 @@ export interface MeResponse extends ProfileFields {
   /** Most recent day the user attempted anything (null if never). */
   lastDayNumber: number | null;
   history: AttemptRecord[];
-}
-
-/**
- * POST /api/me/import — push the browser's existing localStorage state up once,
- * so players who started before accounts existed keep their record. Backfills a
- * single `attempts` row for `lastDayNumber` if the server has none. Idempotent.
- */
-export interface ImportRequest {
-  lastPlayedDate: string;
-  lastDayNumber: number;
-  currentStreak: number;
-  longestStreak: number;
-  lastResult: GameResult;
-  lastTimeMs: number;
-}
-
-export interface ImportResponse {
-  imported: boolean; // false if the server already had a row for that day
 }
 
 /**

@@ -2,7 +2,7 @@
 // account fetch / legacy-import calls. Kept out of the component so it stays
 // readable. Browser-only (touches localStorage via lib/streak indirectly).
 
-import type { ImportRequest, MeResponse } from "@/lib/account";
+import type { MeResponse } from "@/lib/account";
 import type { TodayResponse } from "@/lib/types";
 import { hasPlayed, type GameResult, type SwordleState } from "@/lib/streak";
 
@@ -71,32 +71,5 @@ export async function fetchMe(): Promise<MeResponse | null> {
     return (await res.json()) as MeResponse;
   } catch {
     return null;
-  }
-}
-
-/** One-time push of pre-account localStorage progress, if the server lacks it. */
-export async function maybeImport(me: MeResponse, local: SwordleState): Promise<void> {
-  if (
-    me.lastDayNumber === local.lastDayNumber ||
-    me.history.some((h) => h.dayNumber === local.lastDayNumber)
-  ) {
-    return;
-  }
-  const body: ImportRequest = {
-    lastPlayedDate: local.lastPlayedDate,
-    lastDayNumber: local.lastDayNumber,
-    currentStreak: local.currentStreak,
-    longestStreak: local.longestStreak,
-    lastResult: local.lastResult,
-    lastTimeMs: local.lastTimeMs,
-  };
-  try {
-    await fetch("/api/me/import", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-  } catch {
-    /* offline — non-fatal, retried next visit */
   }
 }

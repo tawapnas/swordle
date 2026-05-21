@@ -413,44 +413,6 @@ export async function recordValidateAttempt(
 }
 
 // ---------------------------------------------------------------------------
-// importLegacyAttempt — POST /api/me/import. Backfills a single attempts row
-// for `lastDayNumber` if the server has none. Idempotent.
-// ---------------------------------------------------------------------------
-
-export async function importLegacyAttempt(
-  user: User,
-  lastDayNumber: number,
-  solved: boolean,
-  timeMs: number,
-): Promise<boolean> {
-  if (!isSupabaseConfigured()) return false;
-  const all = await getPuzzleStore().getAll();
-  const len = all.length;
-  const idx = (((lastDayNumber - 1) % len) + len) % len;
-  const puzzleId = all[idx].id;
-
-  const supabase = await createSupabaseServerClient();
-  const { data: inserted, error } = await supabase
-    .from("attempts")
-    .upsert(
-      {
-        user_id: user.id,
-        puzzle_id: puzzleId,
-        day_number: lastDayNumber,
-        solved,
-        time_ms: Number.isFinite(timeMs) && timeMs >= 0 ? Math.floor(timeMs) : 0,
-      },
-      { onConflict: "user_id,day_number", ignoreDuplicates: true },
-    )
-    .select("id");
-  if (error) {
-    console.error("[account-data] import upsert:", error);
-    throw error;
-  }
-  return Boolean(inserted && inserted.length > 0);
-}
-
-// ---------------------------------------------------------------------------
 // getAdminOverview — cross-user aggregates via the service-role client.
 // ---------------------------------------------------------------------------
 
