@@ -1,6 +1,6 @@
 [
   {
-    "id": "2026-01-01-spotbug-01",
+    "id": "puzzle-01",
     "type": "spot-bug",
     "prompt": {
       "en": "Which line breaks this view?",
@@ -12,7 +12,7 @@
         "struct ContentView: View {",
         "    var body: some View {",
         "        VStack {",
-        "            Text(Hello, world!)",
+        "            Text(Hello, SwiftUI!)",
         "        }",
         "    }",
         "}"
@@ -22,477 +22,232 @@
       "buggyLineIndex": 3
     },
     "explanation": {
-      "en": "String literals in Swift need quotes. It should be Text(\"Hello, world!\").",
-      "th": "ใน Swift สตริงต้องอยู่ในเครื่องหมายคำพูด ต้องเขียนเป็น Text(\"Hello, world!\")"
+      "en": "String literals in Swift need quotes — write Text(\"Hello, SwiftUI!\").",
+      "th": "สตริงใน Swift ต้องอยู่ในเครื่องหมายคำพูด — เขียนเป็น Text(\"Hello, SwiftUI!\")"
     }
   },
   {
-    "id": "2026-01-03-fillmod-01",
+    "id": "puzzle-02",
     "type": "fill-modifier",
     "prompt": {
-      "en": "Fill in the modifier that makes the text blue.",
-      "th": "เติม modifier ที่ทำให้ตัวอักษรเป็นสีน้ำเงิน"
+      "en": "Fill in the modifier that makes the text bold.",
+      "th": "เติม modifier ที่ทำให้ข้อความเป็นตัวหนา"
     },
     "difficulty": 1,
     "payload": {
-      "codeBefore": "Text(\"Hello\")\n    .",
-      "codeAfter": "(.blue)",
-      "options": [
-        "foregroundStyle",
-        "background",
-        "tint",
-        "font"
-      ]
+      "codeBefore": "Text(\"Welcome\")\n    .",
+      "codeAfter": "()",
+      "options": ["bold", "italic", "underline", "strikethrough"]
     },
     "answer": {
       "correctIndex": 0
     },
     "explanation": {
-      "en": ".foregroundStyle(.blue) sets the text color. (.foregroundColor still works but Apple is phasing it out.)",
-      "th": ".foregroundStyle(.blue) ใช้กำหนดสีตัวอักษร (.foregroundColor ยังใช้ได้อยู่แต่ Apple กำลังจะเลิกใช้)"
+      "en": ".bold() renders the text with a heavier weight.",
+      "th": ".bold() ทำให้ข้อความหนาขึ้น"
     }
   },
   {
-    "id": "2026-01-04-syntaxsort-01",
+    "id": "puzzle-03",
     "type": "syntax-sort",
     "prompt": {
       "en": "Put these lines in the right order to make a valid view.",
-      "th": "เรียงลำดับบรรทัดเหล่านี้ให้เป็น view ที่ใช้งานได้"
+      "th": "เรียงบรรทัดเหล่านี้ให้เป็น view ที่ถูกต้อง"
     },
     "difficulty": 1,
     "payload": {
       "shuffledLines": [
+        "        Text(\"Hi\")",
+        "}",
+        "struct GreetingView: View {",
         "    }",
-        "struct ContentView: View {",
-        "        Text(\"Hello\")",
         "    var body: some View {"
       ]
     },
     "answer": {
-      "correctOrder": [
-        1,
-        3,
-        2,
-        0
-      ]
+      "correctOrder": [2, 4, 0, 3, 1]
     },
     "explanation": {
-      "en": "A View declares `struct ... : View`, then a `body` property, then the content, then closes the braces.",
-      "th": "View ต้องประกาศ `struct ... : View` ก่อน แล้วตามด้วย property `body` จากนั้นใส่เนื้อหา แล้วปิดด้วยปีกกา"
+      "en": "A View declares the struct first, then its body property, then the content, then the closing braces.",
+      "th": "View ต้องประกาศ struct ก่อน ตามด้วย property body แล้วเนื้อหา จากนั้นปิดด้วยปีกกา"
     }
   },
   {
-    "id": "2026-01-05-spotbug-02",
+    "id": "puzzle-04",
     "type": "spot-bug",
     "prompt": {
-      "en": "Which line stops this from compiling?",
-      "th": "บรรทัดไหนทำให้โค้ดนี้ compile ไม่ผ่าน?"
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
     },
-    "difficulty": 1,
+    "difficulty": 2,
     "payload": {
       "codeLines": [
-        "struct GreetingView: View {",
+        "struct ListView: View {",
+        "    let names = [\"Ann\", \"Ben\", \"Cara\"]",
         "    var body: some View {",
-        "        VStack {",
-        "            Text(\"Welcome\")",
-        "            Image(systemName: \"star.fill\")",
-        "        ",
+        "        List {",
+        "            ForEach(names) { name in",
+        "                Text(name)",
+        "            }",
+        "        }",
         "    }",
         "}"
       ]
     },
     "answer": {
-      "buggyLineIndex": 5
+      "buggyLineIndex": 4
     },
     "explanation": {
-      "en": "The VStack opens a `{` on line 3 but it is never closed. Line 5 should be a `}` to close the VStack before the body's closing brace.",
-      "th": "VStack เปิด `{` ไว้ที่บรรทัดที่ 3 แต่ไม่มีบรรทัดไหนปิดเลย บรรทัดที่ 5 ควรเป็น `}` เพื่อปิด VStack ก่อนที่จะปิด body"
+      "en": "ForEach over a plain array needs an id — write ForEach(names, id: \\.self).",
+      "th": "ForEach ที่วนบนอาร์เรย์ธรรมดาต้องระบุ id — เขียนเป็น ForEach(names, id: \\.self)"
     }
   },
   {
-    "id": "2026-01-06-fillmod-02",
+    "id": "puzzle-05",
     "type": "fill-modifier",
     "prompt": {
-      "en": "Fill in the modifier that adds space around the text on all sides.",
-      "th": "เติม modifier ที่ใส่ระยะห่างรอบตัวอักษรทุกด้าน"
+      "en": "Fill in the modifier that gives the rectangle a fixed size.",
+      "th": "เติม modifier ที่กำหนดขนาดคงที่ให้สี่เหลี่ยม"
     },
-    "difficulty": 1,
+    "difficulty": 2,
     "payload": {
-      "codeBefore": "Text(\"Tap me\")\n    .",
-      "codeAfter": "()\n    .background(.yellow)",
-      "options": [
-        "padding",
-        "frame",
-        "offset",
-        "spacing"
-      ]
+      "codeBefore": "Rectangle()\n    .",
+      "codeAfter": "(width: 100, height: 100)",
+      "options": ["frame", "padding", "offset", "position"]
     },
     "answer": {
       "correctIndex": 0
     },
     "explanation": {
-      "en": ".padding() adds breathing room inside a view's frame. Without it, the yellow background hugs the text tightly.",
-      "th": ".padding() เพิ่มพื้นที่ว่างให้กับ view ของตัวเอง ถ้าไม่ใส่ พื้นหลังสีเหลืองจะแนบติดตัวอักษรพอดี"
+      "en": ".frame(width:height:) gives a view a fixed size.",
+      "th": ".frame(width:height:) กำหนดขนาดคงที่ให้ view"
     }
   },
   {
-    "id": "2026-01-08-syntaxsort-02",
+    "id": "puzzle-06",
     "type": "syntax-sort",
     "prompt": {
-      "en": "Order these lines to make a working button.",
-      "th": "เรียงบรรทัดเหล่านี้ให้กลายเป็นปุ่มที่ใช้งานได้"
+      "en": "Order the lines so the VStack is padded, then given a yellow background.",
+      "th": "เรียงบรรทัดให้ VStack มี padding แล้วตามด้วยพื้นหลังสีเหลือง"
     },
-    "difficulty": 1,
+    "difficulty": 2,
     "payload": {
       "shuffledLines": [
-        "    print(\"Tapped!\")",
-        "Button(\"Press\") {",
-        "}"
-      ]
-    },
-    "answer": {
-      "correctOrder": [
-        1,
-        0,
-        2
-      ]
-    },
-    "explanation": {
-      "en": "`Button(\"Press\") {` opens the action closure, the action runs inside it, and `}` closes the closure.",
-      "th": "`Button(\"Press\") {` เปิด closure ของ action จากนั้นใส่โค้ดที่จะทำงานข้างใน แล้วปิด closure ด้วย `}`"
-    }
-  },
-  {
-    "id": "2026-01-09-spotbug-03",
-    "type": "spot-bug",
-    "prompt": {
-      "en": "Which line is wrong?",
-      "th": "บรรทัดไหนผิด?"
-    },
-    "difficulty": 1,
-    "payload": {
-      "codeLines": [
-        "struct ProfileView: View {",
-        "    var body: some View {",
-        "        Image(systemName: heart.fill)",
-        "    }",
-        "}"
-      ]
-    },
-    "answer": {
-      "buggyLineIndex": 2
-    },
-    "explanation": {
-      "en": "`systemName:` takes a String, so the SF Symbol name needs quotes: Image(systemName: \"heart.fill\").",
-      "th": "`systemName:` รับค่าเป็น String ดังนั้นชื่อ SF Symbol ต้องอยู่ในเครื่องหมายคำพูด: Image(systemName: \"heart.fill\")"
-    }
-  },
-  {
-    "id": "2026-01-10-fillmod-03",
-    "type": "fill-modifier",
-    "prompt": {
-      "en": "Fill in the modifier that makes the text bigger and bold, like a screen title.",
-      "th": "เติม modifier ที่ทำให้ตัวอักษรใหญ่ขึ้นและตัวหนา เหมือนหัวข้อบนหน้าจอ"
-    },
-    "difficulty": 1,
-    "payload": {
-      "codeBefore": "Text(\"Settings\")\n    .",
-      "codeAfter": "(.largeTitle)\n    .bold()",
-      "options": [
-        "font",
-        "fontWeight",
-        "textScale",
-        "size"
-      ]
-    },
-    "answer": {
-      "correctIndex": 0
-    },
-    "explanation": {
-      "en": ".font(.largeTitle) picks one of SwiftUI's built-in text styles. Combined with .bold() you get a big, heavy title.",
-      "th": ".font(.largeTitle) เลือกใช้สไตล์ตัวอักษรสำเร็จรูปของ SwiftUI พอใช้คู่กับ .bold() ก็จะได้หัวข้อตัวใหญ่ตัวหนา"
-    }
-  },
-  {
-    "id": "2026-01-12-syntaxsort-03",
-    "type": "syntax-sort",
-    "prompt": {
-      "en": "Order these lines to make a view with a title above a subtitle.",
-      "th": "เรียงบรรทัดเหล่านี้ให้เป็น view ที่มีหัวข้ออยู่บนหัวข้อย่อย"
-    },
-    "difficulty": 1,
-    "payload": {
-      "shuffledLines": [
-        "    Text(\"Welcome\")",
-        "VStack {",
+        ".background(.yellow)",
+        "    Text(\"Score\")",
         "}",
-        "    Text(\"to Swordle\")"
+        "VStack {",
+        "    .padding()",
+        "    Text(\"100\")"
       ]
     },
     "answer": {
-      "correctOrder": [
-        1,
-        0,
-        3,
-        2
-      ]
+      "correctOrder": [3, 1, 5, 2, 4, 0]
     },
     "explanation": {
-      "en": "Open the VStack, add \"Welcome\" first (it shows on top), then \"to Swordle\" below it, then close the VStack.",
-      "th": "เปิด VStack ใส่ \"Welcome\" ก่อน (จะอยู่ด้านบน) แล้วตามด้วย \"to Swordle\" ที่อยู่ใต้ลงมา จากนั้นปิด VStack"
+      "en": "A modifier applies to the view above it — close the VStack first, then chain .padding() and .background().",
+      "th": "modifier มีผลกับ view ที่อยู่เหนือมัน — ปิด VStack ก่อน แล้วต่อด้วย .padding() และ .background()"
     }
   },
   {
-    "id": "2026-01-13-spotbug-04",
+    "id": "puzzle-07",
     "type": "spot-bug",
     "prompt": {
-      "en": "Which line breaks this view?",
-      "th": "บรรทัดไหนทำให้ view นี้พัง?"
+      "en": "Which line has the bug?",
+      "th": "บรรทัดไหนมีบั๊ก?"
     },
-    "difficulty": 1,
+    "difficulty": 2,
     "payload": {
       "codeLines": [
+        "struct SettingsView: View {",
+        "    @State private var isOn = false",
+        "    var body: some View {",
+        "        Toggle(\"Enabled\", isOn: isOn)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 3
+    },
+    "explanation": {
+      "en": "Toggle needs a Binding — pass $isOn instead of isOn.",
+      "th": "Toggle ต้องการ Binding — ส่ง $isOn แทน isOn"
+    }
+  },
+  {
+    "id": "puzzle-08",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that crops the image into a circle.",
+      "th": "เติม modifier ที่ตัดรูปภาพให้เป็นวงกลม"
+    },
+    "difficulty": 3,
+    "payload": {
+      "codeBefore": "Image(\"avatar\")\n    .resizable()\n    .frame(width: 60, height: 60)\n    .",
+      "codeAfter": "(Circle())",
+      "options": ["clipShape", "mask", "background", "border"]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".clipShape(Circle()) clips a view to the given shape.",
+      "th": ".clipShape(Circle()) ตัด view ตามรูปทรงที่กำหนด"
+    }
+  },
+  {
+    "id": "puzzle-09",
+    "type": "syntax-sort",
+    "prompt": {
+      "en": "Sort the lines into a valid card view.",
+      "th": "เรียงบรรทัดให้เป็น card view ที่ถูกต้อง"
+    },
+    "difficulty": 3,
+    "payload": {
+      "shuffledLines": [
+        "    }",
+        "        ZStack {",
         "struct CardView: View {",
+        "            Text(\"Card\")",
+        "}",
         "    var body: some View {",
-        "        VStack",
-        "            Text(\"Title\")",
-        "            Text(\"Body\")",
         "        }",
-        "    }",
-        "}"
+        "            Color.blue"
       ]
     },
     "answer": {
-      "buggyLineIndex": 2
+      "correctOrder": [2, 5, 1, 7, 3, 6, 0, 4]
     },
     "explanation": {
-      "en": "A stack needs an opening brace: `VStack {`. Without it, the two Text views aren't inside the stack and the closing `}` has nothing to match.",
-      "th": "stack ต้องมีปีกกาเปิด: `VStack {` ถ้าไม่มี Text สองตัวจะไม่อยู่ใน stack และปีกกา `}` ที่ปิดก็จะไม่มีคู่"
+      "en": "Inside a ZStack, later views are drawn on top — Color.blue is the background and Text sits above it.",
+      "th": "ใน ZStack view ที่อยู่ทีหลังจะถูกวาดทับด้านบน — Color.blue เป็นพื้นหลัง และ Text อยู่ด้านบน"
     }
   },
   {
-    "id": "2026-01-14-fillmod-04",
-    "type": "fill-modifier",
-    "prompt": {
-      "en": "Fill in the modifier that scales this SF Symbol up to a chosen point size.",
-      "th": "เติม modifier ที่ขยาย SF Symbol นี้ให้ใหญ่ขึ้นตามขนาดจุดที่กำหนด"
-    },
-    "difficulty": 1,
-    "payload": {
-      "codeBefore": "Image(systemName: \"star.fill\")\n    .",
-      "codeAfter": "(.system(size: 40))\n    .foregroundStyle(.yellow)",
-      "options": [
-        "font",
-        "imageScale",
-        "resizable",
-        "frame"
-      ]
-    },
-    "answer": {
-      "correctIndex": 0
-    },
-    "explanation": {
-      "en": "SF Symbols are font glyphs, so .font(.system(size: 40)) sizes them. (.imageScale only offers small/medium/large; .resizable is for bitmap images.)",
-      "th": "SF Symbols เป็น glyph ของฟอนต์ ดังนั้นต้องใช้ .font(.system(size: 40)) เพื่อกำหนดขนาด (.imageScale มีแค่ small/medium/large; .resizable เอาไว้ใช้กับรูปแบบ bitmap)"
-    }
-  },
-  {
-    "id": "2026-01-16-syntaxsort-04",
-    "type": "syntax-sort",
-    "prompt": {
-      "en": "Order these lines to make a view with state and a button that changes it.",
-      "th": "เรียงบรรทัดเหล่านี้ให้เป็น view ที่มี state และมีปุ่มเปลี่ยนค่าได้"
-    },
-    "difficulty": 2,
-    "payload": {
-      "shuffledLines": [
-        "    var body: some View {",
-        "struct CounterView: View {",
-        "        Button(\"Add\") { count += 1 }",
-        "    @State private var count = 0",
-        "    }",
-        "}"
-      ]
-    },
-    "answer": {
-      "correctOrder": [
-        1,
-        3,
-        0,
-        2,
-        4,
-        5
-      ]
-    },
-    "explanation": {
-      "en": "Declare the struct, then the @State property, then `body`, then the Button that mutates it, then close `body`, then close the struct.",
-      "th": "ประกาศ struct ก่อน → property @State → `body` → ปุ่ม Button ที่เปลี่ยนค่า → ปิด `body` → ปิด struct"
-    }
-  },
-  {
-    "id": "2026-01-17-spotbug-05",
+    "id": "puzzle-10",
     "type": "spot-bug",
     "prompt": {
-      "en": "Which line is the bug?",
-      "th": "บรรทัดไหนคือบั๊ก?"
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
     },
-    "difficulty": 2,
+    "difficulty": 3,
     "payload": {
       "codeLines": [
         "struct CounterView: View {",
-        "    @State private var count = 0",
+        "    @Binding var count = 0",
         "    var body: some View {",
-        "        Button(\"Count: \\(count)\") {",
-        "            count + 1",
-        "        }",
+        "        Text(\"\\(count)\")",
         "    }",
         "}"
       ]
     },
     "answer": {
-      "buggyLineIndex": 4
+      "buggyLineIndex": 1
     },
     "explanation": {
-      "en": "`count + 1` computes a value and throws it away. To actually update the state you need `count += 1`.",
-      "th": "`count + 1` คำนวณค่าใหม่แต่ทิ้งไปเฉย ๆ ถ้าจะอัปเดต state จริง ๆ ต้องใช้ `count += 1`"
-    }
-  },
-  {
-    "id": "2026-01-18-fillmod-05",
-    "type": "fill-modifier",
-    "prompt": {
-      "en": "Fill in the property wrapper so the Toggle can change `isOn`.",
-      "th": "เติม property wrapper เพื่อให้ Toggle เปลี่ยนค่า `isOn` ได้"
-    },
-    "difficulty": 2,
-    "payload": {
-      "codeBefore": "struct ToggleView: View {\n    @",
-      "codeAfter": " private var isOn = false\n    var body: some View {\n        Toggle(\"Sound\", isOn: $isOn)\n    }\n}",
-      "options": [
-        "State",
-        "Binding",
-        "Environment",
-        "Published"
-      ]
-    },
-    "answer": {
-      "correctIndex": 0
-    },
-    "explanation": {
-      "en": "@State gives a view its own mutable value. The `$isOn` syntax passes a binding to that state into the Toggle so it can flip it.",
-      "th": "@State ทำให้ view มีค่าที่แก้ได้ของตัวเอง สัญลักษณ์ `$isOn` คือการส่ง binding ของ state นั้นเข้าไปใน Toggle เพื่อให้ Toggle สลับค่าได้"
-    }
-  },
-  {
-    "id": "2026-01-20-spotbug-06",
-    "type": "spot-bug",
-    "prompt": {
-      "en": "Which line keeps this list from working?",
-      "th": "บรรทัดไหนทำให้ list นี้ไม่ทำงาน?"
-    },
-    "difficulty": 2,
-    "payload": {
-      "codeLines": [
-        "struct NamesView: View {",
-        "    let names = [\"Ada\", \"Grace\", \"Alan\"]",
-        "    var body: some View {",
-        "        List(names, id: \\.self) {",
-        "            Text(name)",
-        "        }",
-        "    }",
-        "}"
-      ]
-    },
-    "answer": {
-      "buggyLineIndex": 4
-    },
-    "explanation": {
-      "en": "The closure receives each element, but it was never named. Write `List(names, id: \\.self) { name in Text(name) }` so `name` exists.",
-      "th": "closure ได้รับ element แต่ละตัว แต่ไม่ได้ตั้งชื่อให้ ต้องเขียนเป็น `List(names, id: \\.self) { name in Text(name) }` ตัวแปร `name` ถึงจะมี"
-    }
-  },
-  {
-    "id": "2026-01-21-fillmod-06",
-    "type": "fill-modifier",
-    "prompt": {
-      "en": "Fill in the modifier that rounds the corners of the blue box.",
-      "th": "เติม modifier ที่ทำให้กล่องสีน้ำเงินมีมุมโค้ง"
-    },
-    "difficulty": 2,
-    "payload": {
-      "codeBefore": "Color.blue\n    .frame(width: 80, height: 80)\n    .",
-      "codeAfter": "(12)",
-      "options": [
-        "cornerRadius",
-        "border",
-        "shadow",
-        "blur"
-      ]
-    },
-    "answer": {
-      "correctIndex": 0
-    },
-    "explanation": {
-      "en": ".cornerRadius(12) rounds all four corners. (.clipShape(RoundedRectangle(cornerRadius: 12)) does the same thing and is the newer style.)",
-      "th": ".cornerRadius(12) ทำให้มุมทั้งสี่โค้ง (.clipShape(RoundedRectangle(cornerRadius: 12)) ทำเหมือนกันและเป็นสไตล์ใหม่กว่า)"
-    }
-  },
-  {
-    "id": "2026-01-23-syntaxsort-05",
-    "type": "syntax-sort",
-    "prompt": {
-      "en": "Order these lines so the screen has a navigation title.",
-      "th": "เรียงบรรทัดเหล่านี้ให้หน้าจอมี navigation title"
-    },
-    "difficulty": 2,
-    "payload": {
-      "shuffledLines": [
-        "    Text(\"Your tasks go here\")",
-        "NavigationStack {",
-        "        .navigationTitle(\"Tasks\")",
-        "}"
-      ]
-    },
-    "answer": {
-      "correctOrder": [
-        1,
-        0,
-        2,
-        3
-      ]
-    },
-    "explanation": {
-      "en": "Open the NavigationStack, put the content inside, attach `.navigationTitle` to that content, then close the stack.",
-      "th": "เปิด NavigationStack → ใส่เนื้อหาข้างใน → ต่อ `.navigationTitle` ให้กับเนื้อหา → ปิด stack"
-    }
-  },
-  {
-    "id": "2026-01-24-syntaxsort-06",
-    "type": "syntax-sort",
-    "prompt": {
-      "en": "Order these lines to make a row with an icon next to a label.",
-      "th": "เรียงบรรทัดเหล่านี้ให้เป็นแถวที่มีไอคอนอยู่ข้างป้ายชื่อ"
-    },
-    "difficulty": 1,
-    "payload": {
-      "shuffledLines": [
-        "    Text(\"Favorites\")",
-        "HStack {",
-        "    Image(systemName: \"star.fill\")",
-        "}"
-      ]
-    },
-    "answer": {
-      "correctOrder": [
-        1,
-        2,
-        0,
-        3
-      ]
-    },
-    "explanation": {
-      "en": "Open the HStack, the star image comes first (so it's on the left), then the \"Favorites\" label, then close the HStack.",
-      "th": "เปิด HStack → รูปดาวมาก่อน (จะอยู่ทางซ้าย) → ป้าย \"Favorites\" ตามมา → ปิด HStack"
+      "en": "A @Binding can't have a default value — it's supplied by the parent view: @Binding var count: Int.",
+      "th": "@Binding กำหนดค่าเริ่มต้นไม่ได้ — ต้องรับค่าจาก view แม่: @Binding var count: Int"
     }
   }
 ]

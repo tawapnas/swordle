@@ -1,10 +1,14 @@
-// Seed the Supabase `public.puzzles` table from data/puzzles.json.
+// DESTRUCTIVE — full reset of the puzzle bank and play history.
 //
-//   npm run seed:puzzles
+//   npm run reset:puzzles
 //
-// Idempotent — upserts on `id`, so it's safe to re-run after editing the JSON.
-// Each row gets an explicit 1-based `sort_order` from its index in the JSON, so
-// the daily schedule mirrors file order in data/puzzles.json.
+// This wipes EVERY row from `public.attempts` (all player streaks / solve
+// records) and `public.puzzles`, then loads the puzzles in data/puzzles.json
+// fresh with a contiguous 1-based `sort_order` from their file order.
+//
+// Use this for a relaunch / clean slate. For a non-destructive top-up that
+// keeps existing rows, use `npm run seed:puzzles` (upsert) instead.
+//
 // Reads NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY from the
 // environment, falling back to .env.local at the repo root.
 //
@@ -73,10 +77,32 @@ const supabase = createClient(url, serviceKey, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
 
-const { error } = await supabase.from("puzzles").upsert(rows, { onConflict: "id" });
-if (error) {
-  console.error("Seed failed:", error.message);
+// `id` is the primary key on both tables and is never null, so this filter
+// matches every row — supabase-js requires a filter on delete.
+const matchAll = (q) => q.not("id", "is", null);
+
+// 1. Clear play history (attempts reference puzzle_id, so they go first).
+const { error: attemptsError } = await matchAll(supabase.from("attempts").delete());
+if (attemptsError) {
+  console.error("Failed to clear attempts:", attemptsError.message);
+  process.exit(1);
+}
+console.log("Cleared all rows from public.attempts.");
+
+// 2. Clear the puzzle bank.
+const { error: puzzlesDeleteError } = await matchAll(supabase.from("puzzles").delete());
+if (puzzlesDeleteError) {
+  console.error("Failed to clear puzzles:", puzzlesDeleteError.message);
+  process.exit(1);
+}
+console.log("Cleared all rows from public.puzzles.");
+
+// 3. Load the fresh set.
+const { error: insertError } = await supabase.from("puzzles").insert(rows);
+if (insertError) {
+  console.error("Failed to insert puzzles:", insertError.message);
   process.exit(1);
 }
 
-console.log(`Seeded ${rows.length} puzzles into public.puzzles.`);
+console.log(`Inserted ${rows.length} puzzles into public.puzzles (day 1 — ${rows.length}).`);
+console.log("Done. Day 1 is the puzzle bank's first entry.");

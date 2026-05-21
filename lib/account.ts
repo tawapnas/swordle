@@ -15,24 +15,21 @@ export interface AttemptRecord {
 
 /** The onboarding profile fields (collected after first sign-in). */
 export interface ProfileFields {
-  firstName: string | null;
-  lastName: string | null;
+  username: string | null;
+  province: string | null;
   /** Optional. */
-  teamName: string | null;
-  school: string | null;
+  educationalInstitution: string | null;
 }
 
 /** What the onboarding form submits — required fields are non-empty strings. */
 export interface ProfileForm {
-  firstName: string;
-  lastName: string;
-  teamName: string | null;
-  school: string;
+  username: string;
+  province: string;
+  educationalInstitution: string | null;
 }
 
 /** Lightweight profile read — used for the onboarding gate. */
 export interface ProfileSummary extends ProfileFields {
-  displayName: string | null;
   isAdmin: boolean;
   onboarded: boolean;
 }
@@ -40,7 +37,6 @@ export interface ProfileSummary extends ProfileFields {
 /** GET /api/me — the signed-in user's profile + derived stats + history. */
 export interface MeResponse extends ProfileFields {
   email: string;
-  displayName: string | null;
   isAdmin: boolean;
   /** True once the required onboarding fields are filled in. */
   onboarded: boolean;

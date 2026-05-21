@@ -32,15 +32,13 @@ import { getTodayPuzzle } from "@/lib/daily";
 
 /** Columns selected from `profiles` everywhere (kept in sync with toProfileRow). */
 const PROFILE_COLUMNS =
-  "display_name, is_admin, first_name, last_name, team_name, school";
+  "is_admin, username, province, educational_institution";
 
 interface ProfileRow {
-  display_name: string | null;
   is_admin: boolean;
-  first_name: string | null;
-  last_name: string | null;
-  team_name: string | null;
-  school: string | null;
+  username: string | null;
+  province: string | null;
+  educational_institution: string | null;
 }
 
 interface AttemptRow {
@@ -110,27 +108,24 @@ function toProfileRow(value: unknown): ProfileRow | null {
   const r = asRecord(value);
   if (!r) return null;
   return {
-    display_name: strOrNull(r.display_name),
     is_admin: r.is_admin === true,
-    first_name: strOrNull(r.first_name),
-    last_name: strOrNull(r.last_name),
-    team_name: strOrNull(r.team_name),
-    school: strOrNull(r.school),
+    username: strOrNull(r.username),
+    province: strOrNull(r.province),
+    educational_institution: strOrNull(r.educational_institution),
   };
 }
 
 function profileFieldsOf(row: ProfileRow): ProfileFields {
   return {
-    firstName: row.first_name,
-    lastName: row.last_name,
-    teamName: row.team_name,
-    school: row.school,
+    username: row.username,
+    province: row.province,
+    educationalInstitution: row.educational_institution,
   };
 }
 
-/** Onboarding is complete once the required fields (name + school) are set. */
+/** Onboarding is complete once the required fields (username + province) are set. */
 export function isProfileComplete(p: ProfileFields): boolean {
-  return Boolean(p.firstName && p.lastName && p.school);
+  return Boolean(p.username && p.province);
 }
 
 function toStreakSummary(value: unknown): StreakSummaryRow | null {
@@ -204,12 +199,10 @@ async function todayDayNumber(): Promise<number> {
 function emptyMe(user: User): MeResponse {
   return {
     email: user.email ?? "",
-    displayName: null,
     isAdmin: isAdminEmail(user.email),
-    firstName: null,
-    lastName: null,
-    teamName: null,
-    school: null,
+    username: null,
+    province: null,
+    educationalInstitution: null,
     onboarded: false,
     currentStreak: 0,
     longestStreak: 0,
@@ -245,7 +238,6 @@ export async function getProfileSummary(
     const fields = profileFieldsOf(row);
     return {
       ...fields,
-      displayName: row.display_name,
       isAdmin: row.is_admin || isAdminEmail(user.email),
       onboarded: isProfileComplete(fields),
     };
@@ -255,32 +247,41 @@ export async function getProfileSummary(
   }
 }
 
+/** Result of `saveProfile` — `username-taken` maps to a 409 in the route. */
+export type SaveProfileResult =
+  | { ok: true }
+  | { ok: false; error: "username-taken" };
+
 /**
  * Write the onboarding fields to the user's own profile row (RLS: update/insert
- * own). Sets display_name to "First Last" for convenience. Trims inputs; empty
- * team name becomes null.
+ * own). Trims inputs; an empty educational institution becomes null. Usernames
+ * are unique (case-insensitively) — a collision with another user surfaces as
+ * `{ ok: false, error: "username-taken" }` rather than throwing.
  */
-export async function saveProfile(user: User, form: ProfileForm): Promise<void> {
-  const firstName = form.firstName.trim();
-  const lastName = form.lastName.trim();
-  const school = form.school.trim();
-  const teamName = form.teamName?.trim() || null;
+export async function saveProfile(
+  user: User,
+  form: ProfileForm,
+): Promise<SaveProfileResult> {
+  const username = form.username.trim();
+  const province = form.province.trim();
+  const educationalInstitution = form.educationalInstitution?.trim() || null;
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.from("profiles").upsert(
     {
       id: user.id,
-      first_name: firstName,
-      last_name: lastName,
-      team_name: teamName,
-      school,
-      display_name: `${firstName} ${lastName}`.trim(),
+      username,
+      province,
+      educational_institution: educationalInstitution,
     },
     { onConflict: "id" },
   );
   if (error) {
+    // 23505 = unique_violation — the only unique constraint here is on username.
+    if (error.code === "23505") return { ok: false, error: "username-taken" };
     console.error("[account-data] saveProfile:", error);
     throw error;
   }
+  return { ok: true };
 }
 
 export async function getMeData(
@@ -328,11 +329,10 @@ export async function getMeData(
 
     const fields: ProfileFields = profile
       ? profileFieldsOf(profile)
-      : { firstName: null, lastName: null, teamName: null, school: null };
+      : { username: null, province: null, educationalInstitution: null };
 
     return {
       email: user.email ?? "",
-      displayName: profile?.display_name ?? null,
       isAdmin: (profile?.is_admin ?? false) || isAdminEmail(user.email),
       ...fields,
       onboarded: isProfileComplete(fields),

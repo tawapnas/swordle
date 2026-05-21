@@ -5,6 +5,7 @@ import { getSessionUser, isSupabaseConfigured } from "@/lib/supabase/server";
 import { isAdminConfigured, isAdminEmail } from "@/lib/supabase/admin";
 import { getAdminOverview } from "@/lib/account-data";
 import { listAllPuzzles } from "@/lib/puzzle-admin";
+import { getDayNumber } from "@/lib/daily";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 
 export const metadata = { title: "Admin — Swordle" };
@@ -44,6 +45,7 @@ export default async function AdminPage({
   const overview = await getAdminOverview();
   const puzzlesConfigured = isAdminConfigured();
   const puzzles = puzzlesConfigured ? await listAllPuzzles() : [];
+  const todayDayNumber = getDayNumber();
   return (
     <AdminDashboard
       overview={overview}
@@ -51,6 +53,7 @@ export default async function AdminPage({
       adminEmail={user.email ?? ""}
       puzzles={puzzles}
       puzzlesConfigured={puzzlesConfigured}
+      todayDayNumber={todayDayNumber}
     />
   );
 }

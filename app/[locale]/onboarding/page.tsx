@@ -46,7 +46,12 @@ export default async function OnboardingPage({
         <p className="text-sm text-ink-soft">{t("subhead")}</p>
       </header>
 
-      <OnboardingForm email={user.email ?? ""} />
+      <OnboardingForm
+        email={user.email ?? ""}
+        initialUsername={profile?.username ?? ""}
+        initialProvince={profile?.province ?? ""}
+        initialInstitution={profile?.educationalInstitution ?? ""}
+      />
     </main>
   );
 }

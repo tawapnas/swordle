@@ -10,6 +10,10 @@ import "server-only";
 //     so Node parses it once at module-eval time (cached for the process life).
 //     Used when Supabase isn't configured. It also doubles as the seed source
 //     for the Supabase table (`npm run seed:puzzles`).
+//
+//     NOTE: explicit admin day scheduling (the `sort_order` column) is a
+//     Supabase-only feature. The JSON fallback has no `sort_order` — the daily
+//     rotation simply follows file order in `data/puzzles.json`.
 //   - `supabasePuzzleStore` — reads `public.puzzles` via the SERVICE-ROLE client
 //     (the table has RLS on with no select policy — answers must stay
 //     server-side). Used when `SUPABASE_SERVICE_ROLE_KEY` is set.
@@ -45,13 +49,15 @@ export const jsonPuzzleStore: PuzzleStore = {
 // `React.cache` makes this request-scoped: every caller in one request shares a
 // single DB round-trip (the today/validate routes touch the store twice), and
 // the next request gets fresh data — so a puzzle created via /admin shows up
-// without a redeploy. Ordered by `id` so the daily rotation is deterministic.
+// without a redeploy. Ordered by `sort_order` (the admin-controlled schedule),
+// with `id` as a stable tiebreaker, so the daily rotation is deterministic.
 const loadFromSupabase = cache(async (): Promise<Puzzle[]> => {
   const admin = createSupabaseAdminClient();
   const { data, error } = await admin
     .from("puzzles")
     .select("id, type, prompt, difficulty, payload, answer, explanation, is_published")
     .eq("is_published", true)
+    .order("sort_order", { ascending: true })
     .order("id", { ascending: true });
   if (error) throw error;
   const out: Puzzle[] = [];

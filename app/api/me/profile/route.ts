@@ -1,31 +1,42 @@
-// POST /api/me/profile — save the onboarding fields (name, optional team, school)
-// to the signed-in user's profile.
-//   body: { firstName: string, lastName: string, teamName?: string | null, school: string }
+// POST /api/me/profile — save the onboarding fields (username, province,
+// optional educational institution) to the signed-in user's profile.
+//   body: { username: string, province: string, educationalInstitution?: string | null }
 //   → 200 { ok: true }
-//   → 400 malformed body  ·  401 not signed in  ·  500 internal error
+//   → 400 malformed body  ·  401 not signed in
+//   → 409 { error: "username-taken" }  ·  500 internal error
 
 import type { ProfileForm } from "@/lib/account";
 import { getSessionUser } from "@/lib/supabase/server";
 import { saveProfile } from "@/lib/account-data";
+import { isValidProvince } from "@/lib/thailand-provinces";
 
 export const dynamic = "force-dynamic";
 
-function nonEmptyString(value: unknown): value is string {
-  return typeof value === "string" && value.trim().length > 0;
-}
+const USERNAME_MIN = 2;
+const USERNAME_MAX = 30;
 
 function parseBody(body: unknown): ProfileForm | null {
   if (typeof body !== "object" || body === null) return null;
   const b = body as Record<string, unknown>;
-  if (!nonEmptyString(b.firstName)) return null;
-  if (!nonEmptyString(b.lastName)) return null;
-  if (!nonEmptyString(b.school)) return null;
-  if (b.teamName != null && typeof b.teamName !== "string") return null;
+
+  if (typeof b.username !== "string") return null;
+  const username = b.username.trim();
+  if (username.length < USERNAME_MIN || username.length > USERNAME_MAX) return null;
+
+  if (!isValidProvince(b.province)) return null;
+
+  if (b.educationalInstitution != null && typeof b.educationalInstitution !== "string") {
+    return null;
+  }
+  const institution =
+    typeof b.educationalInstitution === "string"
+      ? b.educationalInstitution.trim()
+      : "";
+
   return {
-    firstName: b.firstName,
-    lastName: b.lastName,
-    school: b.school,
-    teamName: typeof b.teamName === "string" ? b.teamName : null,
+    username,
+    province: b.province,
+    educationalInstitution: institution || null,
   };
 }
 
@@ -45,13 +56,16 @@ export async function POST(req: Request): Promise<Response> {
   const form = parseBody(raw);
   if (!form) {
     return Response.json(
-      { error: "Body must be { firstName, lastName, school, teamName? }" },
+      { error: "Body must be { username, province, educationalInstitution? }" },
       { status: 400 },
     );
   }
 
   try {
-    await saveProfile(user, form);
+    const result = await saveProfile(user, form);
+    if (!result.ok) {
+      return Response.json({ error: result.error }, { status: 409 });
+    }
     return Response.json({ ok: true });
   } catch (err) {
     console.error("[api/me/profile] failed:", err);

@@ -17,6 +17,10 @@ export interface PuzzleRow {
   answer: unknown;
   explanation: unknown;
   is_published?: boolean;
+  // Scheduling metadata, not puzzle content — the data-access layer owns it.
+  // `rowToPuzzle`/`puzzleToRow` deliberately ignore it (an UPDATE never
+  // reschedules a puzzle). Documented here only for selects that need it.
+  sort_order?: number;
 }
 
 /** Convert a DB row to a `Puzzle`, or `null` if the row doesn't validate. */

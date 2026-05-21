@@ -1,22 +1,44 @@
 "use client";
 
-// Shown once, right after a user's first sign-in: collects name, optional team,
-// and school, then POSTs to /api/me/profile and drops them into the game.
+// Shown once, right after a user's first sign-in: collects a username, their
+// Thailand province (from a picker), and an optional educational institution,
+// then POSTs to /api/me/profile and drops them into the game.
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import {
+  THAILAND_PROVINCES,
+  provinceLabel,
+  type Province,
+} from "@/lib/thailand-provinces";
 
-export default function OnboardingForm({ email }: { email: string }) {
+export default function OnboardingForm({
+  email,
+  initialUsername = "",
+  initialProvince = "",
+  initialInstitution = "",
+}: {
+  email: string;
+  initialUsername?: string;
+  initialProvince?: string;
+  initialInstitution?: string;
+}) {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("Onboarding");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [teamName, setTeamName] = useState("");
-  const [school, setSchool] = useState("");
+  const [username, setUsername] = useState(initialUsername);
+  const [province, setProvince] = useState(initialProvince);
+  const [institution, setInstitution] = useState(initialInstitution);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Provinces sorted by the label shown in the current language.
+  const provinces = useMemo(() => {
+    return [...THAILAND_PROVINCES].sort((a: Province, b: Province) =>
+      provinceLabel(a, locale).localeCompare(provinceLabel(b, locale), locale),
+    );
+  }, [locale]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -28,14 +50,18 @@ export default function OnboardingForm({ email }: { email: string }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          teamName: teamName.trim() || null,
-          school: school.trim(),
+          username: username.trim(),
+          province,
+          educationalInstitution: institution.trim() || null,
         }),
       });
       if (!res.ok) {
-        setError(t("saveFailed"));
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setError(
+          res.status === 409 && data.error === "username-taken"
+            ? t("usernameTaken")
+            : t("saveFailed"),
+        );
         setSubmitting(false);
         return;
       }
@@ -62,63 +88,77 @@ export default function OnboardingForm({ email }: { email: string }) {
       )}
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="firstName" className="text-sm font-bold text-ink">
-          {t("firstName")}
+        <label htmlFor="username" className="text-sm font-bold text-ink">
+          {t("username")}
         </label>
         <input
-          id="firstName"
-          name="firstName"
+          id="username"
+          name="username"
           required
-          autoComplete="given-name"
+          minLength={2}
+          maxLength={30}
+          autoComplete="username"
           autoFocus
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder={t("usernamePlaceholder")}
           className={inputClass}
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="lastName" className="text-sm font-bold text-ink">
-          {t("lastName")}
+        <label htmlFor="province" className="text-sm font-bold text-ink">
+          {t("province")}
         </label>
-        <input
-          id="lastName"
-          name="lastName"
-          required
-          autoComplete="family-name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          className={inputClass}
-        />
+        <div className="relative">
+          <select
+            id="province"
+            name="province"
+            required
+            value={province}
+            onChange={(e) => setProvince(e.target.value)}
+            className={`${inputClass} w-full appearance-none pr-10 ${
+              province ? "" : "text-ink-soft"
+            }`}
+          >
+            <option value="" disabled>
+              {t("provincePlaceholder")}
+            </option>
+            {provinces.map((p) => (
+              <option key={p.en} value={p.en} className="text-ink">
+                {provinceLabel(p, locale)}
+              </option>
+            ))}
+          </select>
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            fill="none"
+            className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-ink-soft"
+          >
+            <path
+              d="M5 7.5 10 12.5 15 7.5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="teamName" className="text-sm font-bold text-ink">
-          {t("teamName")}{" "}
+        <label htmlFor="institution" className="text-sm font-bold text-ink">
+          {t("institution")}{" "}
           <span className="font-medium text-ink-soft">{t("optional")}</span>
         </label>
         <input
-          id="teamName"
-          name="teamName"
-          autoComplete="off"
-          value={teamName}
-          onChange={(e) => setTeamName(e.target.value)}
-          placeholder={t("teamPlaceholder")}
-          className={inputClass}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label htmlFor="school" className="text-sm font-bold text-ink">
-          {t("school")}
-        </label>
-        <input
-          id="school"
-          name="school"
-          required
+          id="institution"
+          name="institution"
           autoComplete="organization"
-          value={school}
-          onChange={(e) => setSchool(e.target.value)}
+          value={institution}
+          onChange={(e) => setInstitution(e.target.value)}
+          placeholder={t("institutionPlaceholder")}
           className={inputClass}
         />
       </div>
