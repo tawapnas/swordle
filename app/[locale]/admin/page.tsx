@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { getSessionUser, isSupabaseConfigured } from "@/lib/supabase/server";
-import { isAdminConfigured, isAdminEmail } from "@/lib/supabase/admin";
+import { isAdminConfigured } from "@/lib/supabase/admin";
+import { isAuthorizedAdmin } from "@/lib/admin-guard";
 import { getAdminOverview } from "@/lib/account-data";
 import { listAllPuzzles } from "@/lib/puzzle-admin";
 import { getDayNumber } from "@/lib/daily";
@@ -40,7 +41,7 @@ export default async function AdminPage({
 
   const user = await getSessionUser();
   if (!user) redirect(`/${locale}/login?next=/${locale}/admin`);
-  if (!isAdminEmail(user.email)) return <NoAccess locale={locale} />;
+  if (!(await isAuthorizedAdmin(user))) return <NoAccess locale={locale} />;
 
   const overview = await getAdminOverview();
   const puzzlesConfigured = isAdminConfigured();

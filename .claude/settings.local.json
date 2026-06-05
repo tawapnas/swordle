@@ -24,7 +24,8 @@
       "Bash(pkill -f \"next dev\")",
       "Bash(rm -f /tmp/swordle-dev.log)",
       "Bash(echo \"tsc exit: $?\")",
-      "Bash(echo \"exit=$?\")"
+      "Bash(echo \"exit=$?\")",
+      "Bash(xargs grep -nEi 'eyJ[A-Za-z0-9_-]{10,}|sk_live|sk_test|service_role|secret|api[_-]?key|password|bearer ')"
     ]
   }
 }

@@ -7,8 +7,11 @@
 // Two layers:
 //   - `Puzzle` (server-side storage) — `prompt` and `explanation` are
 //     `LocalizedString` so the bank carries both languages.
-//   - `PublicPuzzle` (what the API returns) — `prompt` and `explanation` are
-//     plain strings, already resolved to the request locale by `toPublicPuzzle`.
+//   - `PublicPuzzle` (what GET /api/puzzle/today returns) — `prompt` is a plain
+//     string resolved to the request locale by `toPublicPuzzle`. The
+//     `explanation` is deliberately NOT included: it reveals the answer, so it
+//     is withheld until the player submits and is returned only by
+//     POST /api/puzzle/validate.
 
 import type { Locale } from "@/i18n/routing";
 
@@ -62,7 +65,6 @@ interface BasePublicPuzzle {
   type: PuzzleType;
   prompt: string;
   difficulty: 1 | 2 | 3;
-  explanation: string;
 }
 
 export type PublicPuzzle =

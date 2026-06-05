@@ -16,6 +16,15 @@ import { routing } from "@/i18n/routing";
 
 const LOCALES = new Set<string>(routing.locales);
 
+// Only allow same-origin, absolute-path redirects. Rejects absolute URLs
+// (`https://evil.com`) and protocol-relative ones (`//evil.com`) so a crafted
+// `?next=` can't turn the callback into an open redirect. LoginForm applies the
+// same guard client-side, but the route is directly reachable, so it must too.
+function safeNext(raw: string | null, fallback: string): string {
+  if (raw && raw.startsWith("/") && !raw.startsWith("//")) return raw;
+  return fallback;
+}
+
 export async function GET(
   request: Request,
   context: { params: Promise<{ locale: string }> },
@@ -24,7 +33,7 @@ export async function GET(
   const locale = LOCALES.has(rawLocale) ? rawLocale : routing.defaultLocale;
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
-  const next = url.searchParams.get("next") ?? `/${locale}`;
+  const next = safeNext(url.searchParams.get("next"), `/${locale}`);
 
   if (isSupabaseConfigured() && code) {
     const supabase = await createSupabaseServerClient();

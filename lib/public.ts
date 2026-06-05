@@ -1,8 +1,9 @@
 // Converts a full `Puzzle` (server-side storage, localized strings, carries the
-// answer) into the `PublicPuzzle` the client sees: answer stripped, `prompt`
-// and `explanation` resolved to a single string for the request locale. This
-// is the single chokepoint between "has the answer / both languages" and "safe
-// to serialize".
+// answer) into the `PublicPuzzle` the client sees: `prompt` resolved to a single
+// string for the request locale, and both the `answer` AND the `explanation`
+// stripped — the explanation gives the answer away, so it's withheld until the
+// player submits (POST /api/puzzle/validate returns it). This is the single
+// chokepoint between "has the answer / both languages" and "safe to serialize".
 
 import type { Locale } from "@/i18n/routing";
 import type { LocalizedString, Puzzle, PublicPuzzle } from "@/lib/types";
@@ -15,10 +16,10 @@ export function pickLocale(s: LocalizedString, locale: Locale): string {
 
 export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
   // Rebuild the object field-by-field rather than spreading, so there is no
-  // way for `answer` (or any future secret field) to leak through. Switching
-  // on the discriminant keeps the union narrowing intact for the return type.
+  // way for `answer` or `explanation` (or any future secret field) to leak
+  // through. Switching on the discriminant keeps the union narrowing intact for
+  // the return type.
   const prompt = pickLocale(puzzle.prompt, locale);
-  const explanation = pickLocale(puzzle.explanation, locale);
   switch (puzzle.type) {
     case "spot-bug":
       return {
@@ -26,7 +27,6 @@ export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
         type: puzzle.type,
         prompt,
         difficulty: puzzle.difficulty,
-        explanation,
         payload: puzzle.payload,
       };
     case "fill-modifier":
@@ -35,7 +35,6 @@ export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
         type: puzzle.type,
         prompt,
         difficulty: puzzle.difficulty,
-        explanation,
         payload: puzzle.payload,
       };
     case "syntax-sort":
@@ -44,7 +43,6 @@ export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
         type: puzzle.type,
         prompt,
         difficulty: puzzle.difficulty,
-        explanation,
         payload: puzzle.payload,
       };
     default: {

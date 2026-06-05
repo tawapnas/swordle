@@ -34,14 +34,22 @@ async function profileIsAdmin(userId: string): Promise<boolean> {
   }
 }
 
+/**
+ * Authorization predicate shared by the admin API routes and the /admin page:
+ * an admin is anyone in ADMIN_EMAILS OR with `profiles.is_admin = true`. Keeping
+ * this in one place ensures the page gate and the API gate never drift apart.
+ */
+export async function isAuthorizedAdmin(user: User): Promise<boolean> {
+  return isAdminEmail(user.email) || (await profileIsAdmin(user.id));
+}
+
 export async function requireAdmin(): Promise<{ user: User } | Response> {
   const user = await getSessionUser();
   if (!user) {
     return Response.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const authorized = isAdminEmail(user.email) || (await profileIsAdmin(user.id));
-  if (!authorized) {
+  if (!(await isAuthorizedAdmin(user))) {
     return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 

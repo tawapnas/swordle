@@ -18,18 +18,9 @@
     "subhead": "Sign in to play the daily puzzle and keep your streak across devices.",
     "unconfiguredTitle": "Sign-in isn't set up on this deployment yet.",
     "unconfiguredBody": "Add the Supabase environment variables to enable accounts. Until then the game runs without sign-in.",
-    "checkEmailTitle": "Check your email 📬",
-    "checkEmailBody": "We sent a magic link to {email}. Open it on this device to sign in.",
-    "useDifferentEmail": "Use a different email",
     "linkFailed": "That link didn't work — try again.",
     "continueWithGoogle": "Continue with Google",
     "redirecting": "Redirecting…",
-    "or": "or",
-    "emailLabel": "Email address",
-    "emailPlaceholder": "you@school.edu",
-    "sending": "Sending…",
-    "emailMeLink": "Email me a magic link",
-    "noPassword": "No password needed — we'll email you a link that signs you in.",
     "back": "← Back"
   },
   "Onboarding": {

@@ -1,7 +1,6 @@
 "use client";
 
-// Sign-in: "Continue with Google" (OAuth) and an email magic link. On magic-link
-// success it swaps to a "check your email" state; Google redirects away to the
+// Sign-in: "Continue with Google" (OAuth). Google redirects away to the
 // provider. Honors ?error=auth in the URL (the /auth/callback route redirects
 // there when a code exchange fails) and forwards a same-origin ?next= through.
 
@@ -15,9 +14,7 @@ import {
 
 type Status =
   | { kind: "idle" }
-  | { kind: "sending" } // magic-link email in flight
   | { kind: "redirecting" } // Google OAuth: navigating to the provider
-  | { kind: "sent"; email: string }
   | { kind: "error"; message: string };
 
 function GoogleMark() {
@@ -37,7 +34,6 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const linkFailed = searchParams.get("error") === "auth";
   const nextParam = searchParams.get("next");
-  const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
 
   if (!isSupabaseConfigured()) {
@@ -49,7 +45,7 @@ export default function LoginForm() {
     );
   }
 
-  /** Where the provider/email link should land — locale-aware, ?next= only when same-origin. */
+  /** Where the provider should land — locale-aware, ?next= only when same-origin. */
   function callbackUrl(): string {
     const safeNext =
       nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//")
@@ -82,46 +78,7 @@ export default function LoginForm() {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const trimmed = email.trim();
-    if (!trimmed) return;
-    setStatus({ kind: "sending" });
-    try {
-      const supabase = createSupabaseBrowserClient();
-      const { error } = await supabase.auth.signInWithOtp({
-        email: trimmed,
-        options: { emailRedirectTo: callbackUrl() },
-      });
-      if (error) {
-        setStatus({ kind: "error", message: error.message });
-        return;
-      }
-      setStatus({ kind: "sent", email: trimmed });
-    } catch (err) {
-      reportError(err);
-    }
-  }
-
-  if (status.kind === "sent") {
-    return (
-      <div className="animate-rise rounded-2xl bg-accent px-5 py-6 text-white">
-        <p className="text-lg font-black">{t("checkEmailTitle")}</p>
-        <p className="mt-1 text-sm opacity-90">
-          {t("checkEmailBody", { email: status.email })}
-        </p>
-        <button
-          type="button"
-          onClick={() => setStatus({ kind: "idle" })}
-          className="mt-4 text-sm font-bold underline underline-offset-2"
-        >
-          {t("useDifferentEmail")}
-        </button>
-      </div>
-    );
-  }
-
-  const busy = status.kind === "sending" || status.kind === "redirecting";
+  const busy = status.kind === "redirecting";
 
   return (
     <div className="flex flex-col gap-4">
@@ -151,37 +108,6 @@ export default function LoginForm() {
         <GoogleMark />
         {status.kind === "redirecting" ? t("redirecting") : t("continueWithGoogle")}
       </button>
-
-      <div className="flex items-center gap-3 text-xs font-medium text-ink-soft">
-        <span className="h-px flex-1 bg-line" />
-        {t("or")}
-        <span className="h-px flex-1 bg-line" />
-      </div>
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label htmlFor="email" className="text-sm font-bold text-ink">
-          {t("emailLabel")}
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={t("emailPlaceholder")}
-          className="rounded-2xl bg-card px-4 py-3 text-base text-ink shadow-sm ring-1 ring-line outline-none focus:ring-2 focus:ring-brand"
-        />
-        <button
-          type="submit"
-          disabled={busy}
-          className="rounded-2xl bg-brand px-6 py-3.5 text-base font-bold text-white shadow-sm transition active:translate-y-px active:bg-brand-dark disabled:opacity-60"
-        >
-          {status.kind === "sending" ? t("sending") : t("emailMeLink")}
-        </button>
-        <p className="text-xs text-ink-soft">{t("noPassword")}</p>
-      </form>
     </div>
   );
 }
