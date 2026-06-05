@@ -17,7 +17,6 @@ import {
 import { Field, inputClass, monoInputClass } from "./puzzle-fields/styles";
 import SpotBugFields from "./puzzle-fields/SpotBugFields";
 import FillModifierFields from "./puzzle-fields/FillModifierFields";
-import SyntaxSortFields from "./puzzle-fields/SyntaxSortFields";
 
 export default function PuzzleForm({
   initial,
@@ -132,7 +131,6 @@ export default function PuzzleForm({
           >
             <option value="spot-bug">{t("typeSpotBug")}</option>
             <option value="fill-modifier">{t("typeFillModifier")}</option>
-            <option value="syntax-sort">{t("typeSyntaxSort")}</option>
           </select>
         </Field>
         <Field label={t("difficulty")}>
@@ -200,13 +198,6 @@ export default function PuzzleForm({
           codeAfter={state.codeAfter}
           options={state.options}
           correctIndex={state.correctIndex}
-          onChange={patch}
-        />
-      )}
-      {state.type === "syntax-sort" && (
-        <SyntaxSortFields
-          correctLinesText={state.correctLinesText}
-          shuffle={state.shuffle}
           onChange={patch}
         />
       )}

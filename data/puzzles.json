@@ -37,7 +37,12 @@
     "payload": {
       "codeBefore": "Text(\"Welcome\")\n    .",
       "codeAfter": "()",
-      "options": ["bold", "italic", "underline", "strikethrough"]
+      "options": [
+        "bold",
+        "italic",
+        "underline",
+        "strikethrough"
+      ]
     },
     "answer": {
       "correctIndex": 0
@@ -45,31 +50,6 @@
     "explanation": {
       "en": ".bold() renders the text with a heavier weight.",
       "th": ".bold() ทำให้ข้อความหนาขึ้น"
-    }
-  },
-  {
-    "id": "puzzle-03",
-    "type": "syntax-sort",
-    "prompt": {
-      "en": "Put these lines in the right order to make a valid view.",
-      "th": "เรียงบรรทัดเหล่านี้ให้เป็น view ที่ถูกต้อง"
-    },
-    "difficulty": 1,
-    "payload": {
-      "shuffledLines": [
-        "        Text(\"Hi\")",
-        "}",
-        "struct GreetingView: View {",
-        "    }",
-        "    var body: some View {"
-      ]
-    },
-    "answer": {
-      "correctOrder": [2, 4, 0, 3, 1]
-    },
-    "explanation": {
-      "en": "A View declares the struct first, then its body property, then the content, then the closing braces.",
-      "th": "View ต้องประกาศ struct ก่อน ตามด้วย property body แล้วเนื้อหา จากนั้นปิดด้วยปีกกา"
     }
   },
   {
@@ -113,7 +93,12 @@
     "payload": {
       "codeBefore": "Rectangle()\n    .",
       "codeAfter": "(width: 100, height: 100)",
-      "options": ["frame", "padding", "offset", "position"]
+      "options": [
+        "frame",
+        "padding",
+        "offset",
+        "position"
+      ]
     },
     "answer": {
       "correctIndex": 0
@@ -121,32 +106,6 @@
     "explanation": {
       "en": ".frame(width:height:) gives a view a fixed size.",
       "th": ".frame(width:height:) กำหนดขนาดคงที่ให้ view"
-    }
-  },
-  {
-    "id": "puzzle-06",
-    "type": "syntax-sort",
-    "prompt": {
-      "en": "Order the lines so the VStack is padded, then given a yellow background.",
-      "th": "เรียงบรรทัดให้ VStack มี padding แล้วตามด้วยพื้นหลังสีเหลือง"
-    },
-    "difficulty": 2,
-    "payload": {
-      "shuffledLines": [
-        ".background(.yellow)",
-        "    Text(\"Score\")",
-        "}",
-        "VStack {",
-        "    .padding()",
-        "    Text(\"100\")"
-      ]
-    },
-    "answer": {
-      "correctOrder": [3, 1, 5, 2, 4, 0]
-    },
-    "explanation": {
-      "en": "A modifier applies to the view above it — close the VStack first, then chain .padding() and .background().",
-      "th": "modifier มีผลกับ view ที่อยู่เหนือมัน — ปิด VStack ก่อน แล้วต่อด้วย .padding() และ .background()"
     }
   },
   {
@@ -186,7 +145,12 @@
     "payload": {
       "codeBefore": "Image(\"avatar\")\n    .resizable()\n    .frame(width: 60, height: 60)\n    .",
       "codeAfter": "(Circle())",
-      "options": ["clipShape", "mask", "background", "border"]
+      "options": [
+        "clipShape",
+        "mask",
+        "background",
+        "border"
+      ]
     },
     "answer": {
       "correctIndex": 0
@@ -194,34 +158,6 @@
     "explanation": {
       "en": ".clipShape(Circle()) clips a view to the given shape.",
       "th": ".clipShape(Circle()) ตัด view ตามรูปทรงที่กำหนด"
-    }
-  },
-  {
-    "id": "puzzle-09",
-    "type": "syntax-sort",
-    "prompt": {
-      "en": "Sort the lines into a valid card view.",
-      "th": "เรียงบรรทัดให้เป็น card view ที่ถูกต้อง"
-    },
-    "difficulty": 3,
-    "payload": {
-      "shuffledLines": [
-        "    }",
-        "        ZStack {",
-        "struct CardView: View {",
-        "            Text(\"Card\")",
-        "}",
-        "    var body: some View {",
-        "        }",
-        "            Color.blue"
-      ]
-    },
-    "answer": {
-      "correctOrder": [2, 5, 1, 7, 3, 6, 0, 4]
-    },
-    "explanation": {
-      "en": "Inside a ZStack, later views are drawn on top — Color.blue is the background and Text sits above it.",
-      "th": "ใน ZStack view ที่อยู่ทีหลังจะถูกวาดทับด้านบน — Color.blue เป็นพื้นหลัง และ Text อยู่ด้านบน"
     }
   },
   {

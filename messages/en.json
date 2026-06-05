@@ -6,13 +6,7 @@
   },
   "Welcome": {
     "tagline": "The daily SwiftUI puzzle.",
-    "pitch": "A new puzzle every day. Sixty seconds on the clock. Keep your streak alive.",
-    "types": {
-      "spotBug": "🐛 Spot the bug in a snippet",
-      "fillModifier": "🧩 Fill in the missing modifier",
-      "syntaxSort": "🔀 Sort the lines into a working view"
-    },
-    "signInToPlay": "Sign in to play"
+    "pitch": "A new puzzle every day. Sixty seconds on the clock. Keep your streak alive."
   },
   "Login": {
     "subhead": "Sign in to play the daily puzzle and keep your streak across devices.",
@@ -46,13 +40,12 @@
     "errorTitle": "Couldn't load the puzzle",
     "devPreview": "Dev preview · {date} · drop the ?date= param to play today",
     "submit": "Submit",
-    "syntaxSort": {
-      "hint": "Tap a line then tap another to swap them, or use the arrows.",
-      "moveUp": "Move line {n} up",
-      "moveDown": "Move line {n} down",
-      "lineSelected": "Line {n}: {text}. Selected. Tap another line to swap.",
-      "lineIdle": "Line {n}: {text}. Tap to select.",
-      "blank": "blank"
+    "submitting": "Checking…",
+    "spotBug": {
+      "hint": "Tap the line you think is buggy."
+    },
+    "fillModifier": {
+      "hint": "Pick the modifier that fits the blank."
     },
     "scorerUnreachable": "We couldn't reach the scorer — counted as a miss."
   },
@@ -62,14 +55,14 @@
     "time": "Time",
     "currentStreak": "Current streak",
     "longestStreak": "Longest",
-    "comeBackTomorrow": "Come back tomorrow for a fresh puzzle.",
     "share": "Share",
     "signInCta": "🔥 Sign in to save your streak →",
     "alreadyPlayedTitle": "You've played today's puzzle"
   },
   "AccountBar": {
     "signIn": "Sign in",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "accountMenu": "Account menu"
   },
   "Admin": {
     "title": "Admin dashboard",
@@ -108,7 +101,6 @@
       "type": "Puzzle type",
       "typeSpotBug": "Spot the bug",
       "typeFillModifier": "Fill the modifier",
-      "typeSyntaxSort": "Syntax sort",
       "idLabel": "ID",
       "difficulty": "Difficulty",
       "diffEasy": "Easy",
@@ -138,9 +130,6 @@
       "buggyLineLabel": "Mark the buggy line",
       "option": "Option {n}",
       "correctOption": "Correct option",
-      "correctLines": "Lines in the correct order",
-      "shufflePreview": "Shuffled preview — what players see",
-      "reshuffle": "Re-shuffle",
       "delete": "Delete",
       "deleteConfirm": "Delete this puzzle?",
       "listTitle": "Existing puzzles",

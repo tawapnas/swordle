@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { PuzzleComponentProps } from "./types";
+import SubmitButton from "./SubmitButton";
 
 /**
  * fill-modifier: code with a blank between codeBefore / codeAfter; pick the
@@ -12,6 +13,7 @@ export default function FillTheModifier({
   puzzle,
   onSubmit,
   disabled,
+  submitting,
 }: PuzzleComponentProps) {
   const t = useTranslations("Game");
   const [selected, setSelected] = useState<number | null>(null);
@@ -34,7 +36,7 @@ export default function FillTheModifier({
           {codeAfter}
         </code>
       </pre>
-      <p className="text-sm text-ink-soft">Pick the modifier that fits the blank.</p>
+      <p className="text-sm text-ink-soft">{t("fillModifier.hint")}</p>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {options.map((opt, i) => {
           const isSelected = selected === i;
@@ -57,14 +59,11 @@ export default function FillTheModifier({
           );
         })}
       </div>
-      <button
-        type="button"
+      <SubmitButton
         disabled={disabled || selected === null}
+        submitting={submitting}
         onClick={() => selected !== null && onSubmit({ correctIndex: selected })}
-        className="rounded-2xl bg-brand px-6 py-3.5 text-base font-bold text-white shadow-sm transition active:translate-y-px active:bg-brand-dark disabled:opacity-40"
-      >
-        {t("submit")}
-      </button>
+      />
     </div>
   );
 }

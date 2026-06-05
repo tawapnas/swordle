@@ -7,8 +7,8 @@ export default function Footer() {
   const tBrand = useTranslations("Brand");
   const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-line bg-white">
-      <div className="mx-auto flex max-w-6xl flex-col-reverse items-center justify-between gap-3 px-4 py-3 sm:flex-row">
+    <footer className="shrink-0 border-t border-line bg-white">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-3 sm:flex-row">
         <p className="text-sm text-ink-soft">
           © {year} {tBrand("orgName")}. {t("rightsReserved")}
         </p>

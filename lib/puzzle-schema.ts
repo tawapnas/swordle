@@ -11,7 +11,6 @@ import type {
   Puzzle,
   PuzzleType,
   SpotBugPuzzle,
-  SyntaxSortPuzzle,
 } from "@/lib/types";
 import { routing } from "@/i18n/routing";
 
@@ -19,11 +18,7 @@ export type ParseResult =
   | { ok: true; puzzle: Puzzle }
   | { ok: false; errors: string[] };
 
-const PUZZLE_TYPES: readonly PuzzleType[] = [
-  "spot-bug",
-  "fill-modifier",
-  "syntax-sort",
-];
+const PUZZLE_TYPES: readonly PuzzleType[] = ["spot-bug", "fill-modifier"];
 
 const ID_RE = /^[a-z0-9-]+$/;
 
@@ -137,25 +132,6 @@ export function parsePuzzleInput(input: unknown): ParseResult {
         errors.push("`answer.correctIndex` must be an integer between 0 and 3.");
       }
     }
-  } else if (type === "syntax-sort") {
-    if (payload) {
-      if (!isStringArray(payload.shuffledLines) || payload.shuffledLines.length === 0) {
-        errors.push("`payload.shuffledLines` must be a non-empty array of strings.");
-      } else if (answer) {
-        const order = answer.correctOrder;
-        const n = payload.shuffledLines.length;
-        const isPermutation =
-          Array.isArray(order) &&
-          order.length === n &&
-          order.every((x) => isInteger(x) && x >= 0 && x < n) &&
-          new Set(order as number[]).size === n;
-        if (!isPermutation) {
-          errors.push(
-            "`answer.correctOrder` must be a permutation of [0 .. shuffledLines.length - 1].",
-          );
-        }
-      }
-    }
   }
 
   if (errors.length > 0) return { ok: false, errors };
@@ -178,7 +154,8 @@ export function parsePuzzleInput(input: unknown): ParseResult {
       payload: { codeLines: [...p.codeLines] },
       answer: { buggyLineIndex: a.buggyLineIndex },
     } satisfies SpotBugPuzzle;
-  } else if (type === "fill-modifier") {
+  } else {
+    // fill-modifier — the only other valid type (validated above).
     const p = input.payload as { codeBefore: string; codeAfter: string; options: string[] };
     const a = input.answer as { correctIndex: number };
     puzzle = {
@@ -187,15 +164,6 @@ export function parsePuzzleInput(input: unknown): ParseResult {
       payload: { codeBefore: p.codeBefore, codeAfter: p.codeAfter, options: [...p.options] },
       answer: { correctIndex: a.correctIndex },
     } satisfies FillModifierPuzzle;
-  } else {
-    const p = input.payload as { shuffledLines: string[] };
-    const a = input.answer as { correctOrder: number[] };
-    puzzle = {
-      ...base,
-      type: "syntax-sort",
-      payload: { shuffledLines: [...p.shuffledLines] },
-      answer: { correctOrder: [...a.correctOrder] },
-    } satisfies SyntaxSortPuzzle;
   }
 
   return { ok: true, puzzle };

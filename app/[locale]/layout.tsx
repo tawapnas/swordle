@@ -49,12 +49,12 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${lineSeedSansTH.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${lineSeedSansTH.variable} ${geistMono.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider>
           <Header />
-          <div className="flex flex-1 flex-col">{children}</div>
+          {children}
           <Footer />
         </NextIntlClientProvider>
       </body>

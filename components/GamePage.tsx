@@ -17,8 +17,6 @@ import {
   isSupabaseConfigured,
 } from "@/lib/supabase/client";
 import Timer from "./Timer";
-import AccountBar from "./AccountBar";
-import LanguageToggle from "./LanguageToggle";
 import PuzzleRenderer from "./puzzles/PuzzleRenderer";
 import ResultScreen from "./ResultScreen";
 import AlreadyPlayed from "./AlreadyPlayed";
@@ -45,6 +43,8 @@ export default function GamePage() {
   const [phase, setPhase] = useState<Phase>({ kind: "loading" });
   /** True once we know the player is signed in (server-backed). */
   const [signedIn, setSignedIn] = useState(false);
+  /** True while the submitted answer is being scored — drives the button spinner. */
+  const [submitting, setSubmitting] = useState(false);
   const startedAtRef = useRef<number>(0);
   const submittedRef = useRef(false);
   const pendingAnswerRef = useRef<unknown>(null);
@@ -76,6 +76,8 @@ export default function GamePage() {
         const today = (await res.json()) as TodayResponse;
         const me = await loadAccount();
         if (cancelled) return;
+        // Fresh puzzle loaded → clear any leftover submitting state.
+        setSubmitting(false);
         setSignedIn(me !== null);
         const next = decideInitialPhase(today, me, readState());
         if (next.kind === "playing") {
@@ -101,6 +103,7 @@ export default function GamePage() {
     async (puzzle: PublicPuzzle, dayNumber: number, answer: unknown) => {
       if (submittedRef.current) return;
       submittedRef.current = true;
+      setSubmitting(true);
       const timeMs = Date.now() - startedAtRef.current;
       const { data, explanation } = await submitAnswer(
         puzzle.id,
@@ -167,7 +170,7 @@ export default function GamePage() {
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
       <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-        <h1 className="text-xl font-black text-brand sm:text-2xl">
+        <h1 className="text-xl font-black text-ink sm:text-2xl">
           {tBrand("name")}
           {headerDay !== null && (
             <span className="ml-2 text-ink-soft">
@@ -175,11 +178,7 @@ export default function GamePage() {
             </span>
           )}
         </h1>
-        <div className="flex items-center gap-3">
-          <LanguageToggle />
-          <AccountBar />
-          {phase.kind === "playing" && <Timer running onExpire={handleExpire} />}
-        </div>
+        {phase.kind === "playing" && <Timer running onExpire={handleExpire} />}
       </header>
 
       {previewDate && process.env.NODE_ENV !== "production" && (
@@ -202,7 +201,12 @@ export default function GamePage() {
       {phase.kind === "playing" && (
         <section className="flex flex-col gap-4">
           <p className="text-lg font-bold text-ink">{phase.puzzle.prompt}</p>
-          <PuzzleRenderer puzzle={phase.puzzle} onSubmit={handleSubmit} disabled={false} />
+          <PuzzleRenderer
+            puzzle={phase.puzzle}
+            onSubmit={handleSubmit}
+            disabled={submitting}
+            submitting={submitting}
+          />
         </section>
       )}
 

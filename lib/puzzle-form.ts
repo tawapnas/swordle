@@ -28,10 +28,6 @@ export interface PuzzleFormState {
   codeAfter: string;
   options: string[]; // always length 4
   correctIndex: number | null;
-
-  // syntax-sort working fields
-  correctLinesText: string;
-  shuffle: { shuffledLines: string[]; correctOrder: number[] } | null;
 }
 
 /** Split a textarea value into lines, dropping a single trailing blank line. */
@@ -55,42 +51,7 @@ export function emptyFormState(): PuzzleFormState {
     codeAfter: "",
     options: ["", "", "", ""],
     correctIndex: null,
-    correctLinesText: "",
-    shuffle: null,
   };
-}
-
-/**
- * Fisher-Yates shuffle of `correctLines`, returning what players see
- * (`shuffledLines`) plus the answer key (`correctOrder`).
- *
- * `correctOrder[position]` is the index into `shuffledLines` of the line that
- * belongs at `position`. Each line is tagged with its correct `pos` *before*
- * shuffling, so duplicate lines stay correct (never `indexOf` on text).
- */
-export function buildShuffle(correctLines: string[]): {
-  shuffledLines: string[];
-  correctOrder: number[];
-} {
-  if (correctLines.length <= 1) {
-    return {
-      shuffledLines: [...correctLines],
-      correctOrder: correctLines.map((_, i) => i),
-    };
-  }
-
-  const tagged = correctLines.map((line, pos) => ({ line, pos }));
-  for (let i = tagged.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [tagged[i], tagged[j]] = [tagged[j], tagged[i]];
-  }
-
-  const shuffledLines = tagged.map((t) => t.line);
-  const correctOrder = new Array<number>(tagged.length);
-  for (let shuffledIdx = 0; shuffledIdx < tagged.length; shuffledIdx++) {
-    correctOrder[tagged[shuffledIdx].pos] = shuffledIdx;
-  }
-  return { shuffledLines, correctOrder };
 }
 
 /** Build a form state from an existing puzzle (edit mode). */
@@ -113,29 +74,18 @@ export function puzzleToFormState(p: Puzzle): PuzzleFormState {
       buggyLineIndex: p.answer.buggyLineIndex,
     };
   }
-  if (p.type === "fill-modifier") {
-    return {
-      ...base,
-      codeBefore: p.payload.codeBefore,
-      codeAfter: p.payload.codeAfter,
-      options: [
-        p.payload.options[0] ?? "",
-        p.payload.options[1] ?? "",
-        p.payload.options[2] ?? "",
-        p.payload.options[3] ?? "",
-      ],
-      correctIndex: p.answer.correctIndex,
-    };
-  }
-  // syntax-sort — reconstruct the correct-order lines from the shuffle.
-  const { shuffledLines, correctOrder } = p.payload.shuffledLines.length
-    ? { shuffledLines: p.payload.shuffledLines, correctOrder: p.answer.correctOrder }
-    : { shuffledLines: [], correctOrder: [] };
-  const correctLines = correctOrder.map((shuffledIdx) => shuffledLines[shuffledIdx] ?? "");
+  // fill-modifier (the only other type).
   return {
     ...base,
-    correctLinesText: correctLines.join("\n"),
-    shuffle: { shuffledLines: [...shuffledLines], correctOrder: [...correctOrder] },
+    codeBefore: p.payload.codeBefore,
+    codeAfter: p.payload.codeAfter,
+    options: [
+      p.payload.options[0] ?? "",
+      p.payload.options[1] ?? "",
+      p.payload.options[2] ?? "",
+      p.payload.options[3] ?? "",
+    ],
+    correctIndex: p.answer.correctIndex,
   };
 }
 
@@ -160,21 +110,14 @@ export function formStateToInput(s: PuzzleFormState): Record<string, unknown> {
       answer: { buggyLineIndex: s.buggyLineIndex },
     };
   }
-  if (s.type === "fill-modifier") {
-    return {
-      ...base,
-      payload: {
-        codeBefore: s.codeBefore,
-        codeAfter: s.codeAfter,
-        options: s.options,
-      },
-      answer: { correctIndex: s.correctIndex },
-    };
-  }
-  // syntax-sort
+  // fill-modifier (the only other type).
   return {
     ...base,
-    payload: { shuffledLines: s.shuffle?.shuffledLines ?? [] },
-    answer: { correctOrder: s.shuffle?.correctOrder ?? [] },
+    payload: {
+      codeBefore: s.codeBefore,
+      codeAfter: s.codeAfter,
+      options: s.options,
+    },
+    answer: { correctIndex: s.correctIndex },
   };
 }

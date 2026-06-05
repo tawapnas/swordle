@@ -3,7 +3,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import LoginForm from "@/components/LoginForm";
-import LanguageToggle from "@/components/LanguageToggle";
 import { getSessionUser } from "@/lib/supabase/server";
 
 export const metadata = {
@@ -29,11 +28,8 @@ export default async function LoginPage({
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-8 px-4 py-10">
-      <div className="flex justify-end">
-        <LanguageToggle />
-      </div>
       <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-black text-brand">{tBrand("name")}</h1>
+        <h1 className="text-2xl font-black text-ink">{tBrand("name")}</h1>
         <p className="text-sm text-ink-soft">{tLogin("subhead")}</p>
       </header>
 

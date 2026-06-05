@@ -37,14 +37,6 @@ export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
         difficulty: puzzle.difficulty,
         payload: puzzle.payload,
       };
-    case "syntax-sort":
-      return {
-        id: puzzle.id,
-        type: puzzle.type,
-        prompt,
-        difficulty: puzzle.difficulty,
-        payload: puzzle.payload,
-      };
     default: {
       const _exhaustive: never = puzzle;
       return _exhaustive;

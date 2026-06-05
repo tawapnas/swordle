@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { PuzzleComponentProps } from "./types";
+import SubmitButton from "./SubmitButton";
 
 /** spot-bug: tap the line that breaks the view, then submit { buggyLineIndex }. */
 export default function SpotTheBug({
   puzzle,
   onSubmit,
   disabled,
+  submitting,
 }: PuzzleComponentProps) {
   const t = useTranslations("Game");
   const [selected, setSelected] = useState<number | null>(null);
@@ -43,15 +45,12 @@ export default function SpotTheBug({
           );
         })}
       </ol>
-      <p className="text-sm text-ink-soft">Tap the line you think is buggy.</p>
-      <button
-        type="button"
+      <p className="text-sm text-ink-soft">{t("spotBug.hint")}</p>
+      <SubmitButton
         disabled={disabled || selected === null}
+        submitting={submitting}
         onClick={() => selected !== null && onSubmit({ buggyLineIndex: selected })}
-        className="rounded-2xl bg-brand px-6 py-3.5 text-base font-bold text-white shadow-sm transition active:translate-y-px active:bg-brand-dark disabled:opacity-40"
-      >
-        {t("submit")}
-      </button>
+      />
     </div>
   );
 }

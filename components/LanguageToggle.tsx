@@ -1,9 +1,10 @@
 "use client";
 
-// Small "EN | ไทย" pill. Toggles the locale by swapping the leading segment of
-// the current path. Routing is path-based (next-intl `localePrefix: "always"`),
-// so /en/login → /th/login etc. The next-intl middleware also writes the
-// NEXT_LOCALE cookie on the way through, which the API routes read.
+// Compact "🌐 EN" / "🌐 ไทย" button. Shows the current language; one tap flips to
+// the other (there are only two locales, so no menu is needed). Routing is
+// path-based (next-intl `localePrefix: "always"`), so /en/login → /th/login etc.
+// The next-intl middleware also writes the NEXT_LOCALE cookie on the way
+// through, which the API routes read.
 
 import { useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
@@ -22,12 +23,15 @@ export default function LanguageToggle() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  function switchTo(next: Locale) {
-    if (next === locale || pending) return;
-    // Replace the leading `/<locale>` segment with the new locale, preserving
+  // Two locales only: the "other" one is always the switch target.
+  const target: Locale = locale === "en" ? "th" : "en";
+
+  function switchTo() {
+    if (pending) return;
+    // Replace the leading `/<locale>` segment with the target locale, preserving
     // the rest of the path + any query string handled by the router.
     const re = new RegExp(`^/(?:${routing.locales.join("|")})(?=/|$)`);
-    const nextPath = pathname.replace(re, `/${next}`);
+    const nextPath = pathname.replace(re, `/${target}`);
     startTransition(() => {
       router.replace(nextPath);
       router.refresh();
@@ -35,30 +39,36 @@ export default function LanguageToggle() {
   }
 
   return (
-    <div
-      role="group"
-      aria-label={t("switchTo", { language: LABEL[locale === "en" ? "th" : "en"] })}
-      className="inline-flex items-center gap-0.5 rounded-full bg-card p-0.5 text-xs font-bold shadow-sm ring-1 ring-line"
+    <button
+      type="button"
+      onClick={switchTo}
+      disabled={pending}
+      aria-label={t("switchTo", { language: LABEL[target] })}
+      title={t("switchTo", { language: LABEL[target] })}
+      className="inline-flex items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-xs font-bold text-ink-soft shadow-sm ring-1 ring-line transition hover:text-ink hover:ring-brand active:translate-y-px disabled:opacity-60"
     >
-      {routing.locales.map((l) => {
-        const active = l === locale;
-        return (
-          <button
-            key={l}
-            type="button"
-            disabled={active || pending}
-            onClick={() => switchTo(l)}
-            aria-pressed={active}
-            className={`rounded-full px-2.5 py-1 transition ${
-              active
-                ? "bg-brand text-white"
-                : "text-ink-soft hover:text-ink disabled:opacity-60"
-            }`}
-          >
-            {LABEL[l]}
-          </button>
-        );
-      })}
-    </div>
+      <GlobeIcon />
+      {LABEL[locale]}
+    </button>
+  );
+}
+
+function GlobeIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M2 12h20" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
   );
 }

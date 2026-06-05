@@ -10,4 +10,6 @@ export interface PuzzleComponentProps {
   onSubmit: (answer: unknown) => void;
   /** True once the attempt is locked in (during/after the result screen). */
   disabled: boolean;
+  /** True while the submitted answer is being scored — drives the button spinner. */
+  submitting: boolean;
 }

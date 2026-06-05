@@ -117,8 +117,6 @@ export default function ResultCard({
         </Link>
       ) : null}
 
-      <p className="text-sm text-ink-soft">{tResult("comeBackTomorrow")}</p>
-
       {toast ? <Toast message={toast} onDismiss={() => setToast(null)} /> : null}
     </div>
   );

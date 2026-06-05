@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import OnboardingForm from "@/components/OnboardingForm";
-import LanguageToggle from "@/components/LanguageToggle";
 import { getSessionUser, isSupabaseConfigured } from "@/lib/supabase/server";
 import { getProfileSummary } from "@/lib/account-data";
 
@@ -33,9 +32,6 @@ export default async function OnboardingPage({
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 px-4 py-12">
-      <div className="flex justify-end">
-        <LanguageToggle />
-      </div>
       <header className="flex flex-col gap-2 text-center">
         <span className="text-5xl" aria-hidden>
           {t("wave")}

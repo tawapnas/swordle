@@ -16,7 +16,6 @@ import { inputClass } from "./puzzle-fields/styles";
 const TYPE_META: Record<Puzzle["type"], { emoji: string; labelKey: string }> = {
   "spot-bug": { emoji: "🐛", labelKey: "typeSpotBug" },
   "fill-modifier": { emoji: "✏️", labelKey: "typeFillModifier" },
-  "syntax-sort": { emoji: "🔀", labelKey: "typeSyntaxSort" },
 };
 
 const DIFF_KEYS = ["diffEasy", "diffMedium", "diffHard"] as const;

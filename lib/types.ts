@@ -18,7 +18,7 @@ import type { Locale } from "@/i18n/routing";
 /** A piece of user-facing text translated for every supported locale. */
 export type LocalizedString = Record<Locale, string>;
 
-export type PuzzleType = "spot-bug" | "fill-modifier" | "syntax-sort";
+export type PuzzleType = "spot-bug" | "fill-modifier";
 
 interface BasePuzzle {
   /** Stable id, e.g. "2026-01-01-spotbug-01". */
@@ -51,14 +51,7 @@ export interface FillModifierPuzzle extends BasePuzzle {
   answer: { correctIndex: number };
 }
 
-export interface SyntaxSortPuzzle extends BasePuzzle {
-  type: "syntax-sort";
-  payload: { shuffledLines: string[] };
-  /** Indices into `shuffledLines`, in the order they should appear. */
-  answer: { correctOrder: number[] };
-}
-
-export type Puzzle = SpotBugPuzzle | FillModifierPuzzle | SyntaxSortPuzzle;
+export type Puzzle = SpotBugPuzzle | FillModifierPuzzle;
 
 interface BasePublicPuzzle {
   id: string;
@@ -69,8 +62,7 @@ interface BasePublicPuzzle {
 
 export type PublicPuzzle =
   | (BasePublicPuzzle & Pick<SpotBugPuzzle, "type" | "payload">)
-  | (BasePublicPuzzle & Pick<FillModifierPuzzle, "type" | "payload">)
-  | (BasePublicPuzzle & Pick<SyntaxSortPuzzle, "type" | "payload">);
+  | (BasePublicPuzzle & Pick<FillModifierPuzzle, "type" | "payload">);
 
 /** Response shape of GET /api/puzzle/today. */
 export interface TodayResponse {
