@@ -57,9 +57,9 @@ export default function Timer({
           cy="24"
           r={R}
           fill="none"
-          stroke={low ? "var(--color-danger)" : "var(--color-brand)"}
+          stroke={low ? "var(--color-brand)" : "var(--color-ink)"}
           strokeWidth="4"
-          strokeLinecap="round"
+          strokeLinecap="butt"
           strokeDasharray={C}
           strokeDashoffset={C * (1 - fraction)}
           style={{ transition: "stroke-dashoffset 0.1s linear" }}
@@ -67,7 +67,7 @@ export default function Timer({
       </svg>
       <span
         className={`absolute inset-0 flex items-center justify-center text-sm font-extrabold tabular-nums ${
-          low ? "text-danger" : "text-ink"
+          low ? "text-brand" : "text-ink"
         }`}
       >
         {seconds}

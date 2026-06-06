@@ -45,7 +45,7 @@ export default function LanguageToggle() {
       disabled={pending}
       aria-label={t("switchTo", { language: LABEL[target] })}
       title={t("switchTo", { language: LABEL[target] })}
-      className="inline-flex items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-xs font-bold text-ink-soft shadow-sm ring-1 ring-line transition hover:text-ink hover:ring-brand active:translate-y-px disabled:opacity-60"
+      className="inline-flex h-8 items-center gap-1.5 border border-line bg-white px-2.5 text-xs font-bold text-ink-soft transition hover:border-ink hover:text-ink active:translate-y-px disabled:opacity-60"
     >
       <GlobeIcon />
       {LABEL[locale]}

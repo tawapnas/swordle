@@ -15,7 +15,7 @@ export default async function WelcomeScreen() {
         <span className="text-5xl" aria-hidden>
           ⚔️
         </span>
-        <h1 className="text-4xl font-black tracking-tight text-ink">
+        <h1 className="font-serif text-7xl text-ink sm:text-8xl">
           {tBrand("name")}
         </h1>
         <p className="text-lg font-bold text-ink">{tWelcome("tagline")}</p>

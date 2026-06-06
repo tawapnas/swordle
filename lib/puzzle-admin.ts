@@ -18,7 +18,7 @@ export async function listAllPuzzles(): Promise<Puzzle[]> {
     const admin = createSupabaseAdminClient();
     const { data, error } = await admin
       .from("puzzles")
-      .select("id, type, prompt, difficulty, payload, answer, explanation, is_published")
+      .select("id, type, prompt, difficulty, bird, payload, answer, explanation, is_published")
       .order("sort_order", { ascending: true })
       .order("id", { ascending: true });
     if (error) {

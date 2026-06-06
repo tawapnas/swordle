@@ -77,6 +77,15 @@ export function parsePuzzleInput(input: unknown): ParseResult {
     errors.push("`difficulty` must be 1, 2 or 3.");
   }
 
+  // bird — optional reward image (1..9). Absent/null means "derive from id".
+  if (
+    input.bird !== undefined &&
+    input.bird !== null &&
+    (!isInteger(input.bird) || input.bird < 1 || input.bird > 9)
+  ) {
+    errors.push("`bird` must be an integer between 1 and 9.");
+  }
+
   // prompt / explanation
   if (!isLocalizedString(input.prompt)) {
     errors.push(
@@ -142,6 +151,7 @@ export function parsePuzzleInput(input: unknown): ParseResult {
     prompt: pickLocales(input.prompt as LocalizedString),
     difficulty: input.difficulty as 1 | 2 | 3,
     explanation: pickLocales(input.explanation as LocalizedString),
+    ...(typeof input.bird === "number" ? { bird: input.bird } : {}),
   };
 
   let puzzle: Puzzle;

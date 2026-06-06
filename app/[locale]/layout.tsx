@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
+import { Geist_Mono, Instrument_Serif } from "next/font/google";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -26,6 +26,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Display serif used for the Swordle wordmark (title screens only).
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Swordle — the daily SwiftUI puzzle",
   description: "A new SwiftUI puzzle every day. 60 seconds. Keep your streak alive.",
@@ -49,7 +57,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${lineSeedSansTH.variable} ${geistMono.variable} antialiased`}
+      className={`${lineSeedSansTH.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
     >
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider>

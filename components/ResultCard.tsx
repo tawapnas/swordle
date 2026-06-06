@@ -7,6 +7,16 @@ import { useLocale, useTranslations } from "next-intl";
 import type { GameResult } from "@/lib/streak";
 import { formatTime, formatShare } from "@/lib/share";
 import Toast from "./Toast";
+import SwiftCatch from "./SwiftCatch";
+
+/** Speed tier for the win microcopy, fastest → slowest (timer caps at 60s). */
+type WinTier = "blazing" | "fast" | "steady" | "clutch";
+function winTier(ms: number): WinTier {
+  if (ms < 7_000) return "blazing";
+  if (ms < 15_000) return "fast";
+  if (ms < 30_000) return "steady";
+  return "clutch";
+}
 
 /**
  * The shared "your day is done" card — used both right after playing
@@ -21,6 +31,7 @@ export default function ResultCard({
   explanation,
   heading,
   showSignInCta,
+  claimable,
 }: {
   dayNumber: number;
   result: GameResult;
@@ -32,6 +43,12 @@ export default function ResultCard({
   heading?: string;
   /** Show the "sign in to save your streak" CTA (signed-out only). */
   showSignInCta?: boolean;
+  /**
+   * Whether the swift reward can be claimed: true only when the solve was
+   * recorded server-side (signed in), since /api/bird verifies it. Anonymous
+   * solves can't be verified, so no bird is shown for them.
+   */
+  claimable?: boolean;
 }) {
   const [toast, setToast] = useState<string | null>(null);
   const solved = result === "solved";
@@ -39,6 +56,16 @@ export default function ResultCard({
   const tResult = useTranslations("Result");
   const tToast = useTranslations("Toast");
   const locale = useLocale();
+
+  // Pick the win headline by how fast they solved; the variant within a tier is
+  // deterministic per day so a refresh keeps the same line.
+  function winHeadline(): string {
+    const variants = tResult.raw(`wins.${winTier(timeMs)}`);
+    if (Array.isArray(variants) && variants.length > 0) {
+      return variants[dayNumber % variants.length] as string;
+    }
+    return tResult("solvedBanner");
+  }
 
   async function share() {
     const text = formatShare(dayNumber, result, timeMs, currentStreak);
@@ -61,19 +88,21 @@ export default function ResultCard({
   return (
     <div className="animate-pop flex w-full max-w-md flex-col items-center gap-6 text-center">
       <div
-        className={`flex w-full flex-col items-center gap-2 rounded-3xl px-6 py-7 text-white ${
-          solved ? "bg-accent" : "bg-danger"
+        className={`flex w-full flex-col items-center gap-2 border-2 border-ink px-6 py-7 ${
+          solved || heading ? "bg-ink text-white" : "bg-white text-ink"
         }`}
       >
         <span className="text-4xl" aria-hidden>
           {solved ? "🎉" : "💡"}
         </span>
-        <h2 className="text-2xl font-black">
-          {heading ?? (solved ? tResult("solvedBanner") : tResult("failedBanner"))}
+        <h2 className="text-2xl font-black uppercase tracking-wide">
+          {heading ?? (solved ? winHeadline() : tResult("failedBanner"))}
         </h2>
-        <p className="text-sm font-medium opacity-90">
-          {tBrand("name")} {tBrand("dayLabel", { day: dayNumber })}
-        </p>
+        {!heading && (
+          <p className="text-sm font-medium opacity-70">
+            {tBrand("name")} {tBrand("dayLabel", { day: dayNumber })}
+          </p>
+        )}
       </div>
 
       <div className="grid w-full grid-cols-3 gap-3">
@@ -95,7 +124,7 @@ export default function ResultCard({
       </div>
 
       {explanation ? (
-        <div className="w-full rounded-2xl bg-card px-5 py-4 text-left text-sm leading-relaxed text-ink shadow-sm ring-1 ring-line">
+        <div className="w-full border border-line bg-white px-5 py-4 text-left text-sm leading-relaxed text-ink">
           {explanation}
         </div>
       ) : null}
@@ -103,10 +132,14 @@ export default function ResultCard({
       <button
         type="button"
         onClick={share}
-        className="w-full rounded-2xl bg-brand px-6 py-3.5 text-base font-bold text-white shadow-sm transition active:translate-y-px active:bg-brand-dark"
+        className="w-full bg-brand px-6 py-3.5 text-base font-bold text-white transition active:translate-y-px active:bg-brand-dark"
       >
         {tResult("share")}
       </button>
+
+      {solved && !heading && claimable ? (
+        <SwiftCatch dayNumber={dayNumber} />
+      ) : null}
 
       {showSignInCta ? (
         <Link
@@ -132,7 +165,7 @@ function Stat({
   value: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-1 rounded-2xl bg-card px-2 py-3 shadow-sm ring-1 ring-line">
+    <div className="flex flex-col items-center gap-1 border border-line bg-white px-2 py-3">
       {icon}
       <span className="text-lg font-black tabular-nums text-ink">{value}</span>
       <span className="text-[11px] font-medium uppercase tracking-wide text-ink-soft">

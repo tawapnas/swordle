@@ -19,7 +19,7 @@ export default function SpotTheBug({
 
   return (
     <div className="flex flex-col gap-4">
-      <ol className="overflow-hidden rounded-2xl bg-code-bg font-mono text-[13px] leading-relaxed text-code-fg sm:text-sm">
+      <ol className="overflow-hidden rounded-2xl bg-code-bg font-mono text-sm leading-relaxed text-code-fg sm:text-base">
         {lines.map((line, i) => {
           const isSelected = selected === i;
           return (
@@ -36,7 +36,7 @@ export default function SpotTheBug({
                       : "hover:bg-white/5"
                   }`}
               >
-                <span className="select-none pt-0.5 text-[11px] text-code-fg/40 tabular-nums">
+                <span className="select-none pt-0.5 text-xs text-code-fg/40 tabular-nums">
                   {i + 1}
                 </span>
                 <span className="whitespace-pre">{line.length ? line : " "}</span>

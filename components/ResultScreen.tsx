@@ -12,6 +12,7 @@ export default function ResultScreen({
   longestStreak,
   explanation,
   showSignInCta,
+  claimable,
 }: {
   dayNumber: number;
   result: GameResult;
@@ -21,6 +22,8 @@ export default function ResultScreen({
   explanation: string;
   /** Show the "sign in to save your streak" CTA (signed-out only). */
   showSignInCta?: boolean;
+  /** Whether the swift reward can be claimed (server-recorded solve). */
+  claimable: boolean;
 }) {
   return (
     <ResultCard
@@ -31,6 +34,7 @@ export default function ResultScreen({
       longestStreak={longestStreak}
       explanation={explanation}
       showSignInCta={showSignInCta}
+      claimable={claimable}
     />
   );
 }

@@ -38,7 +38,7 @@ export default function LoginForm() {
 
   if (!isSupabaseConfigured()) {
     return (
-      <div className="rounded-2xl bg-card px-5 py-6 text-sm text-ink ring-1 ring-line">
+      <div className="border border-line bg-white px-5 py-6 text-sm text-ink">
         <p className="font-bold">{t("unconfiguredTitle")}</p>
         <p className="mt-1 text-ink-soft">{t("unconfiguredBody")}</p>
       </div>
@@ -85,7 +85,7 @@ export default function LoginForm() {
       {linkFailed && status.kind !== "error" && (
         <p
           role="alert"
-          className="rounded-xl bg-danger/10 px-4 py-3 text-sm font-medium text-danger-dark"
+          className="border-2 border-ink bg-white px-4 py-3 text-sm font-bold text-ink"
         >
           {t("linkFailed")}
         </p>
@@ -93,7 +93,7 @@ export default function LoginForm() {
       {status.kind === "error" && (
         <p
           role="alert"
-          className="rounded-xl bg-danger/10 px-4 py-3 text-sm font-medium text-danger-dark"
+          className="border-2 border-ink bg-white px-4 py-3 text-sm font-bold text-ink"
         >
           {status.message}
         </p>
@@ -103,7 +103,7 @@ export default function LoginForm() {
         type="button"
         onClick={handleGoogle}
         disabled={busy}
-        className="flex items-center justify-center gap-2.5 rounded-2xl bg-card px-6 py-3.5 text-base font-bold text-ink shadow-sm ring-1 ring-line transition hover:ring-brand active:translate-y-px disabled:opacity-60"
+        className="flex items-center justify-center gap-2.5 border-2 border-ink bg-white px-6 py-3.5 text-base font-bold text-ink transition hover:bg-ink hover:text-white active:translate-y-px disabled:opacity-60"
       >
         <GoogleMark />
         {status.kind === "redirecting" ? t("redirecting") : t("continueWithGoogle")}

@@ -14,6 +14,8 @@ export interface PuzzleFormState {
   id: string;
   type: PuzzleType;
   difficulty: 1 | 2 | 3;
+  /** Reward swift 1–9, or null for "auto-derive from id". */
+  bird: number | null;
   promptEn: string;
   promptTh: string;
   explanationEn: string;
@@ -41,6 +43,7 @@ export function emptyFormState(): PuzzleFormState {
     id: "",
     type: "spot-bug",
     difficulty: 1,
+    bird: null,
     promptEn: "",
     promptTh: "",
     explanationEn: "",
@@ -61,6 +64,7 @@ export function puzzleToFormState(p: Puzzle): PuzzleFormState {
     id: p.id,
     type: p.type,
     difficulty: p.difficulty,
+    bird: p.bird ?? null,
     promptEn: p.prompt.en,
     promptTh: p.prompt.th,
     explanationEn: p.explanation.en,
@@ -102,6 +106,7 @@ export function formStateToInput(s: PuzzleFormState): Record<string, unknown> {
     explanation: { en: s.explanationEn.trim(), th: s.explanationTh.trim() },
   };
   if (s.id.trim()) base.id = s.id.trim();
+  if (s.bird != null) base.bird = s.bird;
 
   if (s.type === "spot-bug") {
     return {

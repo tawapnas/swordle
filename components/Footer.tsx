@@ -16,7 +16,7 @@ export default function Footer() {
           <a
             href="mailto:hello@swordle.app"
             aria-label={t("emailUs")}
-            className="rounded-full p-1.5 text-ink-soft transition hover:bg-line hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="p-1.5 text-ink-soft transition hover:bg-line hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             <EmailIcon />
           </a>
@@ -25,7 +25,7 @@ export default function Footer() {
             target="_blank"
             rel="noreferrer noopener"
             aria-label={t("facebook")}
-            className="rounded-full p-1.5 text-ink-soft transition hover:bg-line hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="p-1.5 text-ink-soft transition hover:bg-line hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             <FacebookIcon />
           </a>

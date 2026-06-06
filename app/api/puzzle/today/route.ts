@@ -24,7 +24,8 @@ function resolveDate(req: NextRequest): Date {
   const raw = req.nextUrl.searchParams.get("date");
   if (!raw || !DATE_RE.test(raw)) return new Date();
 
-  // Parse as UTC midnight so getTodayPuzzle's UTC math lines up.
+  // Parse as UTC midnight; +07:00 lands at 07:00 Bangkok the same calendar day,
+  // so getDayNumber still resolves to the requested date's puzzle.
   const parsed = new Date(`${raw}T00:00:00.000Z`);
   return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
 }

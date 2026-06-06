@@ -74,14 +74,14 @@ export default function OnboardingForm({
   }
 
   const inputClass =
-    "rounded-2xl bg-card px-4 py-3 text-base text-ink shadow-sm ring-1 ring-line outline-none focus:ring-2 focus:ring-brand";
+    "border border-line bg-white px-4 py-3 text-base text-ink outline-none focus:border-ink focus:ring-2 focus:ring-brand";
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {error && (
         <p
           role="alert"
-          className="rounded-xl bg-danger/10 px-4 py-3 text-sm font-medium text-danger-dark"
+          className="border-2 border-ink bg-white px-4 py-3 text-sm font-bold text-ink"
         >
           {error}
         </p>
@@ -166,7 +166,7 @@ export default function OnboardingForm({
       <button
         type="submit"
         disabled={submitting}
-        className="mt-2 rounded-2xl bg-brand px-6 py-3.5 text-base font-bold text-white shadow-sm transition active:translate-y-px active:bg-brand-dark disabled:opacity-60"
+        className="mt-2 bg-brand px-6 py-3.5 text-base font-bold text-white transition active:translate-y-px active:bg-brand-dark disabled:opacity-60"
       >
         {submitting ? t("saving") : t("startPlaying")}
       </button>

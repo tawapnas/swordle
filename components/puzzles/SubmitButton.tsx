@@ -21,7 +21,7 @@ export default function SubmitButton({
       disabled={disabled || submitting}
       onClick={onClick}
       aria-busy={submitting}
-      className="flex items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-3.5 text-base font-bold text-white shadow-sm transition active:translate-y-px active:bg-brand-dark disabled:opacity-40"
+      className="flex items-center justify-center gap-2 bg-ink px-6 py-3.5 text-base font-bold text-white transition active:translate-y-px active:bg-ink/80 disabled:opacity-40"
     >
       {submitting && <Spinner className="text-white" />}
       {submitting ? t("submitting") : t("submit")}

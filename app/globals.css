@@ -1,24 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fefcf7;
-  --foreground: #2b2b3a;
+  --background: #ffffff;
+  --foreground: #1a1a1b;
 
-  /* Swordle palette — playful, Duolingo-ish, high contrast */
-  --color-brand: #6c5ce7; /* primary purple */
-  --color-brand-dark: #5a4bd1;
-  --color-accent: #00b894; /* success green */
-  --color-accent-dark: #00997c;
-  --color-danger: #e84393; /* "miss" pink */
-  --color-danger-dark: #cf3a83;
-  --color-flame: #ff7a18; /* streak flame */
-  --color-sky: #74b9ff;
+  /* Swordle palette — classic Wordle: monochrome ink/paper + a single orange accent.
+     Orange (#F97316) is reserved for the primary action and active/selected states. */
+  --color-brand: #f97316; /* the one accent — primary buttons, selection, urgency */
+  --color-brand-dark: #ea580c;
+  --color-accent: #1a1a1b; /* "win" reads as solid ink, not a colour */
+  --color-accent-dark: #000000;
+  --color-danger: #787c7e; /* neutral grey for "miss"/absent states */
+  --color-danger-dark: #565758;
+  --color-flame: #f97316; /* streak flame stays on the orange accent */
+  --color-sky: #787c7e;
   --color-card: #ffffff;
-  --color-ink: #2b2b3a;
-  --color-ink-soft: #6b6b7d;
-  --color-line: #ece8df;
-  --color-code-bg: #1e1e2e;
-  --color-code-fg: #e4e4ef;
+  --color-ink: #1a1a1b;
+  --color-ink-soft: #787c7e;
+  --color-line: #d3d6da; /* Wordle's tile-border grey */
+  --color-code-bg: #1a1a1b;
+  --color-code-fg: #f5f5f5;
 }
 
 @theme inline {
@@ -42,6 +43,20 @@
 
   --font-sans: var(--font-line-seed-sans-th), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  /* Classic Wordle is hard-edged: square every `rounded-*` utility. `rounded-full`
+     is hard-coded (not a theme token) so genuine circles/pills opt in explicitly. */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+
+  /* …and flat: neutralise the subtle card lift (`shadow-sm`). `shadow-lg` is kept
+     for genuinely floating overlays (toast, account dropdown). */
+  --shadow-sm: 0 0 #0000;
 }
 
 body {
@@ -73,3 +88,10 @@ body {
   100% { transform: translateY(0); opacity: 1; }
 }
 .animate-rise { animation: swordle-rise 0.25s ease-out both; }
+
+/* Gentle float for the uncaught swift — invites a tap. */
+@keyframes swordle-bob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-6px) rotate(1.5deg); }
+}
+.animate-bob { animation: swordle-bob 2.4s ease-in-out infinite; }

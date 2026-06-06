@@ -21,7 +21,7 @@ export default function Toast({
     <div
       role="status"
       aria-live="polite"
-      className="animate-rise fixed inset-x-0 bottom-6 z-50 mx-auto w-fit max-w-[90%] rounded-full bg-ink px-5 py-2.5 text-sm font-bold text-white shadow-lg"
+      className="animate-rise fixed inset-x-0 bottom-6 z-50 mx-auto w-fit max-w-[90%] bg-ink px-5 py-2.5 text-sm font-bold text-white shadow-lg"
     >
       {message}
     </div>

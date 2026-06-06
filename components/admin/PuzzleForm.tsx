@@ -146,6 +146,24 @@ export default function PuzzleForm({
             <option value={3}>{t("diffHard")}</option>
           </select>
         </Field>
+        <Field label={t("bird")}>
+          <select
+            value={state.bird ?? ""}
+            onChange={(e) =>
+              patch({
+                bird: e.target.value === "" ? null : Number(e.target.value),
+              })
+            }
+            className={inputClass}
+          >
+            <option value="">{t("birdAuto")}</option>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </Field>
       </div>
 
       {isEdit && (

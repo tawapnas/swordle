@@ -27,6 +27,7 @@ export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
         type: puzzle.type,
         prompt,
         difficulty: puzzle.difficulty,
+        bird: puzzle.bird,
         payload: puzzle.payload,
       };
     case "fill-modifier":
@@ -35,6 +36,7 @@ export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
         type: puzzle.type,
         prompt,
         difficulty: puzzle.difficulty,
+        bird: puzzle.bird,
         payload: puzzle.payload,
       };
     default: {

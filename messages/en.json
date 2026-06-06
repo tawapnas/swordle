@@ -52,10 +52,19 @@
   "Result": {
     "solvedBanner": "Solved it!",
     "failedBanner": "Not this time",
+    "wins": {
+      "blazing": ["First strike! 🗡️", "Lightning hands ⚡️", "Too fast to compile"],
+      "fast": ["Sharp! 🔪", "Clean and quick", "No hesitation"],
+      "steady": ["Solved it! 🎉", "Nicely done ✅", "That compiles"],
+      "clutch": ["Just in time! ⏱️", "Cutting it close!", "Down to the wire"]
+    },
     "time": "Time",
     "currentStreak": "Current streak",
     "longestStreak": "Longest",
     "share": "Share",
+    "catchHint": "Tap to catch it!",
+    "caught": "Caught it! 🐦",
+    "saveBird": "Save the swift",
     "signInCta": "🔥 Sign in to save your streak →",
     "alreadyPlayedTitle": "You've played today's puzzle"
   },
@@ -106,6 +115,8 @@
       "diffEasy": "Easy",
       "diffMedium": "Medium",
       "diffHard": "Hard",
+      "bird": "Swift bird",
+      "birdAuto": "Auto",
       "promptEn": "Prompt (English)",
       "promptTh": "Prompt (Thai)",
       "explanationEn": "Explanation (English)",

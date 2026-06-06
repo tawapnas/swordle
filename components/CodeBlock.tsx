@@ -14,7 +14,7 @@ export default function CodeBlock({
   const rows = lines ?? (code ?? "").split("\n");
   return (
     <pre
-      className={`overflow-x-auto rounded-2xl bg-code-bg px-4 py-3 font-mono text-[13px] leading-relaxed text-code-fg sm:text-sm ${className}`}
+      className={`overflow-x-auto rounded-2xl bg-code-bg px-4 py-3 font-mono text-sm leading-relaxed text-code-fg sm:text-base ${className}`}
     >
       <code>
         {rows.map((line, i) => (

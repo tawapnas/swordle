@@ -8,8 +8,9 @@
 // Reads NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY from the
 // environment, falling back to .env.local at the repo root.
 //
-// Run AFTER applying supabase/migrations/0003_puzzles.sql and
-// supabase/migrations/0005_puzzle_sort_order.sql.
+// Run AFTER applying supabase/migrations/0003_puzzles.sql,
+// supabase/migrations/0005_puzzle_sort_order.sql and
+// supabase/migrations/0006_puzzle_bird.sql.
 
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -62,6 +63,8 @@ const rows = puzzles.map((p, i) => ({
   type: p.type,
   prompt: p.prompt,
   difficulty: p.difficulty,
+  // Collectible swift 1–9; null means "derive from id" on the client.
+  bird: p.bird ?? null,
   payload: p.payload,
   answer: p.answer,
   explanation: p.explanation,

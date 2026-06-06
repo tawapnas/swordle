@@ -23,12 +23,12 @@ export default function FillTheModifier({
 
   return (
     <div className="flex flex-col gap-4">
-      <pre className="overflow-x-auto rounded-2xl bg-code-bg px-4 py-3 font-mono text-[13px] leading-relaxed text-code-fg sm:text-sm">
+      <pre className="overflow-x-auto rounded-2xl bg-code-bg px-4 py-3 font-mono text-sm leading-relaxed text-code-fg sm:text-base">
         <code className="whitespace-pre-wrap break-words">
           {codeBefore}
           <span
-            className={`rounded px-1.5 py-0.5 font-bold ${
-              selected !== null ? "bg-accent/30 text-accent" : "bg-white/10 text-code-fg/50"
+            className={`px-1.5 py-0.5 font-bold ${
+              selected !== null ? "bg-brand/30 text-brand" : "bg-white/10 text-code-fg/50"
             }`}
           >
             {fill}
@@ -47,11 +47,11 @@ export default function FillTheModifier({
               disabled={disabled}
               onClick={() => setSelected(i)}
               aria-pressed={isSelected}
-              className={`rounded-2xl border-2 px-4 py-3 text-left font-mono text-sm transition active:translate-y-px disabled:cursor-default
+              className={`rounded-2xl border-2 px-4 py-3 text-left font-mono text-base transition active:translate-y-px disabled:cursor-default
                 ${
                   isSelected
                     ? "border-brand bg-brand/10 text-brand"
-                    : "border-line bg-white text-ink hover:border-brand/40"
+                    : "border-line bg-white text-ink hover:border-ink"
                 }`}
             >
               .{opt}

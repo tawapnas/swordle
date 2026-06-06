@@ -13,6 +13,8 @@ export interface PuzzleRow {
   type: string;
   prompt: unknown;
   difficulty: number;
+  /** Collectible swift 1–9, nullable in the DB ("derive from id"). */
+  bird?: number | null;
   payload: unknown;
   answer: unknown;
   explanation: unknown;
@@ -30,6 +32,7 @@ export function rowToPuzzle(row: PuzzleRow): Puzzle | null {
     type: row.type,
     prompt: row.prompt,
     difficulty: row.difficulty,
+    bird: row.bird ?? undefined,
     payload: row.payload,
     answer: row.answer,
     explanation: row.explanation,
@@ -50,6 +53,7 @@ export function puzzleToRow(p: Puzzle, isPublished = true) {
     type: p.type,
     prompt: p.prompt,
     difficulty: p.difficulty,
+    bird: p.bird ?? null,
     payload: p.payload,
     answer: p.answer,
     explanation: p.explanation,

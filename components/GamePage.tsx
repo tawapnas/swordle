@@ -128,7 +128,14 @@ export default function GamePage() {
         setPhase(
           data.alreadyPlayed
             ? { kind: "already", dayNumber, result, timeMs, streaks }
-            : { kind: "result", dayNumber, result, explanation, timeMs, streaks },
+            : {
+                kind: "result",
+                dayNumber,
+                result,
+                explanation,
+                timeMs,
+                streaks,
+              },
         );
         return;
       }
@@ -169,11 +176,11 @@ export default function GamePage() {
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
-      <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-        <h1 className="text-xl font-black text-ink sm:text-2xl">
+      <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b border-ink pb-3">
+        <h1 className="font-serif text-3xl text-ink sm:text-4xl">
           {tBrand("name")}
           {headerDay !== null && (
-            <span className="ml-2 text-ink-soft">
+            <span className="ml-2 text-2xl text-ink sm:text-3xl">
               {tBrand("dayLabel", { day: headerDay })}
             </span>
           )}
@@ -182,7 +189,7 @@ export default function GamePage() {
       </header>
 
       {previewDate && process.env.NODE_ENV !== "production" && (
-        <div className="rounded-xl bg-flame/10 px-3 py-2 text-xs font-bold text-flame">
+        <div className="border-l-2 border-brand bg-brand/10 px-3 py-2 text-xs font-bold text-brand">
           {t("devPreview", { date: previewDate })}
         </div>
       )}
@@ -192,7 +199,7 @@ export default function GamePage() {
       )}
 
       {phase.kind === "error" && (
-        <div className="mt-10 rounded-2xl bg-card px-5 py-4 text-center text-sm text-ink ring-1 ring-line">
+        <div className="mt-10 border border-line bg-white px-5 py-4 text-center text-sm text-ink">
           <p className="font-bold">{t("errorTitle")}</p>
           <p className="mt-1 text-ink-soft">{phase.message}</p>
         </div>
@@ -200,7 +207,7 @@ export default function GamePage() {
 
       {phase.kind === "playing" && (
         <section className="flex flex-col gap-4">
-          <p className="text-lg font-bold text-ink">{phase.puzzle.prompt}</p>
+          <p className="text-xl font-bold text-ink">{phase.puzzle.prompt}</p>
           <PuzzleRenderer
             puzzle={phase.puzzle}
             onSubmit={handleSubmit}
@@ -220,6 +227,7 @@ export default function GamePage() {
             longestStreak={phase.streaks.longestStreak}
             explanation={phase.explanation}
             showSignInCta={showCta(phase.streaks)}
+            claimable={phase.streaks.fromServer}
           />
         </div>
       )}

@@ -89,7 +89,7 @@ export default function AccountBar() {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={t("accountMenu")}
-        className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-black text-white shadow-sm transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        className="flex h-8 w-8 items-center justify-center bg-ink text-xs font-black text-white transition hover:bg-ink/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       >
         {initial}
       </button>
@@ -97,7 +97,7 @@ export default function AccountBar() {
       {open && (
         <div
           role="menu"
-          className="animate-rise absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl bg-card shadow-lg ring-1 ring-line"
+          className="animate-rise absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden border border-ink bg-card shadow-lg"
         >
           <p
             className="break-all px-4 py-3 text-xs font-medium text-ink-soft"

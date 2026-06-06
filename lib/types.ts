@@ -28,6 +28,12 @@ interface BasePuzzle {
   prompt: LocalizedString;
   /** For future weighting; not surfaced in MVP UI. */
   difficulty: 1 | 2 | 3;
+  /**
+   * Which collectible swift (1–9) this puzzle rewards on a win — the image lives
+   * in a private bucket, served by /api/bird after a verified solve. Optional;
+   * when unset a bird is derived from the id (see lib/birds.ts).
+   */
+  bird?: number;
   /** Shown on the result screen — the teaching moment. */
   explanation: LocalizedString;
 }
@@ -58,6 +64,8 @@ interface BasePublicPuzzle {
   type: PuzzleType;
   prompt: string;
   difficulty: 1 | 2 | 3;
+  /** The puzzle's collectible swift (1–9), surfaced so the win screen can show it. */
+  bird?: number;
 }
 
 export type PublicPuzzle =
