@@ -192,5 +192,827 @@
       "en": "A @Binding can't have a default value — it's supplied by the parent view: @Binding var count: Int.",
       "th": "@Binding กำหนดค่าเริ่มต้นไม่ได้ — ต้องรับค่าจาก view แม่: @Binding var count: Int"
     }
+  },
+  {
+    "id": "puzzle-11",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line has the bug?",
+      "th": "บรรทัดไหนมีบั๊ก?"
+    },
+    "difficulty": 1,
+    "bird": 7,
+    "payload": {
+      "codeLines": [
+        "struct FormView: View {",
+        "    @State private var name = \"\"",
+        "    var body: some View {",
+        "        TextField(\"Name\", text: name)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 3
+    },
+    "explanation": {
+      "en": "TextField needs a Binding — pass $name so edits flow back to the state.",
+      "th": "TextField ต้องการ Binding — ส่ง $name เพื่อให้ค่าที่แก้ไขย้อนกลับไปที่ state"
+    }
+  },
+  {
+    "id": "puzzle-12",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that adds space around the text.",
+      "th": "เติม modifier ที่เพิ่มระยะห่างรอบ ๆ ข้อความ"
+    },
+    "difficulty": 1,
+    "bird": 2,
+    "payload": {
+      "codeBefore": "Text(\"Hi\")\n    .",
+      "codeAfter": "()",
+      "options": [
+        "padding",
+        "spacing",
+        "margin",
+        "inset"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".padding() adds space on all sides of a view.",
+      "th": ".padding() เพิ่มระยะห่างรอบทุกด้านของ view"
+    }
+  },
+  {
+    "id": "puzzle-13",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line has the bug?",
+      "th": "บรรทัดไหนมีบั๊ก?"
+    },
+    "difficulty": 1,
+    "bird": 9,
+    "payload": {
+      "codeLines": [
+        "struct VolumeView: View {",
+        "    @State private var volume = 0.5",
+        "    var body: some View {",
+        "        Slider(value: volume, in: 0...1)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 3
+    },
+    "explanation": {
+      "en": "Slider binds to its value — pass $volume, not volume.",
+      "th": "Slider ผูกกับค่าผ่าน Binding — ส่ง $volume ไม่ใช่ volume"
+    }
+  },
+  {
+    "id": "puzzle-14",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that makes the text red.",
+      "th": "เติม modifier ที่ทำให้ข้อความเป็นสีแดง"
+    },
+    "difficulty": 1,
+    "bird": 4,
+    "payload": {
+      "codeBefore": "Text(\"Error\")\n    .",
+      "codeAfter": "(.red)",
+      "options": [
+        "foregroundStyle",
+        "background",
+        "tint",
+        "border"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".foregroundStyle(.red) sets the foreground (text) color.",
+      "th": ".foregroundStyle(.red) กำหนดสีของ foreground (ตัวข้อความ)"
+    }
+  },
+  {
+    "id": "puzzle-15",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 2,
+    "bird": 1,
+    "payload": {
+      "codeLines": [
+        "struct HomeView: View {",
+        "    var body: View {",
+        "        Text(\"Home\")",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 1
+    },
+    "explanation": {
+      "en": "body must return an opaque type — write var body: some View.",
+      "th": "body ต้องคืนค่าเป็น opaque type — เขียนเป็น var body: some View"
+    }
+  },
+  {
+    "id": "puzzle-16",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that rounds the corners.",
+      "th": "เติม modifier ที่ทำให้มุมโค้งมน"
+    },
+    "difficulty": 2,
+    "bird": 6,
+    "payload": {
+      "codeBefore": "Rectangle()\n    .fill(.blue)\n    .frame(width: 80, height: 80)\n    .",
+      "codeAfter": "(12)",
+      "options": [
+        "cornerRadius",
+        "padding",
+        "blur",
+        "shadow"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".cornerRadius(12) clips the view with rounded corners.",
+      "th": ".cornerRadius(12) ตัด view ให้มุมโค้งมน"
+    }
+  },
+  {
+    "id": "puzzle-17",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line has the bug?",
+      "th": "บรรทัดไหนมีบั๊ก?"
+    },
+    "difficulty": 1,
+    "bird": 3,
+    "payload": {
+      "codeLines": [
+        "struct CartView: View {",
+        "    @State private var quantity = 1",
+        "    var body: some View {",
+        "        Stepper(\"Quantity\", value: quantity, in: 1...10)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 3
+    },
+    "explanation": {
+      "en": "Stepper needs a Binding to update the value — pass $quantity.",
+      "th": "Stepper ต้องการ Binding เพื่ออัปเดตค่า — ส่ง $quantity"
+    }
+  },
+  {
+    "id": "puzzle-18",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that makes the image partly transparent.",
+      "th": "เติม modifier ที่ทำให้รูปภาพโปร่งแสงบางส่วน"
+    },
+    "difficulty": 1,
+    "bird": 8,
+    "payload": {
+      "codeBefore": "Image(\"logo\")\n    .",
+      "codeAfter": "(0.4)",
+      "options": [
+        "opacity",
+        "brightness",
+        "contrast",
+        "saturation"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".opacity(0.4) controls how transparent a view is.",
+      "th": ".opacity(0.4) ควบคุมความโปร่งแสงของ view"
+    }
+  },
+  {
+    "id": "puzzle-19",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 2,
+    "bird": 5,
+    "payload": {
+      "codeLines": [
+        "struct MenuView: View {",
+        "    var body: some View {",
+        "        NavigationStack {",
+        "            NavigationLink(\"Details\", destination: DetailView)",
+        "        }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 3
+    },
+    "explanation": {
+      "en": "Pass a view instance, not the type — write destination: DetailView().",
+      "th": "ต้องส่ง instance ของ view ไม่ใช่ตัว type — เขียนเป็น destination: DetailView()"
+    }
+  },
+  {
+    "id": "puzzle-20",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that sets the text style to large title.",
+      "th": "เติม modifier ที่กำหนดสไตล์ตัวอักษรเป็น large title"
+    },
+    "difficulty": 1,
+    "bird": 2,
+    "payload": {
+      "codeBefore": "Text(\"Title\")\n    .",
+      "codeAfter": "(.largeTitle)",
+      "options": [
+        "font",
+        "fontWeight",
+        "textStyle",
+        "foregroundStyle"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".font(.largeTitle) applies a built-in text style.",
+      "th": ".font(.largeTitle) กำหนด text style สำเร็จรูปให้ข้อความ"
+    }
+  },
+  {
+    "id": "puzzle-21",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line has the bug?",
+      "th": "บรรทัดไหนมีบั๊ก?"
+    },
+    "difficulty": 2,
+    "bird": 9,
+    "payload": {
+      "codeLines": [
+        "struct RootView: View {",
+        "    @State private var showSheet = false",
+        "    var body: some View {",
+        "        Button(\"Open\") { showSheet = true }",
+        "            .sheet(isPresented: showSheet) {",
+        "                Text(\"Sheet\")",
+        "            }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 4
+    },
+    "explanation": {
+      "en": ".sheet(isPresented:) takes a Binding — pass $showSheet.",
+      "th": ".sheet(isPresented:) รับค่าเป็น Binding — ส่ง $showSheet"
+    }
+  },
+  {
+    "id": "puzzle-22",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that puts a yellow color behind the text.",
+      "th": "เติม modifier ที่ใส่สีเหลืองไว้ด้านหลังข้อความ"
+    },
+    "difficulty": 2,
+    "bird": 7,
+    "payload": {
+      "codeBefore": "Text(\"Tag\")\n    .padding()\n    .",
+      "codeAfter": "(Color.yellow)",
+      "options": [
+        "background",
+        "foregroundStyle",
+        "overlay",
+        "border"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".background(Color.yellow) draws a color behind the view.",
+      "th": ".background(Color.yellow) วาดสีไว้ด้านหลัง view"
+    }
+  },
+  {
+    "id": "puzzle-23",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line has the bug?",
+      "th": "บรรทัดไหนมีบั๊ก?"
+    },
+    "difficulty": 2,
+    "bird": 1,
+    "payload": {
+      "codeLines": [
+        "struct PickerView: View {",
+        "    @State private var choice = 0",
+        "    var body: some View {",
+        "        Picker(\"Pick\", selection: choice) {",
+        "            Text(\"One\").tag(0)",
+        "            Text(\"Two\").tag(1)",
+        "        }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 3
+    },
+    "explanation": {
+      "en": "Picker's selection is a Binding — pass $choice.",
+      "th": "selection ของ Picker เป็น Binding — ส่ง $choice"
+    }
+  },
+  {
+    "id": "puzzle-24",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that rotates the text 90 degrees.",
+      "th": "เติม modifier ที่หมุนข้อความ 90 องศา"
+    },
+    "difficulty": 2,
+    "bird": 4,
+    "payload": {
+      "codeBefore": "Text(\"Rotate\")\n    .",
+      "codeAfter": "(.degrees(90))",
+      "options": [
+        "rotationEffect",
+        "offset",
+        "scaleEffect",
+        "position"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".rotationEffect(.degrees(90)) rotates the view in 2D.",
+      "th": ".rotationEffect(.degrees(90)) หมุน view ในแบบ 2 มิติ"
+    }
+  },
+  {
+    "id": "puzzle-25",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 1,
+    "bird": 8,
+    "payload": {
+      "codeLines": [
+        "struct IconView: View {",
+        "    var body: some View {",
+        "        Image(systemName: heart.fill)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 2
+    },
+    "explanation": {
+      "en": "An SF Symbol name is a String — write Image(systemName: \"heart.fill\").",
+      "th": "ชื่อ SF Symbol เป็น String — เขียนเป็น Image(systemName: \"heart.fill\")"
+    }
+  },
+  {
+    "id": "puzzle-26",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that adds a soft drop shadow.",
+      "th": "เติม modifier ที่เพิ่มเงาตกกระทบนุ่ม ๆ"
+    },
+    "difficulty": 2,
+    "bird": 3,
+    "payload": {
+      "codeBefore": "RoundedRectangle(cornerRadius: 8)\n    .fill(.white)\n    .",
+      "codeAfter": "(radius: 6)",
+      "options": [
+        "shadow",
+        "border",
+        "overlay",
+        "clipped"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".shadow(radius: 6) casts a blurred shadow behind the view.",
+      "th": ".shadow(radius: 6) สร้างเงาเบลอ ๆ ด้านหลัง view"
+    }
+  },
+  {
+    "id": "puzzle-27",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 1,
+    "bird": 6,
+    "payload": {
+      "codeLines": [
+        "struct TitleView: View {",
+        "    var body: some View {",
+        "        Text(\"Welcome\")",
+        "            .foregroundStyle(blue)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 3
+    },
+    "explanation": {
+      "en": "Reference the color as .blue — a bare blue is undefined.",
+      "th": "อ้างถึงสีเป็น .blue — เขียน blue เฉย ๆ จะไม่รู้จัก"
+    }
+  },
+  {
+    "id": "puzzle-28",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that makes the icon 1.5× bigger.",
+      "th": "เติม modifier ที่ทำให้ไอคอนใหญ่ขึ้น 1.5 เท่า"
+    },
+    "difficulty": 2,
+    "bird": 2,
+    "payload": {
+      "codeBefore": "Image(systemName: \"star.fill\")\n    .",
+      "codeAfter": "(1.5)",
+      "options": [
+        "scaleEffect",
+        "opacity",
+        "offset",
+        "brightness"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".scaleEffect(1.5) scales the view up by 1.5×.",
+      "th": ".scaleEffect(1.5) ขยายขนาด view ขึ้น 1.5 เท่า"
+    }
+  },
+  {
+    "id": "puzzle-29",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 2,
+    "bird": 9,
+    "payload": {
+      "codeLines": [
+        "struct BoxView: View {",
+        "    var body: some View {",
+        "        Rectangle()",
+        "            .frame(width: 100 height: 100)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 3
+    },
+    "explanation": {
+      "en": "Function arguments need commas — write .frame(width: 100, height: 100).",
+      "th": "อาร์กิวเมนต์ของฟังก์ชันต้องคั่นด้วยคอมมา — เขียนเป็น .frame(width: 100, height: 100)"
+    }
+  },
+  {
+    "id": "puzzle-30",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that blurs the photo.",
+      "th": "เติม modifier ที่ทำให้รูปภาพเบลอ"
+    },
+    "difficulty": 2,
+    "bird": 5,
+    "payload": {
+      "codeBefore": "Image(\"photo\")\n    .",
+      "codeAfter": "(radius: 8)",
+      "options": [
+        "blur",
+        "padding",
+        "frame",
+        "clipShape"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".blur(radius: 8) applies a Gaussian blur.",
+      "th": ".blur(radius: 8) ใส่เอฟเฟกต์เบลอแบบ Gaussian"
+    }
+  },
+  {
+    "id": "puzzle-31",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 3,
+    "bird": 7,
+    "payload": {
+      "codeLines": [
+        "struct AppView: View {",
+        "    @StateObject let model = AppModel()",
+        "    var body: some View {",
+        "        Text(model.title)",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 1
+    },
+    "explanation": {
+      "en": "@StateObject must be a var — it manages mutable state: @StateObject private var model = AppModel().",
+      "th": "@StateObject ต้องเป็น var เพราะจัดการ state ที่เปลี่ยนแปลงได้ — เขียนเป็น @StateObject private var model = AppModel()"
+    }
+  },
+  {
+    "id": "puzzle-32",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that caps the text at 2 lines.",
+      "th": "เติม modifier ที่จำกัดข้อความไว้ที่ 2 บรรทัด"
+    },
+    "difficulty": 2,
+    "bird": 1,
+    "payload": {
+      "codeBefore": "Text(longText)\n    .",
+      "codeAfter": "(2)",
+      "options": [
+        "lineLimit",
+        "lineSpacing",
+        "truncationMode",
+        "padding"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".lineLimit(2) shows at most two lines, truncating the rest.",
+      "th": ".lineLimit(2) แสดงไม่เกินสองบรรทัด ส่วนที่เหลือจะถูกตัด"
+    }
+  },
+  {
+    "id": "puzzle-33",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 3,
+    "bird": 4,
+    "payload": {
+      "codeLines": [
+        "struct Person {",
+        "    let name: String",
+        "}",
+        "struct PeopleView: View {",
+        "    let people = [Person(name: \"Ann\"), Person(name: \"Ben\")]",
+        "    var body: some View {",
+        "        List {",
+        "            ForEach(people) { person in",
+        "                Text(person.name)",
+        "            }",
+        "        }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 7
+    },
+    "explanation": {
+      "en": "Person isn't Identifiable, so ForEach needs a key path — ForEach(people, id: \\.name).",
+      "th": "Person ไม่ได้เป็น Identifiable — ForEach จึงต้องระบุ id ด้วย key path: ForEach(people, id: \\.name)"
+    }
+  },
+  {
+    "id": "puzzle-34",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that tints the button green.",
+      "th": "เติม modifier ที่ทำให้ปุ่มมีโทนสีเขียว"
+    },
+    "difficulty": 2,
+    "bird": 8,
+    "payload": {
+      "codeBefore": "Button(\"Save\") { }\n    .",
+      "codeAfter": "(.green)",
+      "options": [
+        "tint",
+        "border",
+        "background",
+        "padding"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".tint(.green) sets the accent color a control uses.",
+      "th": ".tint(.green) กำหนดสี accent ที่ control ใช้"
+    }
+  },
+  {
+    "id": "puzzle-35",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 1,
+    "bird": 3,
+    "payload": {
+      "codeLines": [
+        "struct SubmitView: View {",
+        "    var body: some View {",
+        "        Button(\"Submit\")",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 2
+    },
+    "explanation": {
+      "en": "A Button needs an action closure — write Button(\"Submit\") { }.",
+      "th": "Button ต้องมี closure ของ action — เขียนเป็น Button(\"Submit\") { }"
+    }
+  },
+  {
+    "id": "puzzle-36",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that sets the heading to bold weight.",
+      "th": "เติม modifier ที่กำหนดน้ำหนักตัวอักษรของหัวข้อให้เป็นตัวหนา"
+    },
+    "difficulty": 1,
+    "bird": 6,
+    "payload": {
+      "codeBefore": "Text(\"Heading\")\n    .",
+      "codeAfter": "(.bold)",
+      "options": [
+        "fontWeight",
+        "font",
+        "kerning",
+        "tracking"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".fontWeight(.bold) sets the weight without changing the font.",
+      "th": ".fontWeight(.bold) กำหนดน้ำหนักตัวอักษรโดยไม่เปลี่ยนฟอนต์"
+    }
+  },
+  {
+    "id": "puzzle-37",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 2,
+    "bird": 2,
+    "payload": {
+      "codeLines": [
+        "struct ColumnView: View {",
+        "    var body: some View {",
+        "        VStack(align: .leading) {",
+        "            Text(\"A\")",
+        "            Text(\"B\")",
+        "        }",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 2
+    },
+    "explanation": {
+      "en": "The parameter is alignment, not align — write VStack(alignment: .leading).",
+      "th": "พารามิเตอร์ชื่อ alignment ไม่ใช่ align — เขียนเป็น VStack(alignment: .leading)"
+    }
+  },
+  {
+    "id": "puzzle-38",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that center-aligns the wrapped text.",
+      "th": "เติม modifier ที่จัดข้อความหลายบรรทัดให้อยู่กึ่งกลาง"
+    },
+    "difficulty": 3,
+    "bird": 9,
+    "payload": {
+      "codeBefore": "Text(\"A long centered paragraph\")\n    .frame(width: 200)\n    .",
+      "codeAfter": "(.center)",
+      "options": [
+        "multilineTextAlignment",
+        "frame",
+        "alignmentGuide",
+        "padding"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".multilineTextAlignment(.center) aligns text across wrapped lines.",
+      "th": ".multilineTextAlignment(.center) จัดแนวข้อความที่ตัดขึ้นบรรทัดใหม่ให้อยู่กึ่งกลาง"
+    }
+  },
+  {
+    "id": "puzzle-39",
+    "type": "spot-bug",
+    "prompt": {
+      "en": "Which line won't compile?",
+      "th": "บรรทัดไหนคอมไพล์ไม่ผ่าน?"
+    },
+    "difficulty": 3,
+    "bird": 5,
+    "payload": {
+      "codeLines": [
+        "struct ProfileView: View {",
+        "    func body() -> some View {",
+        "        Text(\"Profile\")",
+        "    }",
+        "}"
+      ]
+    },
+    "answer": {
+      "buggyLineIndex": 1
+    },
+    "explanation": {
+      "en": "View requires a computed property, not a method — write var body: some View.",
+      "th": "View ต้องการ computed property ไม่ใช่ method — เขียนเป็น var body: some View"
+    }
+  },
+  {
+    "id": "puzzle-40",
+    "type": "fill-modifier",
+    "prompt": {
+      "en": "Fill in the modifier that scales the image to fit its ratio.",
+      "th": "เติม modifier ที่ย่อ/ขยายรูปภาพให้พอดีตามอัตราส่วน"
+    },
+    "difficulty": 3,
+    "bird": 7,
+    "payload": {
+      "codeBefore": "Image(\"banner\")\n    .resizable()\n    .",
+      "codeAfter": "(contentMode: .fit)",
+      "options": [
+        "aspectRatio",
+        "frame",
+        "scaledToFill",
+        "scaleEffect"
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": ".aspectRatio(contentMode: .fit) scales the view while keeping its aspect ratio.",
+      "th": ".aspectRatio(contentMode: .fit) ย่อ/ขยาย view โดยคงอัตราส่วนเดิมไว้"
+    }
   }
 ]

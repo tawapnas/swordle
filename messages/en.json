@@ -22,18 +22,18 @@
     "title": "Welcome to Swordle!",
     "subhead": "A couple of quick things before your first puzzle.",
     "username": "Username",
-    "usernamePlaceholder": "Pick a unique username",
+    "usernamePlaceholder": "Pick a username",
     "province": "Province",
     "provincePlaceholder": "Select your province",
     "institution": "Educational institution",
     "optional": "(optional)",
-    "institutionPlaceholder": "School or university — leave blank if none",
+    "institutionPlaceholder": "School or university",
     "saving": "Saving…",
     "startPlaying": "Start playing",
     "signedInAs": "Signed in as <b>{email}</b>.",
-    "usernameTaken": "That username is already taken — please pick another.",
-    "saveFailed": "Couldn't save that — please try again.",
-    "serverUnreachable": "Couldn't reach the server — please try again."
+    "usernameTaken": "That username is already taken",
+    "saveFailed": "Couldn't save that",
+    "serverUnreachable": "Couldn't reach the server"
   },
   "Game": {
     "loading": "Loading today's puzzle…",
@@ -47,20 +47,35 @@
     "fillModifier": {
       "hint": "Pick the modifier that fits the blank."
     },
-    "scorerUnreachable": "We couldn't reach the scorer — counted as a miss."
+    "scorerUnreachable": "We couldn't reach the scorer"
   },
   "Result": {
     "solvedBanner": "Solved it!",
     "failedBanner": "Not this time",
     "wins": {
-      "blazing": ["First strike! 🗡️", "Lightning hands ⚡️", "Too fast to compile"],
-      "fast": ["Sharp! 🔪", "Clean and quick", "No hesitation"],
-      "steady": ["Solved it! 🎉", "Nicely done ✅", "That compiles"],
-      "clutch": ["Just in time! ⏱️", "Cutting it close!", "Down to the wire"]
+      "blazing": [
+        "Unstoppable speed!",
+        "Are you a bot?!",
+        "Too fast to compile"
+      ],
+      "fast": [
+        "Crushing it!",
+        "Flawless! ✨",
+        "No hesitation"
+      ],
+      "steady": [
+        "Solved it! 🎉",
+        "Nailed it!"
+      ],
+      "clutch": [
+        "Just in time! ⏱️",
+        "That was close!",
+        "Heart skipped a beat! 🫣"
+      ]
     },
     "time": "Time",
     "currentStreak": "Current streak",
-    "longestStreak": "Longest",
+    "longestStreak": "Longest streak",
     "share": "Share",
     "catchHint": "Tap to catch it!",
     "caught": "Caught it! 🐦",

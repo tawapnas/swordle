@@ -2,7 +2,7 @@
 //
 // The puzzle rolls over at midnight in Thailand (Asia/Bangkok, UTC+7) — so
 // everyone, wherever they are, plays the puzzle for the current Bangkok calendar
-// date. Day 1 is the Swordle launch date (May 22 2026 in Bangkok). When the bank
+// date. Day 1 is the Swordle launch date (June 8 2026 in Bangkok). When the bank
 // runs out, day numbers wrap modulo the bank length — acceptable for MVP.
 
 import type { Puzzle } from "@/lib/types";
@@ -11,10 +11,10 @@ import type { Puzzle } from "@/lib/types";
 const BANGKOK_OFFSET_MS = 7 * 60 * 60 * 1000;
 
 /**
- * "Day 1" is the Bangkok calendar date 2026-05-22, held as a UTC-midnight marker
+ * "Day 1" is the Bangkok calendar date 2026-06-08, held as a UTC-midnight marker
  * — Bangkok calendar dates are compared as UTC-midnight markers throughout.
  */
-const EPOCH = Date.UTC(2026, 4, 22);
+const EPOCH = Date.UTC(2026, 5, 8);
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
