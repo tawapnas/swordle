@@ -33,9 +33,14 @@ type Phase =
       explanation: string;
       timeMs: number;
       streaks: Streaks;
+      /** Signed CDN URL for the swift reward (fresh server-recorded solve). */
+      birdUrl?: string;
     };
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Longest we'll wait on the reward image before showing the win screen anyway. */
+const BIRD_PRELOAD_CAP_MS = 1000;
 
 export default function GamePage() {
   const t = useTranslations("Game");
@@ -125,18 +130,25 @@ export default function GamePage() {
           longestStreak: data.longestStreak ?? 0,
           fromServer: true,
         };
-        setPhase(
-          data.alreadyPlayed
-            ? { kind: "already", dayNumber, result, timeMs, streaks }
-            : {
-                kind: "result",
-                dayNumber,
-                result,
-                explanation,
-                timeMs,
-                streaks,
-              },
-        );
+        if (data.alreadyPlayed) {
+          setPhase({ kind: "already", dayNumber, result, timeMs, streaks });
+        } else {
+          // Decode the reward image before revealing the win screen so the
+          // swift appears instantly rather than popping in a beat late. Capped
+          // so a slow image never holds the result back for long.
+          if (result === "solved" && data.birdUrl) {
+            await preloadImage(data.birdUrl, BIRD_PRELOAD_CAP_MS);
+          }
+          setPhase({
+            kind: "result",
+            dayNumber,
+            result,
+            explanation,
+            timeMs,
+            streaks,
+            birdUrl: data.birdUrl,
+          });
+        }
         return;
       }
 
@@ -228,6 +240,7 @@ export default function GamePage() {
             explanation={phase.explanation}
             showSignInCta={showCta(phase.streaks)}
             claimable={phase.streaks.fromServer}
+            birdUrl={phase.birdUrl}
           />
         </div>
       )}
@@ -246,6 +259,30 @@ export default function GamePage() {
       )}
     </main>
   );
+}
+
+/**
+ * Warm the browser cache for the reward image: resolves once it's decoded and
+ * paint-ready, or after `capMs` — whichever comes first, so a slow/failed image
+ * never blocks the win screen. SwiftCatch then renders the same URL from cache.
+ */
+function preloadImage(src: string, capMs: number): Promise<void> {
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+    const img = new window.Image();
+    img.onload = done;
+    img.onerror = done;
+    img.src = src;
+    // decode() resolves only when the bitmap is ready to paint; ignore rejection
+    // and let onload / the cap settle it instead.
+    img.decode?.().then(done, () => {});
+    window.setTimeout(done, capMs);
+  });
 }
 
 /** Get the server account if the player has a Supabase session. */

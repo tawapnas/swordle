@@ -18,8 +18,7 @@ export default async function WelcomeScreen() {
         <h1 className="font-serif text-7xl text-ink sm:text-8xl">
           {tBrand("name")}
         </h1>
-        <p className="text-lg font-bold text-ink">{tWelcome("tagline")}</p>
-        <p className="text-sm text-ink-soft">{tWelcome("pitch")}</p>
+        <p className="text-lg font-bold text-ink sm:text-xl">{tWelcome("tagline")}</p>
       </header>
 
       <section className="flex flex-col gap-3">

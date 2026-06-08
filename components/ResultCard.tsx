@@ -32,6 +32,7 @@ export default function ResultCard({
   heading,
   showSignInCta,
   claimable,
+  birdUrl,
 }: {
   dayNumber: number;
   result: GameResult;
@@ -49,6 +50,8 @@ export default function ResultCard({
    * solves can't be verified, so no bird is shown for them.
    */
   claimable?: boolean;
+  /** Preloaded signed URL for the swift image, so it shows without a fetch. */
+  birdUrl?: string;
 }) {
   const [toast, setToast] = useState<string | null>(null);
   const solved = result === "solved";
@@ -138,7 +141,7 @@ export default function ResultCard({
       </button>
 
       {solved && !heading && claimable ? (
-        <SwiftCatch dayNumber={dayNumber} />
+        <SwiftCatch dayNumber={dayNumber} imageUrl={birdUrl} />
       ) : null}
 
       {showSignInCta ? (

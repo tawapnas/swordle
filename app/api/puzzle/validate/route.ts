@@ -21,6 +21,7 @@ import { getSessionUser } from "@/lib/supabase/server";
 import { recordValidateAttempt } from "@/lib/account-data";
 import { pickLocale } from "@/lib/public";
 import { resolveLocale } from "@/lib/server-locale";
+import { signBirdUrl } from "@/lib/bird-url";
 
 export const dynamic = "force-dynamic";
 
@@ -61,17 +62,21 @@ export async function POST(req: NextRequest): Promise<Response> {
     const user = await getSessionUser();
     if (user) {
       const { dayNumber } = getTodayPuzzle(puzzles);
-      const account = await recordValidateAttempt(
-        user,
-        puzzle.id,
-        dayNumber,
-        correct,
-        timeMs,
-      );
+      // Record the attempt and (on a correct answer) mint the reward's signed
+      // URL concurrently — signing doesn't depend on the write, so this keeps
+      // validate fast while letting the client preload the swift image.
+      const [account, birdUrl] = await Promise.all([
+        recordValidateAttempt(user, puzzle.id, dayNumber, correct, timeMs),
+        correct ? signBirdUrl(puzzle) : Promise.resolve(null),
+      ]);
       if (account) {
         result.currentStreak = account.currentStreak;
         result.longestStreak = account.longestStreak;
         result.alreadyPlayed = account.alreadyPlayed;
+        // Only a fresh, server-recorded solve earns the bird this turn.
+        if (correct && !account.alreadyPlayed && birdUrl) {
+          result.birdUrl = birdUrl;
+        }
       }
     }
 

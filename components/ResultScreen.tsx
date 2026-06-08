@@ -13,6 +13,7 @@ export default function ResultScreen({
   explanation,
   showSignInCta,
   claimable,
+  birdUrl,
 }: {
   dayNumber: number;
   result: GameResult;
@@ -24,6 +25,8 @@ export default function ResultScreen({
   showSignInCta?: boolean;
   /** Whether the swift reward can be claimed (server-recorded solve). */
   claimable: boolean;
+  /** Preloaded signed URL for the swift image (instant display). */
+  birdUrl?: string;
 }) {
   return (
     <ResultCard
@@ -35,6 +38,7 @@ export default function ResultScreen({
       explanation={explanation}
       showSignInCta={showSignInCta}
       claimable={claimable}
+      birdUrl={birdUrl}
     />
   );
 }

@@ -5,8 +5,7 @@
     "dayLabel": "#{day}"
   },
   "Welcome": {
-    "tagline": "The daily SwiftUI puzzle.",
-    "pitch": "A new puzzle every day. Sixty seconds on the clock. Keep your streak alive."
+    "tagline": "The daily SwiftUI puzzle in 60 seconds."
   },
   "Login": {
     "subhead": "Sign in to play the daily puzzle and keep your streak across devices.",

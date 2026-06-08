@@ -60,6 +60,12 @@ export interface ValidateResultWithAccount {
   longestStreak?: number;
   /** True if an attempt for this day already existed (this submit was ignored). */
   alreadyPlayed?: boolean;
+  /**
+   * Inline signed URL for the collectible swift, present only on a fresh,
+   * server-recorded solve — lets the client preload the image before the win
+   * screen mounts. Expires; the bucket stays private.
+   */
+  birdUrl?: string;
 }
 
 /** GET /api/admin/overview — aggregates for the bootcamp organizer. */
