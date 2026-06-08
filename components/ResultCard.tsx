@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Flame, Trophy, Clock } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -60,13 +60,24 @@ export default function ResultCard({
   const tToast = useTranslations("Toast");
   const locale = useLocale();
 
-  // Pick the win headline by how fast they solved; the variant within a tier is
-  // deterministic per day so a refresh keeps the same line.
-  function winHeadline(): string {
-    const variants = tResult.raw(`wins.${winTier(timeMs)}`);
-    if (Array.isArray(variants) && variants.length > 0) {
-      return variants[dayNumber % variants.length] as string;
+  // The win headline tier is picked by how fast they solved; the variant within
+  // the tier is random per play. Seed the index with a deterministic day-based
+  // pick so the server and first client render agree (no hydration mismatch),
+  // then re-roll on the client after mount.
+  const winVariants = tResult.raw(`wins.${winTier(timeMs)}`);
+  const winList = Array.isArray(winVariants) ? (winVariants as string[]) : [];
+  const [winIndex, setWinIndex] = useState(() =>
+    winList.length > 0 ? dayNumber % winList.length : 0,
+  );
+  useEffect(() => {
+    if (winList.length > 0) {
+      setWinIndex(Math.floor(Math.random() * winList.length));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [winList.length]);
+
+  function winHeadline(): string {
+    if (winList.length > 0) return winList[winIndex];
     return tResult("solvedBanner");
   }
 
