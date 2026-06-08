@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { setRequestLocale, getTranslations } from "next-intl/server";
-import OnboardingForm from "@/components/OnboardingForm";
+import { setRequestLocale } from "next-intl/server";
+import OnboardingFlow from "@/components/OnboardingFlow";
 import { getSessionUser, isSupabaseConfigured } from "@/lib/supabase/server";
 import { getProfileSummary } from "@/lib/account-data";
 
@@ -28,22 +28,9 @@ export default async function OnboardingPage({
   const profile = await getProfileSummary(user);
   if (profile?.onboarded) redirect(`/${locale}`);
 
-  const t = await getTranslations("Onboarding");
-
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 px-4 py-12">
-      <header className="flex flex-col gap-2 text-center">
-        <span className="text-5xl" aria-hidden>
-          {t("wave")}
-        </span>
-        <h1 className="text-3xl font-black tracking-tight text-brand">
-          {t("title")}
-        </h1>
-        <p className="text-sm text-ink-soft">{t("subhead")}</p>
-      </header>
-
-      <OnboardingForm
-        email={user.email ?? ""}
+      <OnboardingFlow
         initialUsername={profile?.username ?? ""}
         initialProvince={profile?.province ?? ""}
         initialInstitution={profile?.educationalInstitution ?? ""}

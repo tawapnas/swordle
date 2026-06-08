@@ -28,11 +28,16 @@
     "optional": "(optional)",
     "institutionPlaceholder": "School or university",
     "saving": "Saving…",
-    "startPlaying": "Start playing",
+    "createAccount": "Create account",
     "signedInAs": "Signed in as <b>{email}</b>.",
     "usernameTaken": "That username is already taken",
     "saveFailed": "Couldn't save that",
     "serverUnreachable": "Couldn't reach the server"
+  },
+  "HowToPlay": {
+    "title": "You're all set!",
+    "body": "Each day brings one SwiftUI puzzle. Answer it before the 60-second timer runs out, and solve it to keep your streak alive.",
+    "start": "Start playing"
   },
   "Game": {
     "loading": "Loading today's puzzle…",

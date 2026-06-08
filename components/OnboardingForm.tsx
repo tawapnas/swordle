@@ -2,10 +2,11 @@
 
 // Shown once, right after a user's first sign-in: collects a username, their
 // Thailand province (from a picker), and an optional educational institution,
-// then POSTs to /api/me/profile and drops them into the game.
+// then POSTs to /api/me/profile. On success it calls `onCreated` — the parent
+// flow then shows the "how to play" step rather than jumping straight into the
+// timed game.
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import {
   THAILAND_PROVINCES,
@@ -14,17 +15,17 @@ import {
 } from "@/lib/thailand-provinces";
 
 export default function OnboardingForm({
-  email,
   initialUsername = "",
   initialProvince = "",
   initialInstitution = "",
+  onCreated,
 }: {
-  email: string;
   initialUsername?: string;
   initialProvince?: string;
   initialInstitution?: string;
+  /** Called after the profile is saved — advances to the how-to-play step. */
+  onCreated: () => void;
 }) {
-  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("Onboarding");
   const [username, setUsername] = useState(initialUsername);
@@ -65,8 +66,7 @@ export default function OnboardingForm({
         setSubmitting(false);
         return;
       }
-      router.replace(`/${locale}`);
-      router.refresh();
+      onCreated();
     } catch {
       setError(t("serverUnreachable"));
       setSubmitting(false);
@@ -168,15 +168,8 @@ export default function OnboardingForm({
         disabled={submitting}
         className="mt-2 bg-brand px-6 py-3.5 text-base font-bold text-white transition active:translate-y-px active:bg-brand-dark disabled:opacity-60"
       >
-        {submitting ? t("saving") : t("startPlaying")}
+        {submitting ? t("saving") : t("createAccount")}
       </button>
-
-      <p className="text-xs text-ink-soft">
-        {t.rich("signedInAs", {
-          email,
-          b: (chunks) => <span className="font-medium break-all">{chunks}</span>,
-        })}
-      </p>
     </form>
   );
 }
