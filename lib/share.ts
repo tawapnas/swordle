@@ -2,7 +2,7 @@
 
 import type { GameResult } from "@/lib/streak";
 
-const SHARE_URL = "https://swordle.app"; // placeholder
+const SHARE_URL = "https://swordle.swiftcodingclubth.com";
 
 /** Format milliseconds as `m:ss` (e.g. 42_000 → "0:42"). */
 export function formatTime(ms: number): string {
@@ -14,7 +14,7 @@ export function formatTime(ms: number): string {
 
 /**
  * Build the shareable result string, e.g.:
- *   "Swordle #14  ✅  0:42  🔥7\nhttps://swordle.app"
+ *   "Swordle #14  ✅  0:42  🔥7\nhttps://swordle.swiftcodingclubth.com"
  * Uses ❌ for a failed attempt. The 🔥N segment is omitted when streak is 0.
  */
 export function formatShare(
