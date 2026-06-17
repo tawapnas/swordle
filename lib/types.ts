@@ -18,7 +18,7 @@ import type { Locale } from "@/i18n/routing";
 /** A piece of user-facing text translated for every supported locale. */
 export type LocalizedString = Record<Locale, string>;
 
-export type PuzzleType = "spot-bug" | "fill-modifier";
+export type PuzzleType = "spot-bug" | "fill-modifier" | "multiple-choice";
 
 interface BasePuzzle {
   /** Stable id, e.g. "2026-01-01-spotbug-01". */
@@ -57,7 +57,19 @@ export interface FillModifierPuzzle extends BasePuzzle {
   answer: { correctIndex: number };
 }
 
-export type Puzzle = SpotBugPuzzle | FillModifierPuzzle;
+export interface MultipleChoicePuzzle extends BasePuzzle {
+  type: "multiple-choice";
+  payload: {
+    /**
+     * Exactly 4 localized answer choices — unlike the other types these are
+     * natural-language text, so they carry both languages.
+     */
+    choices: LocalizedString[];
+  };
+  answer: { correctIndex: number };
+}
+
+export type Puzzle = SpotBugPuzzle | FillModifierPuzzle | MultipleChoicePuzzle;
 
 interface BasePublicPuzzle {
   id: string;
@@ -70,7 +82,13 @@ interface BasePublicPuzzle {
 
 export type PublicPuzzle =
   | (BasePublicPuzzle & Pick<SpotBugPuzzle, "type" | "payload">)
-  | (BasePublicPuzzle & Pick<FillModifierPuzzle, "type" | "payload">);
+  | (BasePublicPuzzle & Pick<FillModifierPuzzle, "type" | "payload">)
+  // multiple-choice resolves each localized choice to a plain string for the
+  // request locale, so its public payload differs from the stored shape.
+  | (BasePublicPuzzle & {
+      type: "multiple-choice";
+      payload: { choices: string[] };
+    });
 
 /** Response shape of GET /api/puzzle/today. */
 export interface TodayResponse {

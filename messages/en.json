@@ -51,6 +51,9 @@
     "fillModifier": {
       "hint": "Pick the modifier that fits the blank."
     },
+    "multipleChoice": {
+      "hint": "Pick the correct answer."
+    },
     "scorerUnreachable": "We couldn't reach the scorer"
   },
   "Result": {
@@ -129,6 +132,7 @@
       "type": "Puzzle type",
       "typeSpotBug": "Spot the bug",
       "typeFillModifier": "Fill the modifier",
+      "typeMultipleChoice": "Multiple choice",
       "idLabel": "ID",
       "difficulty": "Difficulty",
       "diffEasy": "Easy",
@@ -160,6 +164,9 @@
       "buggyLineLabel": "Mark the buggy line",
       "option": "Option {n}",
       "correctOption": "Correct option",
+      "correctChoice": "Choices (mark the correct one)",
+      "choiceEn": "Choice {n} (English)",
+      "choiceTh": "Choice {n} (Thai)",
       "delete": "Delete",
       "deleteConfirm": "Delete this puzzle?",
       "listTitle": "Existing puzzles",

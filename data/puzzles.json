@@ -1014,5 +1014,30 @@
       "en": ".aspectRatio(contentMode: .fit) scales the view while keeping its aspect ratio.",
       "th": ".aspectRatio(contentMode: .fit) ย่อ/ขยาย view โดยคงอัตราส่วนเดิมไว้"
     }
+  },
+  {
+    "id": "puzzle-41",
+    "type": "multiple-choice",
+    "prompt": {
+      "en": "Which property wrapper marks a view's own value-type source of truth?",
+      "th": "property wrapper ตัวไหนใช้ระบุแหล่งข้อมูลหลักแบบ value type ที่ view เป็นเจ้าของเอง?"
+    },
+    "difficulty": 2,
+    "bird": 8,
+    "payload": {
+      "choices": [
+        { "en": "@State", "th": "@State" },
+        { "en": "@Binding", "th": "@Binding" },
+        { "en": "@Environment", "th": "@Environment" },
+        { "en": "@Published", "th": "@Published" }
+      ]
+    },
+    "answer": {
+      "correctIndex": 0
+    },
+    "explanation": {
+      "en": "@State holds a view's own value-type source of truth; @Binding is just a reference to state owned elsewhere.",
+      "th": "@State เก็บแหล่งข้อมูลหลักแบบ value type ที่ view เป็นเจ้าของเอง ส่วน @Binding เป็นเพียงการอ้างอิงไปยัง state ที่อยู่ที่อื่น"
+    }
   }
 ]

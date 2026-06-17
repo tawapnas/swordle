@@ -17,6 +17,7 @@ import {
 import { Field, inputClass, monoInputClass } from "./puzzle-fields/styles";
 import SpotBugFields from "./puzzle-fields/SpotBugFields";
 import FillModifierFields from "./puzzle-fields/FillModifierFields";
+import MultipleChoiceFields from "./puzzle-fields/MultipleChoiceFields";
 
 export default function PuzzleForm({
   initial,
@@ -131,6 +132,7 @@ export default function PuzzleForm({
           >
             <option value="spot-bug">{t("typeSpotBug")}</option>
             <option value="fill-modifier">{t("typeFillModifier")}</option>
+            <option value="multiple-choice">{t("typeMultipleChoice")}</option>
           </select>
         </Field>
         <Field label={t("difficulty")}>
@@ -215,6 +217,14 @@ export default function PuzzleForm({
           codeBefore={state.codeBefore}
           codeAfter={state.codeAfter}
           options={state.options}
+          correctIndex={state.correctIndex}
+          onChange={patch}
+        />
+      )}
+      {state.type === "multiple-choice" && (
+        <MultipleChoiceFields
+          choicesEn={state.choicesEn}
+          choicesTh={state.choicesTh}
           correctIndex={state.correctIndex}
           onChange={patch}
         />

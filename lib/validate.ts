@@ -20,6 +20,10 @@ export function validate(puzzle: Puzzle, userAnswer: unknown): boolean {
       if (!isRecord(userAnswer)) return false;
       return userAnswer.correctIndex === puzzle.answer.correctIndex;
     }
+    case "multiple-choice": {
+      if (!isRecord(userAnswer)) return false;
+      return userAnswer.correctIndex === puzzle.answer.correctIndex;
+    }
     default: {
       // Exhaustiveness guard — if a new puzzle type is added to the union and
       // not handled above, this line stops compiling.

@@ -8,6 +8,7 @@
 import type {
   FillModifierPuzzle,
   LocalizedString,
+  MultipleChoicePuzzle,
   Puzzle,
   PuzzleType,
   SpotBugPuzzle,
@@ -18,7 +19,11 @@ export type ParseResult =
   | { ok: true; puzzle: Puzzle }
   | { ok: false; errors: string[] };
 
-const PUZZLE_TYPES: readonly PuzzleType[] = ["spot-bug", "fill-modifier"];
+const PUZZLE_TYPES: readonly PuzzleType[] = [
+  "spot-bug",
+  "fill-modifier",
+  "multiple-choice",
+];
 
 const ID_RE = /^[a-z0-9-]+$/;
 
@@ -141,6 +146,23 @@ export function parsePuzzleInput(input: unknown): ParseResult {
         errors.push("`answer.correctIndex` must be an integer between 0 and 3.");
       }
     }
+  } else if (type === "multiple-choice") {
+    if (payload) {
+      if (
+        !Array.isArray(payload.choices) ||
+        payload.choices.length !== 4 ||
+        !payload.choices.every((c) => isLocalizedString(c))
+      ) {
+        errors.push(
+          `\`payload.choices\` must be exactly 4 choices, each with a non-empty string for every locale: ${routing.locales.join(", ")}.`,
+        );
+      }
+    }
+    if (answer) {
+      if (!isInteger(answer.correctIndex) || answer.correctIndex < 0 || answer.correctIndex > 3) {
+        errors.push("`answer.correctIndex` must be an integer between 0 and 3.");
+      }
+    }
   }
 
   if (errors.length > 0) return { ok: false, errors };
@@ -164,8 +186,7 @@ export function parsePuzzleInput(input: unknown): ParseResult {
       payload: { codeLines: [...p.codeLines] },
       answer: { buggyLineIndex: a.buggyLineIndex },
     } satisfies SpotBugPuzzle;
-  } else {
-    // fill-modifier — the only other valid type (validated above).
+  } else if (type === "fill-modifier") {
     const p = input.payload as { codeBefore: string; codeAfter: string; options: string[] };
     const a = input.answer as { correctIndex: number };
     puzzle = {
@@ -174,6 +195,16 @@ export function parsePuzzleInput(input: unknown): ParseResult {
       payload: { codeBefore: p.codeBefore, codeAfter: p.codeAfter, options: [...p.options] },
       answer: { correctIndex: a.correctIndex },
     } satisfies FillModifierPuzzle;
+  } else {
+    // multiple-choice — the only other valid type (validated above).
+    const p = input.payload as { choices: LocalizedString[] };
+    const a = input.answer as { correctIndex: number };
+    puzzle = {
+      ...base,
+      type: "multiple-choice",
+      payload: { choices: p.choices.map((c) => pickLocales(c)) },
+      answer: { correctIndex: a.correctIndex },
+    } satisfies MultipleChoicePuzzle;
   }
 
   return { ok: true, puzzle };

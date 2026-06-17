@@ -3,6 +3,7 @@
 import type { PublicPuzzle } from "@/lib/types";
 import SpotTheBug from "./SpotTheBug";
 import FillTheModifier from "./FillTheModifier";
+import MultipleChoice from "./MultipleChoice";
 
 /** Dispatches to the right puzzle component based on `puzzle.type`. */
 export default function PuzzleRenderer({
@@ -22,6 +23,8 @@ export default function PuzzleRenderer({
       return <SpotTheBug {...props} />;
     case "fill-modifier":
       return <FillTheModifier {...props} />;
+    case "multiple-choice":
+      return <MultipleChoice {...props} />;
     default: {
       // Exhaustiveness guard — adding a PuzzleType without a case is a type error.
       const _exhaustive: never = puzzle;

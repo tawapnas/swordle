@@ -51,6 +51,9 @@
     "fillModifier": {
       "hint": "เลือก modifier ที่เติมในช่องว่างได้ถูกต้อง"
     },
+    "multipleChoice": {
+      "hint": "เลือกคำตอบที่ถูกต้อง"
+    },
     "scorerUnreachable": "ติดต่อระบบตรวจคำตอบไม่ได้"
   },
   "Result": {
@@ -129,6 +132,7 @@
       "type": "ประเภทปริศนา",
       "typeSpotBug": "หาบั๊ก",
       "typeFillModifier": "เติม modifier",
+      "typeMultipleChoice": "เลือกคำตอบ",
       "idLabel": "ID",
       "difficulty": "ระดับความยาก",
       "diffEasy": "ง่าย",
@@ -160,6 +164,9 @@
       "buggyLineLabel": "เลือกบรรทัดที่มีบั๊ก",
       "option": "ตัวเลือกที่ {n}",
       "correctOption": "ตัวเลือกที่ถูก",
+      "correctChoice": "ตัวเลือก (เลือกข้อที่ถูก)",
+      "choiceEn": "ตัวเลือกที่ {n} (อังกฤษ)",
+      "choiceTh": "ตัวเลือกที่ {n} (ไทย)",
       "delete": "ลบ",
       "deleteConfirm": "ลบปริศนานี้?",
       "listTitle": "ปริศนาที่มีอยู่",

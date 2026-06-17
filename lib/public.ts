@@ -39,6 +39,18 @@ export function toPublicPuzzle(puzzle: Puzzle, locale: Locale): PublicPuzzle {
         bird: puzzle.bird,
         payload: puzzle.payload,
       };
+    case "multiple-choice":
+      return {
+        id: puzzle.id,
+        type: puzzle.type,
+        prompt,
+        difficulty: puzzle.difficulty,
+        bird: puzzle.bird,
+        // Resolve each localized choice to the request locale.
+        payload: {
+          choices: puzzle.payload.choices.map((c) => pickLocale(c, locale)),
+        },
+      };
     default: {
       const _exhaustive: never = puzzle;
       return _exhaustive;

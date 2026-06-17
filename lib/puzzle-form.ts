@@ -29,7 +29,13 @@ export interface PuzzleFormState {
   codeBefore: string;
   codeAfter: string;
   options: string[]; // always length 4
+  // Index of the correct option — shared by fill-modifier and multiple-choice
+  // (both pick one of 4); only one type is active at a time.
   correctIndex: number | null;
+
+  // multiple-choice working fields — localized choices, always length 4 each.
+  choicesEn: string[];
+  choicesTh: string[];
 }
 
 /** Split a textarea value into lines, dropping a single trailing blank line. */
@@ -54,6 +60,8 @@ export function emptyFormState(): PuzzleFormState {
     codeAfter: "",
     options: ["", "", "", ""],
     correctIndex: null,
+    choicesEn: ["", "", "", ""],
+    choicesTh: ["", "", "", ""],
   };
 }
 
@@ -78,17 +86,25 @@ export function puzzleToFormState(p: Puzzle): PuzzleFormState {
       buggyLineIndex: p.answer.buggyLineIndex,
     };
   }
-  // fill-modifier (the only other type).
+  if (p.type === "fill-modifier") {
+    return {
+      ...base,
+      codeBefore: p.payload.codeBefore,
+      codeAfter: p.payload.codeAfter,
+      options: [
+        p.payload.options[0] ?? "",
+        p.payload.options[1] ?? "",
+        p.payload.options[2] ?? "",
+        p.payload.options[3] ?? "",
+      ],
+      correctIndex: p.answer.correctIndex,
+    };
+  }
+  // multiple-choice (the only other type).
   return {
     ...base,
-    codeBefore: p.payload.codeBefore,
-    codeAfter: p.payload.codeAfter,
-    options: [
-      p.payload.options[0] ?? "",
-      p.payload.options[1] ?? "",
-      p.payload.options[2] ?? "",
-      p.payload.options[3] ?? "",
-    ],
+    choicesEn: [0, 1, 2, 3].map((i) => p.payload.choices[i]?.en ?? ""),
+    choicesTh: [0, 1, 2, 3].map((i) => p.payload.choices[i]?.th ?? ""),
     correctIndex: p.answer.correctIndex,
   };
 }
@@ -115,13 +131,26 @@ export function formStateToInput(s: PuzzleFormState): Record<string, unknown> {
       answer: { buggyLineIndex: s.buggyLineIndex },
     };
   }
-  // fill-modifier (the only other type).
+  if (s.type === "fill-modifier") {
+    return {
+      ...base,
+      payload: {
+        codeBefore: s.codeBefore,
+        codeAfter: s.codeAfter,
+        options: s.options,
+      },
+      answer: { correctIndex: s.correctIndex },
+    };
+  }
+  // multiple-choice (the only other type) — pair up the per-locale choice
+  // inputs into localized objects.
   return {
     ...base,
     payload: {
-      codeBefore: s.codeBefore,
-      codeAfter: s.codeAfter,
-      options: s.options,
+      choices: [0, 1, 2, 3].map((i) => ({
+        en: s.choicesEn[i]?.trim() ?? "",
+        th: s.choicesTh[i]?.trim() ?? "",
+      })),
     },
     answer: { correctIndex: s.correctIndex },
   };
